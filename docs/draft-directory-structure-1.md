@@ -38,7 +38,6 @@
 - README.md
 - docs
     - SRS.pdf
-    - UserManual.pdf
     - DesignDocs
         - Architecture.pdf
         - ClassDiagram.png

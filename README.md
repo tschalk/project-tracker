@@ -43,5 +43,5 @@ java -jar target/project_tracker-1.0.jar
 
 Weitere Informationen finden Sie in der mitgelieferten Dokumentation:
 
-docs/SRS.pdf: Software Requirements Specification
-docs/DesignDocs/ClassDiagram.png: Klassendiagramm
+- `docs/SRS.pdf`: Software Requirements Specification
+- `docs/DesignDocs/ClassDiagram.png`: Klassendiagramm
