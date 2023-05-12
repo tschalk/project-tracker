@@ -1,4 +1,4 @@
-# _Der Nachfolgende Text dinet als Beispiel_
+# _Der nachfolgende Text dient als Beispiel_
 
 ## Project Tracker - Projektzeiterfassung 
 
