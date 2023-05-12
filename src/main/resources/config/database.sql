@@ -21,7 +21,6 @@ CREATE TABLE TimesheetEntry (
                                 date DATE,
                                 start_time TIME,
                                 end_time TIME,
-                                description TEXT,
                                 FOREIGN KEY (project_id) REFERENCES Project(id)
 );
 

@@ -1,6 +1,6 @@
 # _Der nachfolgende Text dient als Beispiel_
 
-## Project Tracker - Projektzeiterfassung 
+## Project Tracker
 
 Der Project Tracker ist eine Anwendung, die es Benutzern ermöglicht, ihre Projektzeiten zu verfolgen und 
 diese Informationen dann als CSV-Datei zu exportieren.
