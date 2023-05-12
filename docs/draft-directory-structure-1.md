@@ -1,0 +1,40 @@
+- src
+    - main
+        - java
+            - com.github.tschalk.project_tracker
+                - model
+                    - User.java
+                    - Project.java
+                    - TimesheetEntry.java
+                - dao
+                    - UserDAO.java
+                    - ProjectDAO.java
+                    - TimesheetEntryDAO.java
+                - controller
+                    - LoginController.java
+                    - MainController.java
+                    - ExportController.java
+                - view
+                    - LoginView.java
+                    - MainView.java
+                    - ExportView.java
+                - database
+                    - DatabaseManager.java
+                    - DatabaseInitializer.java
+                    - Config.java
+                    - App.java
+            - module-info.java
+        - resources
+            - css
+                - styles.css
+            - config
+                - database.properties
+                - database.sql
+- pom.xml
+- README.md
+- docs
+    - SRS.pdf
+    - UserManual.pdf
+    - DesignDocs
+        - Architecture.pdf
+        - ClassDiagram.png
