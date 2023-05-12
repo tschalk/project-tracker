@@ -1,4 +1,4 @@
-# _Der Nachfolgende Text dinet als Beispiel_
+# _Der nachfolgende Text dient als Beispiel_
 
 ## Project Tracker - Projektzeiterfassung 
 
@@ -45,3 +45,12 @@ Weitere Informationen finden Sie in der mitgelieferten Dokumentation:
 
 - `docs/SRS.pdf`: Software Requirements Specification
 - `docs/DesignDocs/ClassDiagram.png`: Klassendiagramm
+
+## Funktionen und Features für die Zukunft
+
+- Importfunktion
+- Export in weitere gängige Dateiformate wie Excel
+- Drag & Drop-Funktionalität
+- Eine Stoppuhr zur schnellen Zeiterfassung von Aufgaben
+- Auswertung nach Filtern wie z.B. Datum, Projekt, Mitarbeiter
+- Benutzerverwaltung
