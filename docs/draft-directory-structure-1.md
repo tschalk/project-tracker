@@ -6,10 +6,14 @@
                     - User.java
                     - Project.java
                     - TimesheetEntry.java
+                    - CostCenter.java
+                    - Responsible.java
                 - dao
                     - UserDAO.java
                     - ProjectDAO.java
                     - TimesheetEntryDAO.java
+                    - CostCenterDAO.java
+                    - ResponsibleDAO.java
                 - controller
                     - LoginController.java
                     - MainController.java
@@ -22,7 +26,7 @@
                     - DatabaseManager.java
                     - DatabaseInitializer.java
                     - Config.java
-                    - App.java
+                - App.java
             - module-info.java
         - resources
             - css
