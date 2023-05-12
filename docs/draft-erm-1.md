@@ -25,7 +25,6 @@ entity "TimesheetEntry" as timesheet {
   date : DATE
   start_time : TIME
   end_time : TIME
-  description : TEXT
 }
 
 entity "CostCenter" as costcenter {
