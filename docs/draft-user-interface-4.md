@@ -26,7 +26,6 @@
 | Arbeitstag: Spalte in Tabelle                  |
 | Stunden: Spalte in Tabelle                     |
 | Beschreibung: Spalte in Tabelle                |
-| Projekt: Spalte in Tabelle                     |
 | Kontierung: Spalte in Tabelle                  |
 | Verantwortlicher: Spalte in Tabelle            |
 | --                                             |
