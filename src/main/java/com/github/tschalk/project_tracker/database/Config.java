@@ -14,9 +14,11 @@ import java.util.Properties;
 
 public class Config {
     private final Properties configProps = new Properties();
+    private final Path configPath;
+
 
     public Config() {
-        Path configPath = Paths.get("src/main/resources/config/database.properties");
+        configPath = Paths.get("src/main/resources/config/database.properties");
         try {
             configProps.load(Files.newInputStream(configPath));
         } catch (IOException ex) {
@@ -27,6 +29,16 @@ public class Config {
     public String getProperty(String property) {
         return configProps.getProperty(property);
     }
+
+    public void setProperty(String key, String value) {
+        configProps.setProperty(key, value);
+        try {
+            configProps.store(Files.newOutputStream(configPath), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -129,7 +130,7 @@ public class DatabaseLoginView extends VBox {
     }
 
     // Hier wird eine neue LoginView erstellt und die Szene gewechselt
-//    private void switchToLoginView() {
+    private void switchToLoginView() {
 //
 //        UserDAO userDAO = new UserDAO(databaseLoginController.getDatabaseManager()); // Weiterleitung der Datenbankverbindung an den UserDAO
 //        UserController userController = new UserController(userDAO);
@@ -137,6 +138,6 @@ public class DatabaseLoginView extends VBox {
 //
 //        Scene scene = new Scene(loginView, 800, 600);
 //        stage.setScene(scene);
-//    }
+    }
 }
 

@@ -4,10 +4,7 @@ package com.github.tschalk.project_tracker.controller;
 import com.github.tschalk.project_tracker.database.DatabaseInitializer;
 import com.github.tschalk.project_tracker.database.DatabaseManager;
 import com.github.tschalk.project_tracker.database.Config;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
-import java.util.Optional;
 
 public class DatabaseLoginController {
     private final String DATABASE;
@@ -25,8 +22,23 @@ public class DatabaseLoginController {
         return config.getProperty(DATABASE + '.' + property);
     }
 
+//    public boolean createConnection(String host, int port, String username, String password) {
+//        return databaseManager.createConnection(host, port, username, password);
+//    }
+
     public boolean createConnection(String host, int port, String username, String password) {
-        return databaseManager.createConnection(host, port, username, password);
+        boolean isConnected = databaseManager.createConnection(host, port, username, password);
+        if (isConnected) {
+            updateConfig(host, port, username, password);
+        }
+        return isConnected;
+    }
+
+    private void updateConfig(String host, int port, String username, String password) {
+        config.setProperty(DATABASE + ".host", host);
+        config.setProperty(DATABASE + ".port", String.valueOf(port));
+        config.setProperty(DATABASE + ".user", username);
+        config.setProperty(DATABASE + ".password", password);
     }
 
     public void initializeDatabase() {

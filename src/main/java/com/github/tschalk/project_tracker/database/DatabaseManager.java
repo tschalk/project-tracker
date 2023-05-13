@@ -1,9 +1,11 @@
 package com.github.tschalk.project_tracker.database;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseManager {
     private Connection connection;
@@ -49,6 +51,30 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void loadDatabaseProperties() {
+        Properties properties = new Properties();
+        try {
+            FileInputStream file = new FileInputStream("src/main/resources/config/database.properties");
+            properties.load(file);
+            file.close();
+
+            host = properties.getProperty("database.host", "localhost");
+            port = properties.getProperty("database.port", "3306");
+            username = properties.getProperty("database.user", "root");
+            password = properties.getProperty("database.password", "root");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean isConnected() {
+        try {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

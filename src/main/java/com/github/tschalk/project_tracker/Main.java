@@ -18,22 +18,33 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-
         DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.loadDatabaseProperties();
+        databaseManager.connect();
+
+        if (databaseManager.isConnected()) {
+            showMainView(stage);
+        } else {
+            showDatabaseLoginView(stage, databaseManager);
+        }
+    }
+
+    private void showMainView(Stage stage) {
+        System.out.println("MainView");
+    }
+
+    private void showDatabaseLoginView(Stage stage, DatabaseManager databaseManager) {
+        System.out.println("DatabaseLoginView");
+
         Config config = new Config();
-
         DatabaseLoginController databaseLoginController = new DatabaseLoginController(config, databaseManager);
-
-        stage.setTitle("Project Tracker");
-        databaseLoginController.createConnection("localhost", 3306, "root", "root");
-
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
+
         Scene scene = new Scene(databaseLoginView, 250, 260);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
 
         stage.setTitle("Database Login");
         stage.setScene(scene);
         stage.show();
-
     }
 }
