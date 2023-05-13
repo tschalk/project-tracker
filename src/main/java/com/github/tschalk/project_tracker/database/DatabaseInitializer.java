@@ -15,12 +15,14 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
 
-    public static void initialize() {
+    public static void initialize(String host, int port, String username, String password, String databaseName) {
         String sqlScriptPath = "src/main/resources/config/database.sql";
         try {
             String sqlCommands = Files.readString(Paths.get(sqlScriptPath));
 
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root")) {
+            String url = "jdbc:mysql://" + host + ":" + port + "/";
+
+            try (Connection connection = DriverManager.getConnection(url, username, password)) {
                 String[] individualCommands = sqlCommands.split(";");
                 for (String command : individualCommands) {
                     if (!command.trim().isEmpty()) { // trim() ⇾ gute Praxis, aber nicht notwendig
@@ -34,6 +36,7 @@ public class DatabaseInitializer {
             handleSQLException(e.getMessage());
         }
     }
+
 
     private static void executeSQLCommand(Connection connection, String command) throws SQLException {
         try (Statement statement = connection.createStatement()) {

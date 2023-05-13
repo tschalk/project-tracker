@@ -26,24 +26,38 @@ public class DatabaseLoginController {
 //        return databaseManager.createConnection(host, port, username, password);
 //    }
 
-    public boolean createConnection(String host, int port, String username, String password) {
-        boolean isConnected = databaseManager.createConnection(host, port, username, password);
+    public boolean createConnection(String host, int port, String username, String password, String databaseName) {
+        boolean isConnected = databaseManager.createConnection(host, port, username, password, databaseName);
         if (isConnected) {
-            updateConfig(host, port, username, password);
+            updateConfig(host, port, username, password, databaseName);
         }
         return isConnected;
     }
 
-    private void updateConfig(String host, int port, String username, String password) {
+
+    private void updateConfig(String host, int port, String username, String password, String databaseName) {
         config.setProperty(DATABASE + ".host", host);
         config.setProperty(DATABASE + ".port", String.valueOf(port));
         config.setProperty(DATABASE + ".user", username);
         config.setProperty(DATABASE + ".password", password);
+        config.setProperty(DATABASE + ".databaseName", databaseName);
     }
 
-    public void initializeDatabase() {
-        DatabaseInitializer.initialize();
-    }
+//    public void initializeDatabase() {
+//        String host = config.getProperty(DATABASE + ".host");
+//        int port;
+//        try {
+//            port = Integer.parseInt(config.getProperty(DATABASE + ".port"));
+//        } catch (NumberFormatException e) {
+//            System.err.println("Invalid port number format: " + e.getMessage());
+//            port = 0;
+//            return;
+//        }
+//        String username = config.getProperty(DATABASE + ".user");
+//        String password = config.getProperty(DATABASE + ".password");
+//
+//        DatabaseInitializer.initialize(host, port, username, password);
+//    }
 
     public DatabaseManager getDatabaseManager() {
         return databaseManager;

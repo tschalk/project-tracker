@@ -13,6 +13,8 @@ public class DatabaseManager {
     private String port;
     private String username;
     private String password;
+    private String databaseName;
+
 
     public boolean connect() {
         try {
@@ -20,25 +22,47 @@ public class DatabaseManager {
             connection = DriverManager.getConnection(url, username, password);
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error while connecting to the database."+ e.getMessage());
             return false;
         }
     }
 
-    public boolean createConnection(String host, int port, String username, String password) {
+//    public boolean createConnection(String host, int port, String username, String password, String databaseName) {
+//        this.host = host;
+//        this.port = String.valueOf(port);
+//        this.username = username;
+//        this.password = password;
+//        this.databaseName = databaseName;
+//
+//        try {
+//            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+//            connection = DriverManager.getConnection(url, username, password);
+//            return true;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+
+    public boolean createConnection(String host, int port, String username, String password, String databaseName) {
         this.host = host;
         this.port = String.valueOf(port);
         this.username = username;
         this.password = password;
+        this.databaseName = databaseName;
+
         try {
-            String url = "jdbc:mysql://" + host + ":" + port + "/ProjectTracker";
+            String url = "jdbc:mysql://" + host + ":" + port;
             connection = DriverManager.getConnection(url, username, password);
+            DatabaseInitializer.initialize(host, port, username, password, databaseName);
+            connection.setCatalog(databaseName);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public Connection getConnection() {
         return connection;

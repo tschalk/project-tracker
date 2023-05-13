@@ -2,7 +2,6 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,6 +14,7 @@ public class DatabaseLoginView extends VBox {
     private final TextField hostField;
     private final TextField portField;
     private final TextField usernameField;
+    private final TextField databaseNameField;
     private final PasswordField passwordField;
     private final DatabaseLoginController databaseLoginController;
 
@@ -24,10 +24,11 @@ public class DatabaseLoginView extends VBox {
         this.databaseLoginController = databaseLoginController;
         this.stage = stage;
 
-        hostField = new TextField();
-        portField = new TextField();
-        usernameField = new TextField();
-        passwordField = new PasswordField();
+        this.hostField = new TextField();
+        this.portField = new TextField();
+        this.usernameField = new TextField();
+        this.passwordField = new PasswordField();
+        this.databaseNameField = new TextField();
 
         loadDatabaseProperties(databaseLoginController);
         initUI();
@@ -40,6 +41,7 @@ public class DatabaseLoginView extends VBox {
         String port = controller.getDatabaseProperty("port");
         String user = controller.getDatabaseProperty("user");
         String password = controller.getDatabaseProperty("password");
+        String databaseName = controller.getDatabaseProperty("database");
         if (host != null && !host.isEmpty()) {
             hostField.setText(host);
         } else {
@@ -60,6 +62,12 @@ public class DatabaseLoginView extends VBox {
         } else {
             passwordField.setText("root");
         }
+        if (databaseName != null && !databaseName.isEmpty()) {
+            databaseNameField.setText(databaseName);
+        } else {
+            databaseNameField.setText("projecttracker");
+        }
+
     }
 
     // Hier werden die Textfelder und der Connect Button erstellt
@@ -89,14 +97,18 @@ public class DatabaseLoginView extends VBox {
         gridPane.add(passwordLabel, 0, 3);
         gridPane.add(passwordField, 1, 3);
 
+        Label databaseNameLabel = new Label("DB-Name:");
+        gridPane.add(databaseNameLabel, 0, 4);
+        gridPane.add(databaseNameField, 1, 4);
+
         Button connectButton = new Button("Connect");
         connectButton.setOnAction(e -> connect());
 
-        Button initializeDatabaseButton = new Button("Initialize Database");
-        initializeDatabaseButton.setOnAction(e -> databaseLoginController.initializeDatabase());
+//        Button initializeDatabaseButton = new Button("Initialize Database");
+//        initializeDatabaseButton.setOnAction(e -> databaseLoginController.initializeDatabase());
 
         HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(connectButton, initializeDatabaseButton);
+        buttonContainer.getChildren().addAll(connectButton/*, initializeDatabaseButton*/);
         buttonContainer.getStyleClass().add("button-container");
 
         getChildren().addAll(titleLabel, gridPane, buttonContainer);
@@ -111,11 +123,13 @@ public class DatabaseLoginView extends VBox {
         String port = portField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
+        String databaseName = databaseNameField.getText();
 
-        boolean connectionSuccessful = databaseLoginController.createConnection(host, Integer.parseInt(port), username, password);
+        boolean connectionSuccessful = databaseLoginController.createConnection(host, Integer.parseInt(port), username, password, databaseName);
+
         if (connectionSuccessful) {
             System.out.println("Connection successful!");
-//            switchToLoginView();
+            switchToLoginView();
 
         } else {
             System.out.println("Connection failed!");
@@ -131,7 +145,10 @@ public class DatabaseLoginView extends VBox {
 
     // Hier wird eine neue LoginView erstellt und die Szene gewechselt
     private void switchToLoginView() {
-//
+
+        // zu testzwecken dieses fenster schließen:
+        stage.close();
+
 //        UserDAO userDAO = new UserDAO(databaseLoginController.getDatabaseManager()); // Weiterleitung der Datenbankverbindung an den UserDAO
 //        UserController userController = new UserController(userDAO);
 //        LoginView loginView = new LoginView(userController, stage);
