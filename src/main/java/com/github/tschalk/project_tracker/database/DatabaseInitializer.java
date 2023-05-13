@@ -1,15 +1,17 @@
 package com.github.tschalk.project_tracker.database;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+/**
+ * Diese Klasse liest die SQL-Befehle aus der Datei database.sql und führt sie aus.
+ * Die Datei muss im Verzeichnis src/main/resources/config liegen.
+ */
 
 public class DatabaseInitializer {
 
@@ -21,7 +23,7 @@ public class DatabaseInitializer {
             try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root")) {
                 String[] individualCommands = sqlCommands.split(";");
                 for (String command : individualCommands) {
-                    if (!command.trim().isEmpty()) {
+                    if (!command.trim().isEmpty()) { // trim() ⇾ gute Praxis, aber nicht notwendig
                         executeSQLCommand(connection, command);
                     }
                 }

@@ -1,8 +1,13 @@
 package com.github.tschalk.project_tracker.controller;
 
 
+import com.github.tschalk.project_tracker.database.DatabaseInitializer;
 import com.github.tschalk.project_tracker.database.DatabaseManager;
 import com.github.tschalk.project_tracker.database.Config;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 public class DatabaseLoginController {
     private final String DATABASE;
@@ -22,6 +27,10 @@ public class DatabaseLoginController {
 
     public boolean createConnection(String host, int port, String username, String password) {
         return databaseManager.createConnection(host, port, username, password);
+    }
+
+    public void initializeDatabase() {
+        DatabaseInitializer.initialize();
     }
 
     public DatabaseManager getDatabaseManager() {

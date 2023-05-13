@@ -2,10 +2,13 @@ package com.github.tschalk.project_tracker;
 
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
 import com.github.tschalk.project_tracker.database.Config;
-import com.github.tschalk.project_tracker.database.DatabaseInitializer;
 import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.view.DatabaseLoginView;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -16,23 +19,21 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        // Erst Teste ich ob die Databse eine verbinugn aufbauen kann und ob die Tabellen existieren.
-        // Hier kommt der code hin zum testen der ersten Klassen:
-
-        System.out.println("Starte Test");
-
-        DatabaseInitializer.initialize();
-        System.out.println("Database  initialisiert");
         DatabaseManager databaseManager = new DatabaseManager();
         Config config = new Config();
-        System.out.println(config.getProperty("database.host"));
 
         DatabaseLoginController databaseLoginController = new DatabaseLoginController(config, databaseManager);
 
         stage.setTitle("Project Tracker");
         databaseLoginController.createConnection("localhost", 3306, "root", "root");
-        System.out.println(databaseLoginController.getDatabaseManager().toString());
 
+        DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
+        Scene scene = new Scene(databaseLoginView, 250, 260);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/styles.css")).toExternalForm());
+
+        stage.setTitle("Database Login");
+        stage.setScene(scene);
+        stage.show();
 
     }
 }
