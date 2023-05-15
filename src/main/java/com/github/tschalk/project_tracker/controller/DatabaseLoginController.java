@@ -30,6 +30,4 @@ public class DatabaseLoginController {
     private void updateConfig(String host, int port, String username, String password, String databaseName) {
         databaseManager.updateConfig(host, port, username, password, databaseName);
     }
-
-
 }

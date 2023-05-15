@@ -7,33 +7,31 @@ CREATE TABLE User (
                       password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE CostCenter (
+                            id INT(11) PRIMARY KEY AUTO_INCREMENT,
+                            name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Responsible (
+                             id INT(11) PRIMARY KEY AUTO_INCREMENT,
+                             name VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Project (
                          id INT(11) PRIMARY KEY AUTO_INCREMENT,
                          user_id INT(11),
-                         description TEXT,
-                         account_code VARCHAR(255),
-                         FOREIGN KEY (user_id) REFERENCES User(id)
+                         cost_center_id INT(11),
+                         responsible_id INT(11),
+                         description VARCHAR(255),
+                         FOREIGN KEY (user_id) REFERENCES User(id),
+                         FOREIGN KEY (cost_center_id) REFERENCES CostCenter(id),
+                         FOREIGN KEY (responsible_id) REFERENCES Responsible(id)
 );
 
 CREATE TABLE TimesheetEntry (
                                 id INT(11) PRIMARY KEY AUTO_INCREMENT,
                                 project_id INT(11),
-                                date DATE,
-                                start_time TIME,
-                                end_time TIME,
+                                start_time DATETIME,
+                                duration INT(11),
                                 FOREIGN KEY (project_id) REFERENCES Project(id)
-);
-
-CREATE TABLE CostCenter (
-                            id INT(11) PRIMARY KEY AUTO_INCREMENT,
-                            project_id INT(11),
-                            name VARCHAR(255),
-                            FOREIGN KEY (project_id) REFERENCES Project(id)
-);
-
-CREATE TABLE Responsible (
-                             id INT(11) PRIMARY KEY AUTO_INCREMENT,
-                             project_id INT(11),
-                             name VARCHAR(255),
-                             FOREIGN KEY (project_id) REFERENCES Project(id)
 );

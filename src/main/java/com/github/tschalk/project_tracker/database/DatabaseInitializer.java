@@ -15,11 +15,10 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
 
-    public static void initialize(String host, int port, String username, String password, String databaseName) {
+    public static void initialize(String host, int port, String username, String password) {
         String sqlScriptPath = "src/main/resources/config/database.sql";
         try {
             String sqlCommands = Files.readString(Paths.get(sqlScriptPath));
-
             String url = "jdbc:mysql://" + host + ":" + port + "/";
 
             try (Connection connection = DriverManager.getConnection(url, username, password)) {

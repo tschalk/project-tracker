@@ -25,13 +25,10 @@ public class DatabaseManager {
         this.username = config.getProperty("database.user");
         this.password = config.getProperty("database.password");
         this.databaseName = config.getProperty("database.databaseName");
-        System.out.println(host + " " + databaseName + " " + port + " " + username + " " + password);
     }
 
     public boolean connect() {
         try {
-            System.out.println("Connecting to the database...");
-            System.out.println(host + ":" + port + "/" + databaseName);
             String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
             connection = DriverManager.getConnection(url, username, password);
             return true;
@@ -51,7 +48,7 @@ public class DatabaseManager {
         try {
             String url = "jdbc:mysql://" + host + ":" + port;
             connection = DriverManager.getConnection(url, username, password);
-            DatabaseInitializer.initialize(host, port, username, password, databaseName);
+            DatabaseInitializer.initialize(host, port, username, password);
             connection.setCatalog(databaseName);
             return true;
         } catch (SQLException e) {
