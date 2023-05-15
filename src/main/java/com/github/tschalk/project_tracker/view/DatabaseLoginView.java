@@ -104,9 +104,6 @@ public class DatabaseLoginView extends VBox {
         Button connectButton = new Button("Connect");
         connectButton.setOnAction(e -> connect());
 
-//        Button initializeDatabaseButton = new Button("Initialize Database");
-//        initializeDatabaseButton.setOnAction(e -> databaseLoginController.initializeDatabase());
-
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().addAll(connectButton/*, initializeDatabaseButton*/);
         buttonContainer.getStyleClass().add("button-container");
@@ -115,25 +112,39 @@ public class DatabaseLoginView extends VBox {
 
     }
 
-
     // Hier wird die Verbindung zur Datenbank hergestellt
     private void connect() {
 
+        // Die Daten aus den Textfeldern werden ausgelesen
         String host = hostField.getText();
         String port = portField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
         String databaseName = databaseNameField.getText();
 
-        boolean connectionSuccessful = databaseLoginController.createConnection(host, Integer.parseInt(port), username, password, databaseName);
+        // Die Verbindung wird hergestellt
+        boolean connectionSuccessful = databaseLoginController.createConnectionFromUI(host, Integer.parseInt(port), username, password, databaseName);
 
+        // Zeigt dem User, ob die Verbindung erfolgreich war oder nicht und ob die Datenbank initialisiert wurde.
+        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+        alert2.setTitle("Connection Status");
+        alert2.setHeaderText("Connection Status");
+        if (connectionSuccessful) {
+            alert2.setContentText("The connection to the database was successful.\nThe database was initialized.");
+            alert2.setAlertType(Alert.AlertType.CONFIRMATION);
+        } else {
+            alert2.setContentText("The connection to the database failed.\nPlease check your connection and login credentials.");
+            alert2.setAlertType(Alert.AlertType.ERROR);
+        }
+        alert2.showAndWait();
+
+
+        // Wenn die Verbindung erfolgreich war, wird die LoginView aufgerufen
         if (connectionSuccessful) {
             System.out.println("Connection successful!");
             switchToLoginView();
-
         } else {
             System.out.println("Connection failed!");
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection Error");
             alert.setHeaderText("Connection Failed");

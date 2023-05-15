@@ -18,7 +18,7 @@
                     - LoginController.java
                     - MainController.java
                     - ExportController.java
-                    - DatabaseController.java
+                    - DatabaseLoginController.java
                 - view
                     - LoginView.java
                     - MainView.java
