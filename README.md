@@ -11,7 +11,6 @@ diese Informationen dann als CSV-Datei zu exportieren.
 - Maven 3.8.2
 - MySQL 8.0.33
 - JavaFX 11.0.2
-- MVC-Architektur
 
 ## Struktur
 
