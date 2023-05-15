@@ -25,7 +25,7 @@ public class DatabaseInitializer {
             try (Connection connection = DriverManager.getConnection(url, username, password)) {
                 String[] individualCommands = sqlCommands.split(";");
                 for (String command : individualCommands) {
-                    if (!command.trim().isEmpty()) { // trim() ⇾ gute Praxis, aber nicht notwendig
+                    if (!command.trim().isEmpty()) {
                         executeSQLCommand(connection, command);
                     }
                 }

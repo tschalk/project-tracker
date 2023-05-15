@@ -1,7 +1,7 @@
 package com.github.tschalk.project_tracker;
 
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
-import com.github.tschalk.project_tracker.database.Config;
+import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseManager;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
 import javafx.application.Application;
@@ -18,11 +18,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        DatabaseManager databaseManager = new DatabaseManager();
-        databaseManager.loadDatabaseProperties();
-        databaseManager.connect();
+        DatabaseConfig config = new DatabaseConfig();
+        DatabaseManager databaseManager = new DatabaseManager(config);
 
-        if (databaseManager.isConnected()) {
+        if (databaseManager.connect()) {
             showMainView(stage);
         } else {
             showDatabaseLoginView(stage, databaseManager);
@@ -36,8 +35,7 @@ public class Main extends Application {
     private void showDatabaseLoginView(Stage stage, DatabaseManager databaseManager) {
         System.out.println("DatabaseLoginView");
 
-        Config config = new Config();
-        DatabaseLoginController databaseLoginController = new DatabaseLoginController(config, databaseManager);
+        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseManager);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
         Scene scene = new Scene(databaseLoginView, 250, 260);

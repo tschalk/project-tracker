@@ -7,17 +7,16 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
- * Diese Klasse liest die Konfiguration aus der Datei database.properties.
- * Die Datei muss im Verzeichnis src/main/resources/config liegen.
- *
+ *  Diese Klasse ist dafür verantwortlich aus der Datei database.properties zu lesen und Werte zu speichern.
+ *  Die Datei liegt im Verzeichnis src/main/resources/config.
  */
 
-public class Config {
+public class DatabaseConfig {
     private final Properties configProps = new Properties();
     private final Path configPath;
 
 
-    public Config() {
+    public DatabaseConfig() {
         configPath = Paths.get("src/main/resources/config/database.properties");
         try {
             configProps.load(Files.newInputStream(configPath));

@@ -1,11 +1,13 @@
 package com.github.tschalk.project_tracker.database;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
+
+/**
+ * Diese Klasse ist verantwortlich für die direkte Interaktion mit der Datenbank.
+ * Sie stellt die Verbindung zur Datenbank her.
+ */
 
 public class DatabaseManager {
     private Connection connection;
@@ -14,35 +16,30 @@ public class DatabaseManager {
     private String username;
     private String password;
     private String databaseName;
+    private final DatabaseConfig config;
 
+    public DatabaseManager(DatabaseConfig config) {
+        this.config = config;
+        this.host = config.getProperty("database.host");
+        this.port = config.getProperty("database.port");
+        this.username = config.getProperty("database.user");
+        this.password = config.getProperty("database.password");
+        this.databaseName = config.getProperty("database.databaseName");
+        System.out.println(host + " " + databaseName + " " + port + " " + username + " " + password);
+    }
 
     public boolean connect() {
         try {
-            String url = "jdbc:mysql://" + host + ":" + port + "/ProjectTracker";
+            System.out.println("Connecting to the database...");
+            System.out.println(host + ":" + port + "/" + databaseName);
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
             connection = DriverManager.getConnection(url, username, password);
             return true;
         } catch (SQLException e) {
-            System.out.println("Error while connecting to the database."+ e.getMessage());
+            System.err.println("Error while connecting to the database." + e.getMessage());
             return false;
         }
     }
-
-//    public boolean createConnection(String host, int port, String username, String password, String databaseName) {
-//        this.host = host;
-//        this.port = String.valueOf(port);
-//        this.username = username;
-//        this.password = password;
-//        this.databaseName = databaseName;
-//
-//        try {
-//            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
-//            connection = DriverManager.getConnection(url, username, password);
-//            return true;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
 
     public boolean createConnection(String host, int port, String username, String password, String databaseName) {
         this.host = host;
@@ -63,43 +60,21 @@ public class DatabaseManager {
         }
     }
 
-
-    public Connection getConnection() {
-        return connection;
+    public void updateConfig(String host, int port, String username, String password, String databaseName) {
+        config.setProperty("database.host", host);
+        config.setProperty("database.port", String.valueOf(port));
+        config.setProperty("database.user", username);
+        config.setProperty("database.password", password);
+        config.setProperty("database.databaseName", databaseName);
     }
 
-    public void closeConnection() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+    public DatabaseConfig getDatabaseConfig() {
+        return config;
     }
 
-    public void loadDatabaseProperties() {
-        Properties properties = new Properties();
-        try {
-            FileInputStream file = new FileInputStream("src/main/resources/config/database.properties");
-            properties.load(file);
-            file.close();
-
-            host = properties.getProperty("database.host", "localhost");
-            port = properties.getProperty("database.port", "3306");
-            username = properties.getProperty("database.user", "root");
-            password = properties.getProperty("database.password", "root");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public boolean isConnected() {
-        try {
-            return connection != null && !connection.isClosed();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public String getDatabaseName() {
+        return databaseName;
     }
 
     @Override
