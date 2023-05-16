@@ -74,6 +74,10 @@ public class DatabaseManager {
         return databaseName;
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     @Override
     public String toString() {
         return "DatabaseManager{" +
