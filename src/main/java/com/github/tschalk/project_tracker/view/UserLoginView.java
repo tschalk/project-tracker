@@ -1,7 +1,10 @@
 package com.github.tschalk.project_tracker.view;
 
+import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
+import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -64,6 +67,11 @@ public class UserLoginView extends VBox {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // FIXME: DEBUGGING & TESTING:
+        username = "Max";
+        password = "123";
+        //
+
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");
             return;
@@ -72,16 +80,25 @@ public class UserLoginView extends VBox {
         boolean loginSuccessful = userLoginController.login(username, password);
         if (loginSuccessful) {
             System.out.println("Login successful!");
-            switchToTaskView();
             stage.close();
+            switchToMainWindowView();
         } else {
             showAlert("Login failed!");
         }
     }
 
-    private void switchToTaskView() {
+    private void switchToMainWindowView() {
 
-        System.out.println("Now opening main window");
+        ProjectDAO projectDAO = new ProjectDAO(userLoginController.getUserDAO().getDatabaseManager());
+        MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController.getCurrentUser(), stage);
+        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
+
+        Scene scene = new Scene(mainWindowView, 800, 600);
+        stage.setScene(scene);
+        stage.setTitle("Project Tracker");
+        stage.setResizable(false);
+        stage.centerOnScreen();
+        stage.show();
     }
 
     private void showAlert(String message) {

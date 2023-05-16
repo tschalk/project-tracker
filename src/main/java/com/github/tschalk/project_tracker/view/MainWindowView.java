@@ -32,8 +32,8 @@ public class MainWindowView extends VBox {
 
         Button addButton = new Button("Add");
         Button editButton = new Button("Edit");
-        Button exportButton = new Button("Export in CSV");
-        Button startStopButton = new Button("Start/Stopp");
+        Button exportButton = new Button("Export to CSV");
+        Button startStopButton = new Button("Start/Stop");
 
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton);
@@ -41,4 +41,6 @@ public class MainWindowView extends VBox {
 
         this.getChildren().addAll(titleLabel, tableView, buttonContainer);
     }
+
+
 }
