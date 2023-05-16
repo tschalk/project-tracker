@@ -81,7 +81,7 @@ public class UserLoginView extends VBox {
 
     private void switchToTaskView() {
 
-        System.out.println("now opening main window");
+        System.out.println("Now opening main window");
     }
 
     private void showAlert(String message) {

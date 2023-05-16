@@ -33,10 +33,10 @@ public class Main extends Application {
         DatabaseManager databaseManager = new DatabaseManager(config);
 
         if (databaseManager.connect()) {
-            System.out.println("connected successfully");
+            System.out.println("Connected successfully");
             showUserLoginView(stage, databaseManager);
         } else {
-            System.err.println("connection failed");
+            System.err.println("Connection failed");
             showDatabaseLoginView(stage, databaseManager);
         }
     }
