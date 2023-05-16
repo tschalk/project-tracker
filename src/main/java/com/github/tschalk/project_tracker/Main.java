@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 
 public class Main extends Application {
 
-    private static final int USER_LOGIN_VIEW_WIDTH = 250;
-    private static final int USER_LOGIN_VIEW_HEIGHT = 110;
+    public static final int USER_LOGIN_VIEW_WIDTH = 250;
+    public static final int USER_LOGIN_VIEW_HEIGHT = 150;
     private static final int DATABASE_LOGIN_VIEW_WIDTH = 250;
     private static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
     private static final String STYLESHEET_PATH = "/css/styles.css";
@@ -61,6 +61,8 @@ public class Main extends Application {
 
         stage.setTitle(User_Login);
         stage.setScene(userLoginView);
+        stage.setResizable(false);
+        stage.centerOnScreen();
         stage.show();
     }
 

@@ -1,5 +1,6 @@
 package com.github.tschalk.project_tracker.view;
 
+import com.github.tschalk.project_tracker.Main;
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
 import com.github.tschalk.project_tracker.dao.UserDAO;
@@ -21,7 +22,6 @@ public class DatabaseLoginView extends VBox {
     private final PasswordField passwordField;
     private final DatabaseLoginController databaseLoginController;
 
-
     public DatabaseLoginView(DatabaseLoginController databaseLoginController, Stage stage) {
 
         this.databaseLoginController = databaseLoginController;
@@ -33,11 +33,10 @@ public class DatabaseLoginView extends VBox {
         this.passwordField = new PasswordField();
         this.databaseNameField = new TextField();
 
-        loadDatabaseProperties();
+        loadDatabaseProperties(); // database.properties Datei laden
         initUI();
     }
 
-    // Hier werden die Daten aus der Datenbank.properties Datei geladen und in die Textfelder gesetzt
     private void loadDatabaseProperties() {
 
         String host = databaseLoginController.getDatabaseProperty("host");
@@ -75,8 +74,9 @@ public class DatabaseLoginView extends VBox {
 
     // Hier werden die Textfelder und der Connect Button erstellt
     private void initUI() {
-        setSpacing(10);
-        setPadding(new Insets(10));
+
+        this.setSpacing(10);
+        this.setPadding(new Insets(10));
 
         Label titleLabel = new Label("Database Login");
 
@@ -108,66 +108,54 @@ public class DatabaseLoginView extends VBox {
         connectButton.setOnAction(e -> connect());
 
         HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(connectButton/*, initializeDatabaseButton*/);
+        buttonContainer.getChildren().addAll(connectButton);
         buttonContainer.getStyleClass().add("button-container");
 
-        getChildren().addAll(titleLabel, gridPane, buttonContainer);
+        this.getChildren().addAll(titleLabel, gridPane, buttonContainer);
 
     }
 
-    // Hier wird die Verbindung zur Datenbank hergestellt
     private void connect() {
 
-        // Die Daten aus den Textfeldern werden ausgelesen
         String host = hostField.getText();
         String port = portField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
         String databaseName = databaseNameField.getText();
 
-        // Die Verbindung wird hergestellt
         boolean connectionSuccessful = databaseLoginController.createConnectionFromUI(host, Integer.parseInt(port), username, password, databaseName);
 
-        // Zeigt dem User, ob die Verbindung erfolgreich war oder nicht und ob die Datenbank initialisiert wurde.
-        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-        alert2.setTitle("Connection Status");
-        alert2.setHeaderText("Connection Status");
         if (connectionSuccessful) {
-            alert2.setContentText("The connection to the database was successful.\nThe database was initialized.");
-            alert2.setAlertType(Alert.AlertType.CONFIRMATION);
-        } else {
-            alert2.setContentText("The connection to the database failed.\nPlease check your connection and login credentials.");
-            alert2.setAlertType(Alert.AlertType.ERROR);
-        }
-        alert2.showAndWait();
-
-
-        // Wenn die Verbindung erfolgreich war, wird die LoginView aufgerufen
-        if (connectionSuccessful) {
+            showAlert(Alert.AlertType.CONFIRMATION, "Connection Status", "Connection Status", "The connection to the database was successful.\nThe database was initialized.");
             System.out.println("Connection successful!");
             switchToLoginView();
         } else {
+            showAlert(Alert.AlertType.ERROR, "Connection Error", "Connection Failed", "The connection to the database failed.\nPlease check your connection and login credentials.");
             System.out.println("Connection failed!");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Connection Error");
-            alert.setHeaderText("Connection Failed");
-            alert.setContentText("The connection to the database failed.\nPlease check your connection and login credentials.");
-
-            alert.showAndWait();
         }
     }
 
-    // Hier wird eine neue LoginView erstellt und die Szene gewechselt
     private void switchToLoginView() {
 
-        // Das nächste Fenster "LoginView" wird erstellt
         UserDAO userDAO = new UserDAO(databaseLoginController.getDatabaseManager()); // Weiterleitung der Datenbankverbindung an den UserDAO
         UserLoginController userLoginController = new UserLoginController(userDAO);
         UserLoginView userLoginView = new UserLoginView(userLoginController, stage);
 
-        Scene scene = new Scene(userLoginView, 800, 600);
+        Scene scene = new Scene(userLoginView, Main.USER_LOGIN_VIEW_WIDTH, Main.USER_LOGIN_VIEW_HEIGHT);
         stage.setScene(scene);
+        stage.setTitle("User Login");
+        stage.setResizable(false);
+        stage.centerOnScreen();
         stage.show();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String header, String message) {
+
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 
