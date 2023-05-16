@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class Main extends Application {
 
@@ -29,6 +28,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+
         DatabaseConfig config = new DatabaseConfig();
         DatabaseManager databaseManager = new DatabaseManager(config);
 
@@ -42,6 +42,7 @@ public class Main extends Application {
     }
 
     private void showUserLoginView(Stage stage, DatabaseManager databaseManager) {
+
         UserDAO userDAO = new UserDAO(databaseManager);
         UserLoginController userLoginController = new UserLoginController(userDAO);
         UserLoginView userLoginView = new UserLoginView(userLoginController, stage);
@@ -50,6 +51,7 @@ public class Main extends Application {
     }
 
     private void showDatabaseLoginView(Stage stage, DatabaseManager databaseManager) {
+
         DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseManager);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
@@ -57,6 +59,7 @@ public class Main extends Application {
     }
 
     private void displayScene(Scene userLoginView, Stage stage, String User_Login) {
+
         userLoginView.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
         stage.setTitle(User_Login);
@@ -65,5 +68,4 @@ public class Main extends Application {
         stage.centerOnScreen();
         stage.show();
     }
-
 }

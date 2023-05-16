@@ -69,7 +69,6 @@ public class DatabaseLoginView extends VBox {
         } else {
             databaseNameField.setText("projecttracker");
         }
-
     }
 
     // Hier werden die Textfelder und der Connect Button erstellt
@@ -112,7 +111,6 @@ public class DatabaseLoginView extends VBox {
         buttonContainer.getStyleClass().add("button-container");
 
         this.getChildren().addAll(titleLabel, gridPane, buttonContainer);
-
     }
 
     private void connect() {
