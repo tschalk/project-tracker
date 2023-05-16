@@ -12,11 +12,12 @@ import java.util.Properties;
  */
 
 public class DatabaseConfig {
-    private final Properties configProps = new Properties();
+    private final Properties configProps;
     private final Path configPath;
 
 
     public DatabaseConfig() {
+        configProps = new Properties();
         configPath = Paths.get("src/main/resources/config/database.properties");
         try {
             configProps.load(Files.newInputStream(configPath));

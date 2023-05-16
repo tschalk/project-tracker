@@ -30,18 +30,18 @@ public class DatabaseLoginView extends VBox {
         this.passwordField = new PasswordField();
         this.databaseNameField = new TextField();
 
-        loadDatabaseProperties(databaseLoginController);
+        loadDatabaseProperties();
         initUI();
     }
 
     // Hier werden die Daten aus der Datenbank.properties Datei geladen und in die Textfelder gesetzt
-    private void loadDatabaseProperties(DatabaseLoginController controller) {
+    private void loadDatabaseProperties() {
 
-        String host = controller.getDatabaseProperty("host");
-        String port = controller.getDatabaseProperty("port");
-        String user = controller.getDatabaseProperty("user");
-        String password = controller.getDatabaseProperty("password");
-        String databaseName = controller.getDatabaseProperty("database");
+        String host = databaseLoginController.getDatabaseProperty("host");
+        String port = databaseLoginController.getDatabaseProperty("port");
+        String user = databaseLoginController.getDatabaseProperty("user");
+        String password = databaseLoginController.getDatabaseProperty("password");
+        String databaseName = databaseLoginController.getDatabaseProperty("database");
         if (host != null && !host.isEmpty()) {
             hostField.setText(host);
         } else {

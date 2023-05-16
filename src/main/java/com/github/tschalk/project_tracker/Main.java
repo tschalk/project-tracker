@@ -22,13 +22,13 @@ public class Main extends Application {
         DatabaseManager databaseManager = new DatabaseManager(config);
 
         if (databaseManager.connect()) {
-            showMainView(stage);
+            showUserLoginView(stage);
         } else {
             showDatabaseLoginView(stage, databaseManager);
         }
     }
 
-    private void showMainView(Stage stage) {
+    private void showUserLoginView(Stage stage) {
         System.out.println("MainView");
     }
 

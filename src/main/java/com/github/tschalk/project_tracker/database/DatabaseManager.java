@@ -10,13 +10,13 @@ import java.sql.SQLException;
  */
 
 public class DatabaseManager {
-    private Connection connection;
     private String host;
     private String port;
     private String username;
     private String password;
     private String databaseName;
     private final DatabaseConfig config;
+    private Connection connection;
 
     public DatabaseManager(DatabaseConfig config) {
         this.config = config;
