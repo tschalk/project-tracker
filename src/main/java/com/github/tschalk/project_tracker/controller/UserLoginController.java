@@ -13,14 +13,12 @@ public class UserLoginController {
 
     public boolean login(String username, String password) {
 
-            userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
+            userDAO.setConnection(userDAO.getDatabaseManager().getConnection()); // Hier wird die Connection gesetzt, die in der UserDAO verwendet wird
             User user = userDAO.readUserByUsername(username);
             if (user != null && user.getPassword().equals(password)) {
-                // Login successful
-                userDAO.closeConnection();
                 return true;
             } else {
-                // Login failed
+                System.err.println("Login failed!");
                 return false;
             }
     }

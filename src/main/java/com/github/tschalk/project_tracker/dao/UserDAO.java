@@ -38,16 +38,6 @@ public class UserDAO {
         }
     }
 
-    public void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
