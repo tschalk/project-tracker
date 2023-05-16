@@ -12,18 +12,17 @@ public class UserLoginController {
     }
 
     public boolean login(String username, String password) {
-        try {
+
+            userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
             User user = userDAO.readUserByUsername(username);
             if (user != null && user.getPassword().equals(password)) {
                 // Login successful
+                userDAO.closeConnection();
                 return true;
             } else {
                 // Login failed
                 return false;
             }
-        } finally {
-            userDAO.closeConnection(); // Da kein try-with-resources
-        }
     }
 
     public UserDAO getUserDAO() {

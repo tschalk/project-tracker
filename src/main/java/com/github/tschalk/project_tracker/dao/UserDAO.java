@@ -48,6 +48,10 @@ public class UserDAO {
         }
     }
 
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
     }

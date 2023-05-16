@@ -1,10 +1,6 @@
 .root {
     -fx-font-family: Arial, sans-serif;
 }
-.label {
-    -fx-font-weight: bold;
-}
-
 .text-field {
     -fx-background-color: #f5f5f5;
     -fx-padding: 5;
