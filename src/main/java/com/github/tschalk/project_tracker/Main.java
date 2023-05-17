@@ -79,7 +79,6 @@ public class Main extends Application {
         if (databaseConnectionManager.isConnected()) {
             System.out.println("Connected to database");
             sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
-
         } else {
             System.err.println("Connection to database failed!");
             sceneManager.showCustomScene(DATABASE_LOGIN_SCENE, stage);
