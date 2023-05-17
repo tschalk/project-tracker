@@ -1,12 +1,8 @@
 package com.github.tschalk.project_tracker.view;
 
-import com.github.tschalk.project_tracker.controller.AddProjectController;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.model.Project;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -16,9 +12,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.github.tschalk.project_tracker.Main.*;
+import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
+
 public class MainWindowView extends VBox {
 
     private final Stage stage;
+    private Stage newStage;
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
 
@@ -50,19 +52,13 @@ public class MainWindowView extends VBox {
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(event -> {
-            AddProjectController addProjectController = new AddProjectController(mainWindowController.getProjectDAO()); // ProjectDAO
-            AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
+        addButton.setOnAction(e ->
+            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE)
+        );
 
-            Scene scene = new Scene(addProjectView, 500, 400);
-            Stage addStage = new Stage();
-            addStage.setScene(scene);
-            addStage.setTitle("Project Tracker");
-            addStage.setResizable(false);
-            addStage.centerOnScreen();
-            addStage.show();
 
-        });
+
+
         Button editButton = new Button("Edit");
         Button exportButton = new Button("Export to CSV");
         Button startStopButton = new Button("Start/Stop");
@@ -79,7 +75,6 @@ public class MainWindowView extends VBox {
 //        projectTableView.setItems(projectList);
 //        System.out.println("Project list updated!");
 //    }
-
 
 
 }

@@ -16,6 +16,7 @@ public class UserLoginController {
 
             userDAO.setConnection(userDAO.getDatabaseManager().getConnection()); // Hier wird die Connection gesetzt, die in der UserDAO verwendet wird
             currentUser = userDAO.readUserByUsername(username);
+
             if (currentUser != null && currentUser.getPassword().equals(password)) {
                 return true;
             } else {

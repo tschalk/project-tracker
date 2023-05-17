@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 public class AddProjectView extends VBox {
 
     private final AddProjectController addProjectController;
@@ -40,22 +41,25 @@ public class AddProjectView extends VBox {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
-        Label descriptionLabel = new Label("Description");
+        Label descriptionLabel = new Label("Description:");
         gridPane.add(descriptionLabel, 0, 0);
         gridPane.add(descriptionField, 1, 0);
 
-        Label costCenterLabel = new Label("Cost Center");
+        Label costCenterLabel = new Label("Cost Center:");
         gridPane.add(costCenterLabel, 0, 1);
         gridPane.add(costCenterField, 1, 1);
 
-        Label responsibleLabel = new Label("Responsible");
+        Label responsibleLabel = new Label("Responsible:");
         gridPane.add(responsibleLabel, 0, 2);
         gridPane.add(responsibleField, 1, 2);
 
         Button addButton = new Button("Ok");
         addButton.setOnAction(event -> {
             // TODO: add project to database if all fields are filled
-            stage.close();
+            // ...
+
+            Stage currentStage = (Stage) addButton.getScene().getWindow();
+            currentStage.close();
         });
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(event -> stage.close());
@@ -64,6 +68,6 @@ public class AddProjectView extends VBox {
         buttonContainer.getChildren().addAll(addButton, cancelButton);
         buttonContainer.getStyleClass().add("button-container");
 
-        this.getChildren().addAll(descriptionField, costCenterField, responsibleField, buttonContainer);
+        this.getChildren().addAll(titleLabel, gridPane, buttonContainer);
     }
 }

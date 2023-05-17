@@ -134,7 +134,7 @@ public class DatabaseLoginView extends VBox {
     private void switchToLoginView() {
 
         SceneManager sceneManager = SceneManager.getInstance();
-        sceneManager.loadAndShowCustomScene(USER_LOGIN_SCENE, stage);
+        sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
 
     }
 

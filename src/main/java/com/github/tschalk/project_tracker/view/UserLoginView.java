@@ -86,7 +86,7 @@ public class UserLoginView extends VBox {
     private void switchToMainWindowView() {
 
         SceneManager sceneManager = SceneManager.getInstance();
-        sceneManager.loadAndShowCustomScene(MAIN_WINDOW_SCENE, stage);
+        sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
 
     }
 

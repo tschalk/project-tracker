@@ -1,5 +1,7 @@
 package com.github.tschalk.project_tracker.utils;
 
+import com.github.tschalk.project_tracker.controller.AddProjectController;
+import com.github.tschalk.project_tracker.view.AddProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -7,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.tschalk.project_tracker.Main.MAIN_WINDOW_SCENE;
-import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
+import static com.github.tschalk.project_tracker.Main.*;
 
 public class SceneManager {
 
@@ -47,15 +48,29 @@ public class SceneManager {
         return scene;
     }
 
-    public void loadAndShowCustomScene(String name, Stage stage) {
+    public void showCustomScene(String name, Stage stage) {
 
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
         stage.setScene(scene);
-        stage.setTitle(MAIN_WINDOW_SCENE);
+        stage.setTitle(name);
         stage.setResizable(false);
         stage.centerOnScreen();
         stage.show();
     }
+
+    public void showNewWindowWithCustomScene(String name) {
+
+        Scene scene = scenes.get(name);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
+
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        newStage.setTitle(name);
+        newStage.setResizable(false);
+        newStage.centerOnScreen();
+        newStage.show();
+    }
+
 }

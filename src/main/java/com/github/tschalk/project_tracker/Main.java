@@ -30,8 +30,8 @@ public class Main extends Application {
     private static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
     private static final int MAIN_WINDOW_VIEW_WIDTH = 800;
     private static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
-    private static final int ADD_PROJECT_VIEW_WIDTH = 800;
-    private static final int ADD_PROJECT_VIEW_HEIGHT = 600;
+    private static final int ADD_PROJECT_VIEW_WIDTH = 300;
+    private static final int ADD_PROJECT_VIEW_HEIGHT = 200;
 
     public static final String STYLESHEET_PATH = "/css/styles.css";
 
@@ -72,11 +72,11 @@ public class Main extends Application {
         // Hier werden die Entry-points der Anwendung definiert.
         if (databaseConnectionManager.connect()) {
             System.out.println("Connected to database");
-            sceneManager.loadAndShowCustomScene(USER_LOGIN_SCENE, stage);
+            sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
 
         } else {
             System.err.println("Connection to database failed!");
-            sceneManager.loadAndShowCustomScene(DATABASE_LOGIN_SCENE, stage);
+            sceneManager.showCustomScene(DATABASE_LOGIN_SCENE, stage);
         }
     }
 
