@@ -1,12 +1,17 @@
 package com.github.tschalk.project_tracker.dao;
 
-import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
+
 
 public class ProjectDAO {
 
-    DatabaseManager databaseManager;
+    DatabaseConnectionManager databaseConnectionManager;
 
-    public ProjectDAO(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    public ProjectDAO(DatabaseConnectionManager databaseConnectionManager) {
+        this.databaseConnectionManager = databaseConnectionManager;
     }
+
+
+
+
 }
