@@ -4,7 +4,7 @@ import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
 import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
-import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
 import com.github.tschalk.project_tracker.view.UserLoginView;
 import javafx.application.Application;
@@ -30,29 +30,40 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         DatabaseConfig config = new DatabaseConfig();
-        DatabaseManager databaseManager = new DatabaseManager(config);
+        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config);
 
-        if (databaseManager.connect()) {
+        /*
+        SceneManager sceneManager = new SceneManager();
+
+            // Add scenes
+            sceneManager.addScene("mainWindow", new Scene(new MainWindowView()));
+            sceneManager.addScene("addProject", new Scene(new AddProjectView()));
+
+            // Switch to a different scene
+            sceneManager.loadScene("addProject", stage);
+         */
+
+        if (databaseConnectionManager.connect()) {
             System.out.println("Connected successfully");
-            showUserLoginView(stage, databaseManager);
+            showUserLoginView(stage, databaseConnectionManager);
         } else {
             System.err.println("Connection failed");
-            showDatabaseLoginView(stage, databaseManager);
+            showDatabaseLoginView(stage, databaseConnectionManager);
         }
     }
 
-    private void showUserLoginView(Stage stage, DatabaseManager databaseManager) {
+    private void showUserLoginView(Stage stage, DatabaseConnectionManager databaseConnectionManager) {
 
-        UserDAO userDAO = new UserDAO(databaseManager);
+        UserDAO userDAO = new UserDAO(databaseConnectionManager);
         UserLoginController userLoginController = new UserLoginController(userDAO);
         UserLoginView userLoginView = new UserLoginView(userLoginController, stage);
 
         displayScene(new Scene(userLoginView, USER_LOGIN_VIEW_WIDTH, USER_LOGIN_VIEW_HEIGHT), stage, "User Login");
     }
 
-    private void showDatabaseLoginView(Stage stage, DatabaseManager databaseManager) {
+    private void showDatabaseLoginView(Stage stage, DatabaseConnectionManager databaseConnectionManager) {
 
-        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseManager);
+        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
         displayScene(new Scene(databaseLoginView, DATABASE_LOGIN_VIEW_WIDTH, DATABASE_LOGIN_VIEW_HEIGHT), stage, "Database Login");

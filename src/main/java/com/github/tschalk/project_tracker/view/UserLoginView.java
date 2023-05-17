@@ -90,7 +90,7 @@ public class UserLoginView extends VBox {
     private void switchToMainWindowView() {
 
         ProjectDAO projectDAO = new ProjectDAO(userLoginController.getUserDAO().getDatabaseManager());
-        MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController.getCurrentUser(), stage);
+        MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController.getCurrentUser());
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
 
         Scene scene = new Scene(mainWindowView, 800, 600);

@@ -1,6 +1,6 @@
 package com.github.tschalk.project_tracker.dao;
 
-import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.User;
 
 import java.sql.Connection;
@@ -9,12 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
-    DatabaseManager databaseManager;
+    DatabaseConnectionManager databaseConnectionManager;
     Connection connection;
 
-    public UserDAO(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
-        this.connection = databaseManager.getConnection();
+    public UserDAO(DatabaseConnectionManager databaseConnectionManager) {
+        this.databaseConnectionManager = databaseConnectionManager;
+        this.connection = databaseConnectionManager.getConnection();
     }
 
     public User readUserByUsername(String username) {
@@ -42,7 +42,7 @@ public class UserDAO {
         this.connection = connection;
     }
 
-    public DatabaseManager getDatabaseManager() {
-        return databaseManager;
+    public DatabaseConnectionManager getDatabaseManager() {
+        return databaseConnectionManager;
     }
 }

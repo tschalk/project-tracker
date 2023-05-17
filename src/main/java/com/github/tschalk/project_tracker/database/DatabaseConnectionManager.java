@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * Sie stellt die Verbindung zur Datenbank her.
  */
 
-public class DatabaseManager {
+public class DatabaseConnectionManager {
     private String host;
     private String port;
     private String username;
@@ -18,7 +18,7 @@ public class DatabaseManager {
     private final DatabaseConfig config;
     private Connection connection;
 
-    public DatabaseManager(DatabaseConfig config) {
+    public DatabaseConnectionManager(DatabaseConfig config) {
         this.config = config;
         this.host = config.getProperty("database.host");
         this.port = config.getProperty("database.port");

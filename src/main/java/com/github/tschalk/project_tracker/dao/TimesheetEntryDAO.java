@@ -1,12 +1,12 @@
 package com.github.tschalk.project_tracker.dao;
 
-import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 
 public class TimesheetEntryDAO {
 
-    DatabaseManager databaseManager;
+    DatabaseConnectionManager databaseConnectionManager;
 
-    public TimesheetEntryDAO(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    public TimesheetEntryDAO(DatabaseConnectionManager databaseConnectionManager) {
+        this.databaseConnectionManager = databaseConnectionManager;
     }
 }

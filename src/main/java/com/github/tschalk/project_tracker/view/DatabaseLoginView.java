@@ -14,19 +14,18 @@ import javafx.stage.Stage;
 
 public class DatabaseLoginView extends VBox {
 
+    private final DatabaseLoginController databaseLoginController;
     private final Stage stage;
     private final TextField hostField;
     private final TextField portField;
     private final TextField usernameField;
     private final TextField databaseNameField;
     private final PasswordField passwordField;
-    private final DatabaseLoginController databaseLoginController;
 
     public DatabaseLoginView(DatabaseLoginController databaseLoginController, Stage stage) {
 
         this.databaseLoginController = databaseLoginController;
         this.stage = stage;
-
         this.hostField = new TextField();
         this.portField = new TextField();
         this.usernameField = new TextField();

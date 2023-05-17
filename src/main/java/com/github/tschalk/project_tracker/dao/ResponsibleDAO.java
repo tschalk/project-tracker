@@ -1,12 +1,12 @@
 package com.github.tschalk.project_tracker.dao;
 
-import com.github.tschalk.project_tracker.database.DatabaseManager;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 
 public class ResponsibleDAO {
 
-    DatabaseManager databaseManager;
+    DatabaseConnectionManager databaseConnectionManager;
 
-    public ResponsibleDAO(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    public ResponsibleDAO(DatabaseConnectionManager databaseConnectionManager) {
+        this.databaseConnectionManager = databaseConnectionManager;
     }
 }

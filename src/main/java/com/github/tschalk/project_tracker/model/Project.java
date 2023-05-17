@@ -1,12 +1,13 @@
 package com.github.tschalk.project_tracker.model;
 
 public class Project {
+
+    // benötige ich immeer beides Resposnible und ResponsibleId??
     int id;
-    String name;
-    int userId;
-    int responsibleUserId;
-    int costCenterId;
-    int workHours;
+    String description;
+    String responsible;
+    String costCenter;
+    int duration;
 
     public int getId() {
         return id;
@@ -16,43 +17,35 @@ public class Project {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getResponsible() {
+        return responsible;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setResponsible(String responsible) {
+        this.responsible = responsible;
     }
 
-    public int getResponsibleUserId() {
-        return responsibleUserId;
+    public String getCostCenter() {
+        return costCenter;
     }
 
-    public void setResponsibleUserId(int responsibleUserId) {
-        this.responsibleUserId = responsibleUserId;
+    public void setCostCenter(String costCenter) {
+        this.costCenter = costCenter;
     }
 
-    public int getCostCenterId() {
-        return costCenterId;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setCostCenterId(int costCenterId) {
-        this.costCenterId = costCenterId;
-    }
-
-    public int getWorkHours() {
-        return workHours;
-    }
-
-    public void setWorkHours(int workHours) {
-        this.workHours = workHours;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
