@@ -18,9 +18,9 @@ public class MainWindowController {
 //        this.stage = stage;
     }
 
-    public List<Project> getProjectList() {
-        return projectDAO.readAllProjectsByUserID(currentUser.getId());
-    }
+//    public List<Project> getProjectList() {
+//        return projectDAO.readAllProjectsByUserID(currentUser.getId());
+//    }
 
     public ProjectDAO getProjectDAO() {
         return projectDAO;

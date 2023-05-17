@@ -28,6 +28,17 @@ public class DatabaseConnectionManager {
     }
 
     public boolean connect() {
+
+        if (host == null || port == null || username == null || password == null || databaseName == null) {
+            System.out.println("properties are null");
+            return false;
+        }
+        if (host.isEmpty() || port.isEmpty() || username.isEmpty() || password.isEmpty() || databaseName.isEmpty()) {
+            System.out.println("properties are empty");
+            return false;
+        }
+
+        System.out.println("Try connecting to database...");
         try {
             String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
             connection = DriverManager.getConnection(url, username, password);

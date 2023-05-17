@@ -31,15 +31,11 @@ public class SceneManager {
         scenes.remove(name);
     }
 
-    public void loadScene(String name, Stage stage) {
-        stage.setScene(scenes.get(name));
+    public Scene loadScene(String name, Stage stage) {
+        Scene scene = scenes.get(name);
+        if (scene != null) {
+            stage.setScene(scene);
+        }
+        return scene;
     }
 }
-
-
-// Add scenes
-//            sceneManager.addScene("mainWindow", new Scene(new MainWindowView()));
-//                    sceneManager.addScene("addProject", new Scene(new AddProjectView()));
-//
-//                    // Switch to a different scene
-//                    sceneManager.loadScene("addProject", stage);

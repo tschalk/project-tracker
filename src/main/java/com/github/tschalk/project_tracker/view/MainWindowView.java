@@ -22,14 +22,14 @@ public class MainWindowView extends VBox {
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
 
-    MainWindowView(MainWindowController mainWindowController, Stage stage) {
+    public MainWindowView(MainWindowController mainWindowController, Stage stage) {
 
         this.stage = stage;
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
 
         initUI();
-        updateProjectTableView();
+//        updateProjectTableView();
     }
 
     private void initUI() {
@@ -74,11 +74,11 @@ public class MainWindowView extends VBox {
         this.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
     }
 
-    private void updateProjectTableView() {
-        ObservableList<Project> projectList = FXCollections.observableArrayList(mainWindowController.getProjectList());
-        projectTableView.setItems(projectList);
-        System.out.println("Project list updated!");
-    }
+//    private void updateProjectTableView() {
+//        ObservableList<Project> projectList = FXCollections.observableArrayList(mainWindowController.getProjectList());
+//        projectTableView.setItems(projectList);
+//        System.out.println("Project list updated!");
+//    }
 
 
 
