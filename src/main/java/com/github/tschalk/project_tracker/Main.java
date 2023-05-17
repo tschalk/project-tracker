@@ -49,6 +49,7 @@ public class Main extends Application {
         // Hier wird die Verbindung zur Datenbank hergestellt.
         DatabaseConfig config = new DatabaseConfig();
         DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config);
+        databaseConnectionManager.connect();
 
         // Hier werden alle Controller und Views erstellt.
         DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager);
@@ -75,7 +76,7 @@ public class Main extends Application {
         sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH,ADD_PROJECT_VIEW_HEIGHT));
 
         // Hier werden die Entry-points der Anwendung definiert.
-        if (databaseConnectionManager.connect()) {
+        if (databaseConnectionManager.isConnected()) {
             System.out.println("Connected to database");
             sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
 
