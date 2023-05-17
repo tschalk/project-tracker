@@ -27,6 +27,15 @@ public class DatabaseConnectionManager {
         this.databaseName = config.getProperty("database.databaseName");
     }
 
+    public boolean isConnected() {
+        try {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean connect() {
 
         if (host == null || port == null || username == null || password == null || databaseName == null) {

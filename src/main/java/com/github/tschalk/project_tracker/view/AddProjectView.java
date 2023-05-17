@@ -1,14 +1,16 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.AddProjectController;
+import com.github.tschalk.project_tracker.model.CostCenter;
+import com.github.tschalk.project_tracker.model.Responsible;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 
 public class AddProjectView extends VBox {
@@ -16,16 +18,17 @@ public class AddProjectView extends VBox {
     private final AddProjectController addProjectController;
     private final Stage stage;
     private final TextField descriptionField;
-    private final TextField costCenterField;
-    private final TextField responsibleField;
+    private final ComboBox<CostCenter> costCenterComboBox;
+    private final ComboBox<Responsible> responsibleComboBox;
+
 
     public AddProjectView(AddProjectController addProjectController, Stage stage) {
 
         this.addProjectController = addProjectController;
         this.stage = stage;
         this.descriptionField = new TextField();
-        this.costCenterField = new TextField();
-        this.responsibleField = new TextField();
+        this.costCenterComboBox = new ComboBox<>();
+        this.responsibleComboBox = new ComboBox<>();
 
         initUI();
     }
@@ -47,11 +50,13 @@ public class AddProjectView extends VBox {
 
         Label costCenterLabel = new Label("Cost Center:");
         gridPane.add(costCenterLabel, 0, 1);
-        gridPane.add(costCenterField, 1, 1);
+        gridPane.add(costCenterComboBox, 1, 1);
+        costCenterComboBox.setItems(addProjectController.getCostCenters());
 
         Label responsibleLabel = new Label("Responsible:");
         gridPane.add(responsibleLabel, 0, 2);
-        gridPane.add(responsibleField, 1, 2);
+        gridPane.add(responsibleComboBox, 1, 2);
+
 
         Button addButton = new Button("Ok");
         addButton.setOnAction(event -> {
@@ -64,10 +69,57 @@ public class AddProjectView extends VBox {
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(event -> stage.close());
 
-        HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(addButton, cancelButton);
-        buttonContainer.getStyleClass().add("button-container");
+        Button addCostCenterButton = new Button("Add Cost Center");
+        addCostCenterButton.setOnAction(event -> {
 
-        this.getChildren().addAll(titleLabel, gridPane, buttonContainer);
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Add new Cost Center");
+
+            ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+            TextField textField = new TextField();
+            textField.setPromptText("Cost Center");
+
+            dialog.getDialogPane().setContent(textField);
+
+            // Behandel den OK-Button
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == okButtonType) {
+                    return textField.getText();
+                }
+                return null;
+            });
+
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(name -> {
+                addProjectController.addCostCenter(name);
+                costCenterComboBox.setItems(addProjectController.getCostCenters());
+            });
+        });
+        Button addResponsibleButton = new Button("Add Responsible");
+
+        HBox addEntityButtonContainer = new HBox(10);
+        addEntityButtonContainer.getChildren().addAll(addCostCenterButton, addResponsibleButton);
+        addEntityButtonContainer.getStyleClass().add("button-container");
+
+        HBox actionButtonContainer = new HBox(10);
+        actionButtonContainer.getChildren().addAll(addButton, cancelButton);
+        actionButtonContainer.getStyleClass().add("button-container");
+
+        setButtonSize(130, 25, addButton, cancelButton, addCostCenterButton, addResponsibleButton);
+
+        this.getChildren().addAll(titleLabel, gridPane, addEntityButtonContainer, actionButtonContainer);
     }
+
+    private void setButtonSize(double width, double height, Button... buttons) {
+        for (Button button : buttons) {
+            button.setMinWidth(width);
+            button.setMaxWidth(width);
+            button.setMinHeight(height);
+            button.setMaxHeight(height);
+        }
+    }
+
 }

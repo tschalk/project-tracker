@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.github.tschalk.project_tracker.Main.*;
+import static javafx.scene.paint.Color.*;
 
 public class SceneManager {
 
@@ -52,7 +53,6 @@ public class SceneManager {
 
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-
         stage.setScene(scene);
         stage.setTitle(name);
         stage.setResizable(false);

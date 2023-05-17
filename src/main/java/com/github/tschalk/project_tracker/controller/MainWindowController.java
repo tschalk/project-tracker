@@ -12,7 +12,7 @@ public class MainWindowController {
     User currentUser;
 //    Stage stage;
 
-    public MainWindowController(ProjectDAO projectDAO, User currentUser/*, Stage stage*/) {
+    public MainWindowController(ProjectDAO projectDAO, User currentUser) {
         this.projectDAO = projectDAO;
         this.currentUser = currentUser;
 //        this.stage = stage;
@@ -24,5 +24,9 @@ public class MainWindowController {
 
     public ProjectDAO getProjectDAO() {
         return projectDAO;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 }
