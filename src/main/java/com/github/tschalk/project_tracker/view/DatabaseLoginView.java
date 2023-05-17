@@ -1,16 +1,15 @@
 package com.github.tschalk.project_tracker.view;
 
-import com.github.tschalk.project_tracker.Main;
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
-import com.github.tschalk.project_tracker.controller.UserLoginController;
-import com.github.tschalk.project_tracker.dao.UserDAO;
+import com.github.tschalk.project_tracker.utils.SceneManager;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import static com.github.tschalk.project_tracker.Main.USER_LOGIN_SCENE;
 
 public class DatabaseLoginView extends VBox {
 
@@ -134,16 +133,9 @@ public class DatabaseLoginView extends VBox {
 
     private void switchToLoginView() {
 
-        UserDAO userDAO = new UserDAO(databaseLoginController.getDatabaseManager()); // Weiterleitung der Datenbankverbindung an den UserDAO
-        UserLoginController userLoginController = new UserLoginController(userDAO);
-        UserLoginView userLoginView = new UserLoginView(userLoginController, stage);
+        SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.loadAndShowCustomScene(USER_LOGIN_SCENE, stage);
 
-        Scene scene = new Scene(userLoginView, Main.USER_LOGIN_VIEW_WIDTH, Main.USER_LOGIN_VIEW_HEIGHT);
-        stage.setScene(scene);
-        stage.setTitle("User Login");
-        stage.setResizable(false);
-        stage.centerOnScreen();
-        stage.show();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String header, String message) {

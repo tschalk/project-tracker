@@ -1,26 +1,15 @@
 package com.github.tschalk.project_tracker.view;
 
-import com.github.tschalk.project_tracker.Main;
-import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
-import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
 import static com.github.tschalk.project_tracker.Main.MAIN_WINDOW_SCENE;
-import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
 
 public class UserLoginView extends VBox {
 
@@ -95,13 +84,10 @@ public class UserLoginView extends VBox {
     }
 
     private void switchToMainWindowView() {
+
         SceneManager sceneManager = SceneManager.getInstance();
-        Scene scene = sceneManager.loadScene(MAIN_WINDOW_SCENE, stage);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-        stage.setTitle(MAIN_WINDOW_SCENE);
-        stage.setResizable(false);
-        stage.centerOnScreen();
-        stage.show();
+        sceneManager.loadAndShowCustomScene(MAIN_WINDOW_SCENE, stage);
+
     }
 
     private void showAlert(String message) {

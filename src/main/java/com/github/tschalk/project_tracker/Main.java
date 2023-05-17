@@ -17,8 +17,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
 public class Main extends Application {
 
     public static final String MAIN_WINDOW_SCENE = "Main Window";
@@ -31,13 +29,11 @@ public class Main extends Application {
     private static final int DATABASE_LOGIN_VIEW_WIDTH = 250;
     private static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
     private static final int MAIN_WINDOW_VIEW_WIDTH = 800;
-    private static final int MAIN_WINDOW_VIEW_HEIGHT = 600;
+    private static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     private static final int ADD_PROJECT_VIEW_WIDTH = 800;
     private static final int ADD_PROJECT_VIEW_HEIGHT = 600;
 
     public static final String STYLESHEET_PATH = "/css/styles.css";
-
-    private SceneManager sceneManager;
 
 
     public static void main(String[] args) {
@@ -66,9 +62,8 @@ public class Main extends Application {
         AddProjectController addProjectController = new AddProjectController(mainWindowController.getProjectDAO()); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
 
-
         // Hier werden die Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
-        this.sceneManager = SceneManager.getInstance();
+        SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.addScene(USER_LOGIN_SCENE, new Scene(userLoginView, USER_LOGIN_VIEW_WIDTH, USER_LOGIN_VIEW_HEIGHT));
         sceneManager.addScene(DATABASE_LOGIN_SCENE, new Scene(databaseLoginView, DATABASE_LOGIN_VIEW_WIDTH, DATABASE_LOGIN_VIEW_HEIGHT));
         sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH,MAIN_WINDOW_VIEW_HEIGHT));
@@ -76,26 +71,13 @@ public class Main extends Application {
 
         // Hier werden die Entry-points der Anwendung definiert.
         if (databaseConnectionManager.connect()) {
-            System.out.println("Connected successfully");
-            displayScene(USER_LOGIN_SCENE, stage );
+            System.out.println("Connected to database");
+            sceneManager.loadAndShowCustomScene(USER_LOGIN_SCENE, stage);
+
         } else {
-            System.err.println("Connection failed");
-            displayScene(DATABASE_LOGIN_SCENE, stage );
+            System.err.println("Connection to database failed!");
+            sceneManager.loadAndShowCustomScene(DATABASE_LOGIN_SCENE, stage);
         }
     }
 
-
-    private void displayScene(String sceneName, Stage stage) {
-
-        sceneManager.loadScene(sceneName, stage);
-        Scene scene = sceneManager.loadScene(sceneName, stage);
-
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-
-        stage.setTitle(sceneName);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.centerOnScreen();
-        stage.show();
-    }
 }
