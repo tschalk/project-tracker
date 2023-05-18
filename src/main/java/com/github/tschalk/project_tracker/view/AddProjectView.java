@@ -62,12 +62,24 @@ public class AddProjectView extends VBox {
 
         Button removeCostCenterButton = new Button("Remove Cost Center");
         removeCostCenterButton.setOnAction(event -> {
+
             CostCenter selectedCostCenter = costCenterComboBox.getValue();
             if (selectedCostCenter != null) {
-                System.out.println("Remove " + selectedCostCenter);
-                addProjectController.removeCostCenter(selectedCostCenter);
-                costCenterComboBox.setItems(addProjectController.getCostCenters());
-                costCenterComboBox.getSelectionModel().clearSelection();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to remove the selected cost center?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){
+                    // Der Benutzer hat OK gedrückt, also entferne Cost Center
+                    System.out.println("Remove " + selectedCostCenter);
+                    addProjectController.removeCostCenter(selectedCostCenter);
+//                    costCenterComboBox.setItems(addProjectController.getCostCenters());
+                    costCenterComboBox.getSelectionModel().clearSelection();
+                }
             }
         });
 
@@ -77,7 +89,7 @@ public class AddProjectView extends VBox {
 
         Button addButton = new Button("Ok");
         addButton.setOnAction(event -> {
-            // TODO: add project to database if all fields are filled
+            // TODO: add project to database if all fields are filled or selected
             // ...
 
             Stage currentStage = (Stage) addButton.getScene().getWindow();

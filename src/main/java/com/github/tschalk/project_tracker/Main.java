@@ -34,7 +34,7 @@ public class Main extends Application {
     private static final int MAIN_WINDOW_VIEW_WIDTH = 800;
     private static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     private static final int ADD_PROJECT_VIEW_WIDTH = 300;
-    private static final int ADD_PROJECT_VIEW_HEIGHT = 210;
+    private static final int ADD_PROJECT_VIEW_HEIGHT = 300;
 
     public static final String STYLESHEET_PATH = "/css/styles.css";
 
