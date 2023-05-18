@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CostCenterDAO {
 
-    DatabaseConnectionManager databaseConnectionManager;
+    private final DatabaseConnectionManager databaseConnectionManager;
     private final Connection connection;
 
     public CostCenterDAO(DatabaseConnectionManager databaseConnectionManager) {
@@ -18,10 +18,9 @@ public class CostCenterDAO {
     }
 
     public void add(CostCenter costCenter) {
-        String query = "INSERT INTO CostCenter (name) VALUES (?)";
+        String query = "INSERT INTO costcenter (name) VALUES (?)";
 
-        try (PreparedStatement stmt = databaseConnectionManager.getConnection().prepareStatement(query)) {
-            System.out.println("Adding cost center: " + costCenter.getName());
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, costCenter.getName());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -30,11 +29,10 @@ public class CostCenterDAO {
     }
 
     public List<CostCenter> getAll() {
-        System.out.println("databaseConnectionManager.isConnected() = " + databaseConnectionManager.isConnected());
         List<CostCenter> costCenterList = new ArrayList<>();
-        String query = "SELECT * FROM CostCenter";
+        String query = "SELECT * FROM costcenter";
 
-        try (PreparedStatement stmt = databaseConnectionManager.getConnection().prepareStatement(query);
+        try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -54,15 +52,13 @@ public class CostCenterDAO {
 
         // TODO: Prüfe ob CostCenter in Verwendung ist.
 
-        String sql = "DELETE FROM CostCenter WHERE id = ?";
+        String sql = "DELETE FROM costcenter WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, costCenter.getId());
             pstmt.executeUpdate();
-            System.out.println("Deleted cost center: " + costCenter.getName());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
 }

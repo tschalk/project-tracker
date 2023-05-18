@@ -18,11 +18,16 @@ public class AddProjectController {
     private ResponsibleDAO responsibleDAO;
     private User currentUser;
 
-    public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, User currentUser) {
+    public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, User currentUser) {
         this.projectDAO = projectDAO;
         this.costCenterDAO = costCenterDAO;
         this.currentUser = currentUser;
+        this.responsibleDAO = responsibleDAO;
     }
+
+    /**
+     * Cost Center:
+     */
 
     public void addCostCenter(String name) {
         CostCenter newCostCenter = new CostCenter();
@@ -35,29 +40,35 @@ public class AddProjectController {
         return FXCollections.observableArrayList(costCenterList);
     }
 
-    public ProjectDAO getProjectDAO() {
-        return projectDAO;
-    }
-
     public void removeCostCenter(CostCenter costCenter) {
         costCenterDAO.remove(costCenter);
     }
 
+    /**
+     * Responsible:
+     */
 
+    public void addResponsible(String name) {
+        Responsible newResponsible = new Responsible();
+        newResponsible.setName(name);
+        responsibleDAO.add(newResponsible);
+    }
 
-//    public ObservableList<CostCenter> getCostCenters() {
-//        return costCenterDAO.getAll();
-//    }
-//
-//    public ObservableList<Responsible> getResponsibles() {
-//        return responsibleDAO.getAll();
-//    }
-//
-//    public void addCostCenter(String name) {
-//        costCenterDAO.add(name);
-//    }
-//
-//    public void addResponsible(String name) {
-//        responsibleDAO.add(name);
-//    }
+    public ObservableList<Responsible> getResponsible() {
+        List<Responsible> responsibleList = responsibleDAO.getAll();
+        return FXCollections.observableArrayList(responsibleList);
+    }
+
+    public void removeResponsible(Responsible responsible) {
+        responsibleDAO.remove(responsible);
+    }
+
+    /**
+     * Getter & Setter:
+     */
+
+    public ProjectDAO getProjectDAO() {
+        return projectDAO;
+    }
+
 }

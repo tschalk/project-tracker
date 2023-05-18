@@ -64,8 +64,8 @@ public class Main extends Application {
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
 
         CostCenterDAO costCenterDAO = new CostCenterDAO(databaseConnectionManager);
-//        ResponsibleDAO responsibleDAO = new ResponsibleDAO();
-        AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, userLoginController.getCurrentUser()); // ProjectDAO
+        ResponsibleDAO responsibleDAO = new ResponsibleDAO(databaseConnectionManager);
+        AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController.getCurrentUser()); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
 
         // Hier werden die Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
