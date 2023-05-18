@@ -39,6 +39,11 @@ public class AddProjectController {
         return projectDAO;
     }
 
+    public void removeCostCenter(CostCenter costCenter) {
+        costCenterDAO.remove(costCenter);
+    }
+
+
 
 //    public ObservableList<CostCenter> getCostCenters() {
 //        return costCenterDAO.getAll();

@@ -10,9 +10,11 @@ import java.util.List;
 public class CostCenterDAO {
 
     DatabaseConnectionManager databaseConnectionManager;
+    private final Connection connection;
 
     public CostCenterDAO(DatabaseConnectionManager databaseConnectionManager) {
         this.databaseConnectionManager = databaseConnectionManager;
+        this.connection = databaseConnectionManager.getConnection();
     }
 
     public void add(CostCenter costCenter) {
@@ -46,6 +48,21 @@ public class CostCenterDAO {
         }
 
         return costCenterList;
+    }
+
+    public void remove(CostCenter costCenter) {
+
+        // TODO: Prüfe ob CostCenter in Verwendung ist.
+
+        String sql = "DELETE FROM CostCenter WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, costCenter.getId());
+            pstmt.executeUpdate();
+            System.out.println("Deleted cost center: " + costCenter.getName());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

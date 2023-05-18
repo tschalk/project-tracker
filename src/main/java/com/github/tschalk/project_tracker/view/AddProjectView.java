@@ -20,6 +20,7 @@ public class AddProjectView extends VBox {
     private final TextField descriptionField;
     private final ComboBox<CostCenter> costCenterComboBox;
     private final ComboBox<Responsible> responsibleComboBox;
+    private CostCenter lastSelectedCostCenter;
 
 
     public AddProjectView(AddProjectController addProjectController, Stage stage) {
@@ -51,12 +52,25 @@ public class AddProjectView extends VBox {
         Label costCenterLabel = new Label("Cost Center:");
         gridPane.add(costCenterLabel, 0, 1);
         gridPane.add(costCenterComboBox, 1, 1);
+
+        // Aktualisiert die ComboBox-Elemente, wenn die ComboBox angezeigt wird
         costCenterComboBox.showingProperty().addListener((observable, wasShowing, isNowShowing) -> {
             if (isNowShowing) {
                 costCenterComboBox.setItems(addProjectController.getCostCenters());
             }
         });
 
+
+        Button removeCostCenterButton = new Button("Remove Cost Center");
+        removeCostCenterButton.setOnAction(event -> {
+            CostCenter selectedCostCenter = costCenterComboBox.getValue();
+            if (selectedCostCenter != null) {
+                System.out.println("Remove " + selectedCostCenter);
+                addProjectController.removeCostCenter(selectedCostCenter);
+                costCenterComboBox.setItems(addProjectController.getCostCenters());
+                costCenterComboBox.getSelectionModel().clearSelection();
+            }
+        });
 
         Label responsibleLabel = new Label("Responsible:");
         gridPane.add(responsibleLabel, 0, 2);
@@ -113,10 +127,12 @@ public class AddProjectView extends VBox {
         actionButtonContainer.getChildren().addAll(addButton, cancelButton);
         actionButtonContainer.getStyleClass().add("button-container");
 
+        HBox removeButtonContainer = new HBox(removeCostCenterButton);
+        removeButtonContainer.getStyleClass().add("button-container");
+
         setButtonSize(130, 25, addButton, cancelButton, addCostCenterButton, addResponsibleButton);
 
-        this.getChildren().addAll(titleLabel, gridPane, addEntityButtonContainer, actionButtonContainer);
-    }
+        this.getChildren().addAll(titleLabel, gridPane, addEntityButtonContainer, removeButtonContainer, actionButtonContainer);    }
 
     private void setButtonSize(double width, double height, Button... buttons) {
         for (Button button : buttons) {
