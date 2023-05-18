@@ -60,7 +60,6 @@ public class AddProjectView extends VBox {
             }
         });
 
-
         Button removeCostCenterButton = new Button("Remove Cost Center");
         removeCostCenterButton.setOnAction(event -> {
             CostCenter selectedCostCenter = costCenterComboBox.getValue();
@@ -76,7 +75,6 @@ public class AddProjectView extends VBox {
         gridPane.add(responsibleLabel, 0, 2);
         gridPane.add(responsibleComboBox, 1, 2);
 
-
         Button addButton = new Button("Ok");
         addButton.setOnAction(event -> {
             // TODO: add project to database if all fields are filled
@@ -85,6 +83,7 @@ public class AddProjectView extends VBox {
             Stage currentStage = (Stage) addButton.getScene().getWindow();
             currentStage.close();
         });
+
         Button cancelButton = new Button("Cancel");
         cancelButton.setOnAction(event -> stage.close());
 
@@ -117,6 +116,7 @@ public class AddProjectView extends VBox {
                 costCenterComboBox.setItems(addProjectController.getCostCenters());
             });
         });
+
         Button addResponsibleButton = new Button("Add Responsible");
 
         HBox addEntityButtonContainer = new HBox(10);
@@ -135,6 +135,7 @@ public class AddProjectView extends VBox {
         this.getChildren().addAll(titleLabel, gridPane, addEntityButtonContainer, removeButtonContainer, actionButtonContainer);    }
 
     private void setButtonSize(double width, double height, Button... buttons) {
+
         for (Button button : buttons) {
             button.setMinWidth(width);
             button.setMaxWidth(width);
