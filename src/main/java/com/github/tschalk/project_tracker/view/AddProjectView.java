@@ -51,7 +51,12 @@ public class AddProjectView extends VBox {
         Label costCenterLabel = new Label("Cost Center:");
         gridPane.add(costCenterLabel, 0, 1);
         gridPane.add(costCenterComboBox, 1, 1);
-        costCenterComboBox.setItems(addProjectController.getCostCenters());
+        costCenterComboBox.showingProperty().addListener((observable, wasShowing, isNowShowing) -> {
+            if (isNowShowing) {
+                costCenterComboBox.setItems(addProjectController.getCostCenters());
+            }
+        });
+
 
         Label responsibleLabel = new Label("Responsible:");
         gridPane.add(responsibleLabel, 0, 2);
