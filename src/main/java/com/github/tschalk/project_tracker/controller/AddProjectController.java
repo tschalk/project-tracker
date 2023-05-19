@@ -6,6 +6,7 @@ import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.model.CostCenter;
 import com.github.tschalk.project_tracker.model.Responsible;
 import com.github.tschalk.project_tracker.model.User;
+import com.github.tschalk.project_tracker.view.MainWindowView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -16,13 +17,15 @@ public class AddProjectController {
     private ProjectDAO projectDAO;
     private CostCenterDAO costCenterDAO;
     private ResponsibleDAO responsibleDAO;
-    private User currentUser;
+    private UserLoginController userLoginController;
+    private MainWindowView mainWindowView;
 
-    public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, User currentUser) {
+    public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, UserLoginController userLoginController, MainWindowView mainWindowView) {
         this.projectDAO = projectDAO;
         this.costCenterDAO = costCenterDAO;
-        this.currentUser = currentUser;
         this.responsibleDAO = responsibleDAO;
+        this.userLoginController = userLoginController;
+        this.mainWindowView = mainWindowView;
     }
 
     /**
@@ -71,4 +74,11 @@ public class AddProjectController {
         return projectDAO;
     }
 
+    public User getCurrentUser() {
+        return userLoginController.getCurrentUser();
+    }
+
+    public MainWindowView getMainWindowView() {
+        return mainWindowView;
+    }
 }

@@ -3,14 +3,14 @@ package com.github.tschalk.project_tracker.model;
 public class Project {
 
     // benötige ich immeer beides Resposnible und ResponsibleId??
-    int id;
-    String description;
-    String responsible;
-    String costCenter;
-    int duration;
+    private int id;
+    private String description;
+    private String responsible;
+    private String costCenter;
+    private int duration;
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -18,7 +18,7 @@ public class Project {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
@@ -26,7 +26,7 @@ public class Project {
     }
 
     public String getResponsible() {
-        return responsible;
+        return this.responsible;
     }
 
     public void setResponsible(String responsible) {
@@ -34,7 +34,7 @@ public class Project {
     }
 
     public String getCostCenter() {
-        return costCenter;
+        return this.costCenter;
     }
 
     public void setCostCenter(String costCenter) {
@@ -42,7 +42,7 @@ public class Project {
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public void setDuration(int duration) {

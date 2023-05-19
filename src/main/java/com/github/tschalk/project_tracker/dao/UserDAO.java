@@ -17,7 +17,7 @@ public class UserDAO {
         this.connection = databaseConnectionManager.getConnection();
     }
 
-    public User readUserByUsername(String username) {
+    public User getUser(String username) {
         String query = "SELECT * FROM user WHERE username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
@@ -37,6 +37,49 @@ public class UserDAO {
             return null;
         }
     }
+
+    public int getUserId(String username) {
+        String query = "SELECT id FROM User WHERE username = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, username);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+//    public boolean checkPassword(User user, String password) {
+//        String query = "SELECT password FROM User WHERE id = ?";
+//
+//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+//
+//            pstmt.setInt(1, user.getId());
+//
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            if (rs.next()) {
+//                String storedPasswordHash = rs.getString("password");
+//                return checkPasswordHash(password, storedPasswordHash); // Sie müssen diese Methode implementieren, um den gehashten Passwort-String zu überprüfen
+//            } else {
+//                return false;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+
+
 
     public void setConnection(Connection connection) {
         this.connection = connection;

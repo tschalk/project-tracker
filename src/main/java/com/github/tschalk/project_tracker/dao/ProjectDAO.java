@@ -1,30 +1,40 @@
 package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
+import com.github.tschalk.project_tracker.model.CostCenter;
+import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.model.Responsible;
+import com.github.tschalk.project_tracker.model.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
 public class ProjectDAO {
 
-    DatabaseConnectionManager databaseConnectionManager;
+    private final Connection connection;
+    private final CostCenterDAO costCenterDAO;
+    private final ResponsibleDAO responsibleDAO;
 
-    public ProjectDAO(DatabaseConnectionManager databaseConnectionManager) {
-        this.databaseConnectionManager = databaseConnectionManager;
+    public ProjectDAO(DatabaseConnectionManager databaseConnectionManager, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO) {
+        this.connection = databaseConnectionManager.getConnection();
+        this.costCenterDAO = costCenterDAO;
+        this.responsibleDAO = responsibleDAO;
     }
 
-    public void addProject(String description, String costCenter, String responsible) {
-        String sql = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
+    public void addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
+        String query = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = databaseConnectionManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             pstmt.setString(1, description);
-//            pstmt.setInt(2, getCostCenterId(costCenter));
-//            pstmt.setInt(3, getResponsibleId(responsible));
-//            pstmt.setInt(4, getUserId());
+            pstmt.setInt(2, costCenter.getId());
+            pstmt.setInt(3, responsible.getId());
+            pstmt.setInt(4, user.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -32,24 +42,32 @@ public class ProjectDAO {
         }
     }
 
-    public DatabaseConnectionManager getDatabaseConnectionManager() {
-        return databaseConnectionManager;
+    public ObservableList<Project> readAllProjectsByUserID(int userID) {
+        ObservableList<Project> projectList = FXCollections.observableArrayList();
+        String query = "SELECT * FROM project WHERE user_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(rs.getInt("id"));
+                project.setDescription(rs.getString("description"));
+
+                int costCenterId = rs.getInt("cost_center_id");
+                CostCenter costCenter = costCenterDAO.getCostCenterById(costCenterId);
+                project.setCostCenter(costCenter.getName());
+
+                int responsibleId = rs.getInt("responsible_id");
+                Responsible responsible = responsibleDAO.getResponsibleById(responsibleId);
+                project.setResponsible(responsible.getName());
+
+                projectList.add(project);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projectList;
     }
-
-//    private int getCostCenterId(String costCenter) {
-//        ID des Cost Centers basierend auf dem Namen zu erhalten
-//
-//        return id;
-//    }
-//
-//    private int getResponsibleId(String responsible) {
-//        ID des Responsible basierend auf dem Namen zu erhalten
-//
-//        return id;
-//    }
-
-
-
-
-
 }

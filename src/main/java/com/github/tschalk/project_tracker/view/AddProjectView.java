@@ -22,7 +22,6 @@ public class AddProjectView extends VBox {
     private final ComboBox<Responsible> responsibleComboBox;
 
     public AddProjectView(AddProjectController addProjectController, Stage stage) {
-
         this.addProjectController = addProjectController;
         this.stage = stage;
         this.descriptionField = new TextField();
@@ -33,7 +32,6 @@ public class AddProjectView extends VBox {
     }
 
     private void initUI() {
-
         this.setSpacing(10);
         this.setPadding(new Insets(10));
 
@@ -173,14 +171,29 @@ public class AddProjectView extends VBox {
             });
         });
 
-        // 3. Buttons
+        // 3. Ok & Cancel - Buttons
         Button addButton = new Button("Ok");
         addButton.setOnAction(event -> {
-            // TODO: add project to database if all fields are filled or selected
-            // ...
+            if (descriptionField.getText() != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
+                addProjectController.getProjectDAO().addProject(
+                        descriptionField.getText(),
+                        costCenterComboBox.getValue(),
+                        responsibleComboBox.getValue(),
+                        addProjectController.getCurrentUser());
 
-            Stage currentStage = (Stage) addButton.getScene().getWindow();
-            currentStage.close();
+                Stage currentStage = (Stage) addButton.getScene().getWindow();
+
+                addProjectController.getMainWindowView().updateProjectTableView();
+
+                currentStage.close();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Please make sure all fields are filled and selected!");
+
+                alert.showAndWait();
+            }
         });
 
         Button cancelButton = new Button("Cancel");
@@ -207,7 +220,6 @@ public class AddProjectView extends VBox {
         this.getChildren().addAll(titleLabel, gridPane, addEntityButtonContainer, removeButtonContainer, actionButtonContainer);    }
 
     private void setButtonSize(double width, double height, Button... buttons) {
-
         for (Button button : buttons) {
             button.setMinWidth(width);
             button.setMaxWidth(width);

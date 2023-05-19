@@ -1,7 +1,5 @@
 package com.github.tschalk.project_tracker.utils;
 
-import com.github.tschalk.project_tracker.controller.AddProjectController;
-import com.github.tschalk.project_tracker.view.AddProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -9,22 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.github.tschalk.project_tracker.Main.*;
-import static javafx.scene.paint.Color.*;
-
+import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
 public class SceneManager {
 
     private static SceneManager sceneManager = null;
 
-    private Map<String, Scene> scenes = new HashMap<>();
+    private final Map<String, Scene> scenes = new HashMap<>();
 
     // Privater Konsruktor damit nur eine Instanz von SceneManager existiert
-    private SceneManager() {
-    }
+    private SceneManager() {}
 
     // Get the single instance of SceneManager
     public static SceneManager getInstance() {
-
         if (sceneManager == null) {
             sceneManager = new SceneManager();
         }
@@ -32,7 +26,6 @@ public class SceneManager {
     }
 
     public void addScene(String name, Scene scene) {
-
         scenes.put(name, scene);
     }
 
@@ -41,8 +34,8 @@ public class SceneManager {
     }
 
     public Scene loadScene(String name, Stage stage) {
-
         Scene scene = scenes.get(name);
+
         if (scene != null) {
             stage.setScene(scene);
         }
@@ -50,9 +43,9 @@ public class SceneManager {
     }
 
     public void showCustomScene(String name, Stage stage) {
-
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
+
         stage.setScene(scene);
         stage.setTitle(name);
         stage.setResizable(false);
@@ -61,7 +54,6 @@ public class SceneManager {
     }
 
     public void showNewWindowWithCustomScene(String name) {
-
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
@@ -72,5 +64,6 @@ public class SceneManager {
         newStage.centerOnScreen();
         newStage.show();
     }
+
 
 }

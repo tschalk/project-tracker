@@ -9,11 +9,9 @@ import java.util.List;
 
 public class CostCenterDAO {
 
-    private final DatabaseConnectionManager databaseConnectionManager;
     private final Connection connection;
 
     public CostCenterDAO(DatabaseConnectionManager databaseConnectionManager) {
-        this.databaseConnectionManager = databaseConnectionManager;
         this.connection = databaseConnectionManager.getConnection();
     }
 
@@ -46,6 +44,46 @@ public class CostCenterDAO {
         }
 
         return costCenterList;
+    }
+
+    public CostCenter getCostCenterById(int costCenterId) {
+        String query = "SELECT * FROM CostCenter WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, costCenterId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                CostCenter costCenter = new CostCenter();
+                costCenter.setId(rs.getInt("id"));
+                costCenter.setName(rs.getString("name"));
+                return costCenter;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+
+    public int getCostCenterId(String costCenterName) {
+        String query = "SELECT id FROM CostCenter WHERE name = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, costCenterName);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return -1;
     }
 
     public void remove(CostCenter costCenter) {

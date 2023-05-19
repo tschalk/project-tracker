@@ -1,17 +1,31 @@
 package com.github.tschalk.project_tracker.view;
 
+import com.github.tschalk.project_tracker.Main;
+import com.github.tschalk.project_tracker.controller.AddProjectController;
+import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
+import com.github.tschalk.project_tracker.dao.CostCenterDAO;
+import com.github.tschalk.project_tracker.dao.ProjectDAO;
+import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
+import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import static com.github.tschalk.project_tracker.Main.MAIN_WINDOW_SCENE;
 
 public class UserLoginView extends VBox {
+
+    public static final String MAIN_WINDOW_SCENE = "Main Window";
+    public static final String ADD_PROJECT_SCENE = "Add Project";
+    public static final int MAIN_WINDOW_VIEW_WIDTH = 335;
+    public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
+    public static final int ADD_PROJECT_VIEW_WIDTH = 300;
+    public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
 
     private final TextField usernameField;
     private final PasswordField passwordField;
@@ -19,7 +33,6 @@ public class UserLoginView extends VBox {
     private final UserLoginController userLoginController;
 
     public UserLoginView(UserLoginController userLoginController, Stage stage) {
-
         this.userLoginController = userLoginController;
         this.stage = stage;
 
@@ -30,7 +43,6 @@ public class UserLoginView extends VBox {
     }
 
     private void initUI() {
-
         this.setSpacing(10);
         this.setPadding(new Insets(10));
 
@@ -59,14 +71,12 @@ public class UserLoginView extends VBox {
     }
 
     private void login() {
-
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
         username = "Max";
         password = "123";
-        //
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");
@@ -84,18 +94,33 @@ public class UserLoginView extends VBox {
     }
 
     private void switchToMainWindowView() {
+        DatabaseConnectionManager databaseConnectionManager = userLoginController.getDatabaseConnectionManager();
 
+        CostCenterDAO costCenterDAO = new CostCenterDAO(databaseConnectionManager);
+        ResponsibleDAO responsibleDAO = new ResponsibleDAO(databaseConnectionManager);
+        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO);
+
+        MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
+        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
+
+        AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
+        AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
+
+        // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
+        sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
+        sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH,ADD_PROJECT_VIEW_HEIGHT));
+
         sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
 
     }
 
     private void showAlert(String message) {
-
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
         alert.showAndWait();
     }
 }

@@ -1,7 +1,6 @@
 package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.model.CostCenter;
 import com.github.tschalk.project_tracker.model.Responsible;
 
 import java.sql.Connection;
@@ -13,11 +12,9 @@ import java.util.List;
 
 public class ResponsibleDAO {
 
-    private final DatabaseConnectionManager databaseConnectionManager;
     private final Connection connection;
 
     public ResponsibleDAO(DatabaseConnectionManager databaseConnectionManager) {
-        this.databaseConnectionManager = databaseConnectionManager;
         this.connection = databaseConnectionManager.getConnection();
     }
 
@@ -50,6 +47,46 @@ public class ResponsibleDAO {
         }
 
         return responsibleList;
+    }
+
+    public Responsible getResponsibleById(int responsibleId) {
+        String query = "SELECT * FROM Responsible WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, responsibleId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Responsible responsible = new Responsible();
+                responsible.setId(rs.getInt("id"));
+                responsible.setName(rs.getString("name"));
+                return responsible;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+
+    public int getResponsibleId(String responsibleName) {
+        String query = "SELECT id FROM Responsible WHERE name = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, responsibleName);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return -1;
     }
 
     public void remove(Responsible responsible) {

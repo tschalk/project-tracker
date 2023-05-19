@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.model.Project;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,30 +13,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.github.tschalk.project_tracker.Main.*;
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
+import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
 
 public class MainWindowView extends VBox {
 
     private final Stage stage;
-    private Stage newStage;
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage) {
-
         this.stage = stage;
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
 
         initUI();
-//        updateProjectTableView();
     }
 
     private void initUI() {
-
         this.setSpacing(10);
         this.setPadding(new Insets(10));
 
@@ -52,12 +49,9 @@ public class MainWindowView extends VBox {
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(e ->
-            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE)
-        );
-
-
-
+        addButton.setOnAction(e -> {
+            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE);
+        });
 
         Button editButton = new Button("Edit");
         Button exportButton = new Button("Export to CSV");
@@ -68,13 +62,13 @@ public class MainWindowView extends VBox {
         buttonContainer.getStyleClass().add("button-container");
 
         this.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
+
+        updateProjectTableView();
     }
 
-//    private void updateProjectTableView() {
-//        ObservableList<Project> projectList = FXCollections.observableArrayList(mainWindowController.getProjectList());
-//        projectTableView.setItems(projectList);
-//        System.out.println("Project list updated!");
-//    }
-
-
+    public void updateProjectTableView() {
+        ObservableList<Project> projectList = mainWindowController.getProjectList();
+        projectTableView.setItems(projectList);
+        System.out.println("Project list updated!");
+    }
 }

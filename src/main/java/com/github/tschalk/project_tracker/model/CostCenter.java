@@ -1,11 +1,11 @@
 package com.github.tschalk.project_tracker.model;
 
 public class CostCenter {
-    int id;
-    String name;
+    private int id;
+    private String name;
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -13,7 +13,7 @@ public class CostCenter {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -22,6 +22,6 @@ public class CostCenter {
 
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
 }
