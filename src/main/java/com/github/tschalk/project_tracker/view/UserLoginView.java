@@ -7,6 +7,7 @@ import com.github.tschalk.project_tracker.controller.UserLoginController;
 import com.github.tschalk.project_tracker.dao.CostCenterDAO;
 import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
+import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import javafx.geometry.Insets;
@@ -23,6 +24,7 @@ public class UserLoginView extends VBox {
     public static final String MAIN_WINDOW_SCENE = "Main Window";
     public static final String ADD_PROJECT_SCENE = "Add Project";
     public static final String EDIT_PROJECT_SCENE = "Edit Project";
+
     public static final int MAIN_WINDOW_VIEW_WIDTH = 335;
     public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     public static final int ADD_PROJECT_VIEW_WIDTH = 300;
@@ -101,7 +103,8 @@ public class UserLoginView extends VBox {
 
         CostCenterDAO costCenterDAO = new CostCenterDAO(databaseConnectionManager);
         ResponsibleDAO responsibleDAO = new ResponsibleDAO(databaseConnectionManager);
-        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO);
+        TimesheetEntryDAO timesheetDAO = new TimesheetEntryDAO(databaseConnectionManager);
+        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO , timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);

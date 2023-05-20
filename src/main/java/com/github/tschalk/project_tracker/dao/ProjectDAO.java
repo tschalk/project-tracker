@@ -19,11 +19,13 @@ public class ProjectDAO {
     private final Connection connection;
     private final CostCenterDAO costCenterDAO;
     private final ResponsibleDAO responsibleDAO;
+    private final TimesheetEntryDAO timesheetEntryDAO;
 
-    public ProjectDAO(DatabaseConnectionManager databaseConnectionManager, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO) {
+    public ProjectDAO(DatabaseConnectionManager databaseConnectionManager, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, TimesheetEntryDAO timesheetEntryDAO) {
         this.connection = databaseConnectionManager.getConnection();
         this.costCenterDAO = costCenterDAO;
         this.responsibleDAO = responsibleDAO;
+        this.timesheetEntryDAO = timesheetEntryDAO;
     }
 
     public void addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
@@ -70,4 +72,27 @@ public class ProjectDAO {
         }
         return projectList;
     }
+
+    public int getProjectDuration(int projectId) {
+        int duration = 0;
+        String query = "SELECT SUM(duration) as total FROM TimesheetEntry WHERE project_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                duration = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return duration;
+    }
+
+    public TimesheetEntryDAO getTimesheetEntryDAO() {
+        return timesheetEntryDAO;
+    }
+
 }

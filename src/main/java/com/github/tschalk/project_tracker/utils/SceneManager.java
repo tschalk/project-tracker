@@ -72,8 +72,7 @@ public class SceneManager {
         Scene scene = this.scenes.get(sceneName);
 
         // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
-        if(scene.getRoot() instanceof EditProjectView) {
-            EditProjectView editProjectView = (EditProjectView) scene.getRoot();
+        if(scene.getRoot() instanceof EditProjectView editProjectView) {
             editProjectView.setSelectedProject(selectedProject);
         }
 

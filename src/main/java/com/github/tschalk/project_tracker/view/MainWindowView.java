@@ -1,7 +1,10 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.MainWindowController;
+import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.model.Project;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
 import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
@@ -42,12 +46,24 @@ public class MainWindowView extends VBox {
 
         TableColumn<Project, String> descriptionColumn = new TableColumn<>("Description");
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
         TableColumn<Project, String> costCenterColumn = new TableColumn<>("Cost Center");
         costCenterColumn.setCellValueFactory(new PropertyValueFactory<>("costCenter"));
+
         TableColumn<Project, String> responsibleColumn = new TableColumn<>("Responsible");
         responsibleColumn.setCellValueFactory(new PropertyValueFactory<>("responsible"));
+
         TableColumn<Project, Integer> durationColumn = new TableColumn<>("Duration");
-        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        durationColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Project, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Project, Integer> p) {
+                int duration = mainWindowController.getProjectDuration(p.getValue());
+                return new SimpleIntegerProperty(duration).asObject();
+            }
+        });
+
+
+
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
 
         Button addButton = new Button("Add");
@@ -72,7 +88,21 @@ public class MainWindowView extends VBox {
         });
 
         Button exportButton = new Button("Export to CSV");
+
+
         Button startStopButton = new Button("Start/Stop");
+        startStopButton.setOnAction(e -> {
+            if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
+                mainWindowController.startStopwatch(selectedProject);
+                startStopButton.setText("Stop");
+            } else {
+                mainWindowController.stopStopwatch(selectedProject);
+                startStopButton.setText("Start");
+                updateProjectTableView();
+            }
+        });
+
+
 
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton);
@@ -94,7 +124,4 @@ public class MainWindowView extends VBox {
         System.out.println("Project list updated!");
     }
 
-    public Project getSelectedProject() {
-        return selectedProject;
-    }
 }
