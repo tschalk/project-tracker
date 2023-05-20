@@ -87,6 +87,10 @@ public class MainWindowController {
         return FXCollections.observableArrayList();
     }
 
+    public int getSecondsElapsed() {
+        return secondsElapsed;
+    }
+
     public ProjectDAO getProjectDAO() {
         return projectDAO;
     }

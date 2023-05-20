@@ -3,6 +3,8 @@ package com.github.tschalk.project_tracker.view;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.model.Project;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
 import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
@@ -20,12 +23,12 @@ import static com.github.tschalk.project_tracker.view.UserLoginView.EDIT_PROJECT
 
 public class MainWindowView extends VBox {
 
-    // TODO: Label, dass beim starten der Stoppuhr die Projektbschreibung und die Zeit im format hh:mm:ss angezeigt. [ Selected Project: <Project Description> | Time: <hh:mm:ss> ]
-
     private final Stage stage;
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
     private Project selectedProject;
+    private Label titleLabel;
+    private Timeline updateTimeLabelTimeline;
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage) {
         this.stage = stage;
@@ -39,7 +42,7 @@ public class MainWindowView extends VBox {
         this.setSpacing(10);
         this.setPadding(new Insets(10));
 
-        Label titleLabel = new Label("Project Tracker");
+        this.titleLabel = new Label("Project Tracker");
 
         TableColumn<Project, String> descriptionColumn = new TableColumn<>("Description");
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -107,11 +110,18 @@ public class MainWindowView extends VBox {
                 mainWindowController.startStopwatch(selectedProject);
                 startStopButton.setText("Stop");
                 startStopButton.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+
+                startUpdateTitleLabelTimeline();
             } else {
                 mainWindowController.stopStopwatch(/*selectedProject*/);
                 startStopButton.setText("Start");
                 startStopButton.setStyle("");
                 selectedProject = null;
+
+                // Stop updating the titleLabel
+                stopUpdateTitleLabelTimeline();
+                titleLabel.setText("Project Tracker");
+
                 updateProjectTableView();
             }
         });
@@ -123,6 +133,26 @@ public class MainWindowView extends VBox {
         this.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
 
         updateProjectTableView();
+    }
+
+    private void startUpdateTitleLabelTimeline() {
+        updateTimeLabelTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+
+            int elapsed = mainWindowController.getSecondsElapsed();
+            String formattedTime = String.format("%02d:%02d:%02d", elapsed / 3600, (elapsed % 3600) / 60, elapsed % 60);
+
+            titleLabel.setText("Selected Project: " + selectedProject.getDescription() + " | Time: " + formattedTime);
+        }));
+
+        updateTimeLabelTimeline.setCycleCount(Timeline.INDEFINITE);
+        updateTimeLabelTimeline.play();
+    }
+
+    private void stopUpdateTitleLabelTimeline() {
+        if (updateTimeLabelTimeline != null) {
+            updateTimeLabelTimeline.stop();
+            updateTimeLabelTimeline = null;
+        }
     }
 
     private void openEditProjectWindow(Project selectedProject) {
