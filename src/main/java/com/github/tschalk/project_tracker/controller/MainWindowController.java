@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class MainWindowController {
+
     ProjectDAO projectDAO;
     UserLoginController userLoginController;
 
@@ -38,6 +39,10 @@ public class MainWindowController {
 
     public User getCurrentUser() {
         return userLoginController.getCurrentUser();
+    }
+
+    public UserLoginController getUserLoginController() {
+        return userLoginController;
     }
 
 

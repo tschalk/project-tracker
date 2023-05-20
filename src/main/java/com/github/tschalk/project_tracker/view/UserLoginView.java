@@ -1,7 +1,7 @@
 package com.github.tschalk.project_tracker.view;
 
-import com.github.tschalk.project_tracker.Main;
 import com.github.tschalk.project_tracker.controller.AddProjectController;
+import com.github.tschalk.project_tracker.controller.EditProjectController;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
 import com.github.tschalk.project_tracker.dao.CostCenterDAO;
@@ -22,10 +22,13 @@ public class UserLoginView extends VBox {
 
     public static final String MAIN_WINDOW_SCENE = "Main Window";
     public static final String ADD_PROJECT_SCENE = "Add Project";
+    public static final String EDIT_PROJECT_SCENE = "Edit Project";
     public static final int MAIN_WINDOW_VIEW_WIDTH = 335;
     public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     public static final int ADD_PROJECT_VIEW_WIDTH = 300;
     public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
+    public static final int EDIT_PROJECT_VIEW_WIDTH = 300;
+    public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
 
     private final TextField usernameField;
     private final PasswordField passwordField;
@@ -106,10 +109,15 @@ public class UserLoginView extends VBox {
         AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
 
+
+        EditProjectController editProjectController = new EditProjectController(projectDAO, userLoginController, mainWindowView);
+        EditProjectView editProjectView = new EditProjectView(editProjectController, stage);
+
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
         sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH,ADD_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH,EDIT_PROJECT_VIEW_HEIGHT));
 
         sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
 
@@ -123,4 +131,6 @@ public class UserLoginView extends VBox {
 
         alert.showAndWait();
     }
+
+
 }

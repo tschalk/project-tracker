@@ -1,5 +1,7 @@
 package com.github.tschalk.project_tracker.utils;
 
+import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.view.EditProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -53,17 +55,53 @@ public class SceneManager {
         stage.show();
     }
 
-    public void showNewWindowWithCustomScene(String name) {
-        Scene scene = scenes.get(name);
+    public void showNewWindowWithCustomScene(String sceneName) {
+        Scene scene = scenes.get(sceneName);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
         Stage newStage = new Stage();
         newStage.setScene(scene);
-        newStage.setTitle(name);
+        newStage.setTitle(sceneName);
         newStage.setResizable(false);
         newStage.centerOnScreen();
         newStage.show();
     }
+
+    public void showNewWindowWithCustomScene(String sceneName, Project selectedProject) {
+        // Hole die Szene aus der Map
+        Scene scene = this.scenes.get(sceneName);
+
+        // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
+        if(scene.getRoot() instanceof EditProjectView) {
+            EditProjectView editProjectView = (EditProjectView) scene.getRoot();
+            editProjectView.setSelectedProject(selectedProject);
+        }
+
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        newStage.show();
+    }
+
+
+//    public void showNewWindowWithCustomSceneAndProject(String sceneName, Project project) {
+//        Scene scene = scenes.get(sceneName);
+//        if (scene == null) {
+//            System.out.println("Scene \"" + sceneName + "\" not found!");
+//            return;
+//        }
+//
+//        // Setzen des Projekts im EditProjectController bevor die Szene gezeigt wird
+//        if (sceneName.equals(UserLoginView.EDIT_PROJECT_SCENE)) {
+//            // Hier die Instanz des EditProjectController erhalten
+//            EditProjectController editProjectController = (EditProjectController) scene.getUserData();
+//            editProjectController.setProject(project);
+//        }
+//
+//        Stage newStage = new Stage();
+//        newStage.setScene(scene);
+//        newStage.show();
+//    }
+
 
 
 }

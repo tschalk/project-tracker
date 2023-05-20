@@ -3,7 +3,6 @@ package com.github.tschalk.project_tracker.controller;
 import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.User;
-import com.github.tschalk.project_tracker.view.MainWindowView;
 
 public class UserLoginController {
 
@@ -30,6 +29,8 @@ public class UserLoginController {
     public User getCurrentUser() {
         return currentUser;
     }
+
+
 
     public DatabaseConnectionManager getDatabaseConnectionManager() {
         return userDAO.getDatabaseManager();

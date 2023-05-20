@@ -48,4 +48,15 @@ public class Project {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", responsible='" + responsible + '\'' +
+                ", costCenter='" + costCenter + '\'' +
+                ", duration=" + duration +
+                '}';
+    }
 }

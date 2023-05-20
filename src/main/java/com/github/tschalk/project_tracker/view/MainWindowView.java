@@ -13,16 +13,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
-import static com.github.tschalk.project_tracker.Main.*;
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
 import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
+import static com.github.tschalk.project_tracker.view.UserLoginView.EDIT_PROJECT_SCENE;
 
 public class MainWindowView extends VBox {
+
+    private static MainWindowView instance = null;
 
     private final Stage stage;
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
+    private Project selectedProject;
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage) {
         this.stage = stage;
@@ -53,7 +55,22 @@ public class MainWindowView extends VBox {
             getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE);
         });
 
+        projectTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedProject = newSelection;
+            }
+        });
+
         Button editButton = new Button("Edit");
+        editButton.setOnAction(e -> {
+            if (selectedProject != null) {
+                System.out.println("Edit project: " + selectedProject.getDescription());
+                openEditProjectWindow(selectedProject);
+            } else {
+                System.out.println("No project selected!");
+            }
+        });
+
         Button exportButton = new Button("Export to CSV");
         Button startStopButton = new Button("Start/Stop");
 
@@ -66,9 +83,18 @@ public class MainWindowView extends VBox {
         updateProjectTableView();
     }
 
+    private void openEditProjectWindow(Project selectedProject) {
+        // Öffnen Sie das Bearbeitungsfenster und übergeben Sie das ausgewählte Projekt
+        getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
+    }
+
     public void updateProjectTableView() {
         ObservableList<Project> projectList = mainWindowController.getProjectList();
         projectTableView.setItems(projectList);
         System.out.println("Project list updated!");
+    }
+
+    public Project getSelectedProject() {
+        return selectedProject;
     }
 }
