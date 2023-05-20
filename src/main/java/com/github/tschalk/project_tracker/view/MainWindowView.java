@@ -27,6 +27,7 @@ public class MainWindowView extends VBox {
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
     private Project selectedProject;
+    private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
 
@@ -107,6 +108,7 @@ public class MainWindowView extends VBox {
             }
 
             if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
+                activeProject = selectedProject;
                 mainWindowController.startStopwatch(selectedProject);
                 startStopButton.setText("Stop");
                 startStopButton.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
@@ -117,6 +119,7 @@ public class MainWindowView extends VBox {
                 startStopButton.setText("Start");
                 startStopButton.setStyle("");
                 selectedProject = null;
+                activeProject = null;
 
                 // Stop updating the titleLabel
                 stopUpdateTitleLabelTimeline();
@@ -141,7 +144,7 @@ public class MainWindowView extends VBox {
             int elapsed = mainWindowController.getSecondsElapsed();
             String formattedTime = String.format("%02d:%02d:%02d", elapsed / 3600, (elapsed % 3600) / 60, elapsed % 60);
 
-            titleLabel.setText("Selected Project: " + selectedProject.getDescription() + " | Time: " + formattedTime);
+            titleLabel.setText("Selected Project: " + activeProject.getDescription() + " | Time: " + formattedTime);
         }));
 
         updateTimeLabelTimeline.setCycleCount(Timeline.INDEFINITE);
