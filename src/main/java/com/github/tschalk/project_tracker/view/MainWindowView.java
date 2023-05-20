@@ -6,7 +6,6 @@ import com.github.tschalk.project_tracker.model.Project;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -17,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
 import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
