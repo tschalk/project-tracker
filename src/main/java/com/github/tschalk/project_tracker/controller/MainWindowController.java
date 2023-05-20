@@ -33,6 +33,7 @@ public class MainWindowController {
     }
 
     public void startStopwatch(Project selectedProject) {
+
         System.out.println("Start Stopwatch");
         this.selectedProject = selectedProject;
         if (this.stopwatchState == StopwatchState.STOPPED) {
@@ -48,12 +49,8 @@ public class MainWindowController {
     }
 
 
-    public void stopStopwatch(Project project) {
-        if (project == null) {
-            System.out.println("No project selected!");
-            return;
-        }
-        this.selectedProject = project;
+    public void stopStopwatch() {
+
         this.stopwatchState = StopwatchState.STOPPED;
 
         if (timeline != null) {
@@ -61,8 +58,8 @@ public class MainWindowController {
             timeline = null;
         }
         updateProjectDuration();
-        // Zeile hinzufügen
-        secondsElapsed = 0;
+
+        secondsElapsed = 0; // reset stopwatch
     }
 
     public void updateProjectDuration() {
@@ -81,7 +78,6 @@ public class MainWindowController {
         return projectDAO.getProjectDuration(project.getId());
     }
 
-
     public ObservableList<Project> getProjectList() {
         User currentUser = userLoginController.getCurrentUser();
         if (currentUser != null) {
@@ -90,7 +86,6 @@ public class MainWindowController {
         }
         return FXCollections.observableArrayList();
     }
-
 
     public ProjectDAO getProjectDAO() {
         return projectDAO;
@@ -103,7 +98,6 @@ public class MainWindowController {
     public UserLoginController getUserLoginController() {
         return userLoginController;
     }
-
 
     public StopwatchState getStopwatchState() {
         return this.stopwatchState;

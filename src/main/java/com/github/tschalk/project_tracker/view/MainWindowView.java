@@ -8,10 +8,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,7 +20,7 @@ import static com.github.tschalk.project_tracker.view.UserLoginView.EDIT_PROJECT
 
 public class MainWindowView extends VBox {
 
-    private static MainWindowView instance = null;
+    // TODO: Label, dass beim starten der Stoppuhr die Projektbschreibung und die Zeit im format hh:mm:ss angezeigt. [ Selected Project: <Project Description> | Time: <hh:mm:ss> ]
 
     private final Stage stage;
     private final MainWindowController mainWindowController;
@@ -67,8 +64,6 @@ public class MainWindowView extends VBox {
             return durationInHours;
         });
 
-
-
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
 
         Button addButton = new Button("Add");
@@ -95,21 +90,31 @@ public class MainWindowView extends VBox {
         Button exportButton = new Button("Export to CSV");
 
         Button startStopButton = new Button("Start/Stop");
+
         startStopButton.setOnAction(e -> {
+
+            if (selectedProject == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("No project selected!");
+                alert.setContentText("Please select a project to start the stopwatch!");
+
+                alert.showAndWait();
+                return;
+            }
+
             if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
                 mainWindowController.startStopwatch(selectedProject);
                 startStopButton.setText("Stop");
                 startStopButton.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
             } else {
-                mainWindowController.stopStopwatch(selectedProject);
+                mainWindowController.stopStopwatch(/*selectedProject*/);
                 startStopButton.setText("Start");
                 startStopButton.setStyle("");
-
+                selectedProject = null;
                 updateProjectTableView();
             }
         });
-
-
 
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton);
@@ -121,7 +126,7 @@ public class MainWindowView extends VBox {
     }
 
     private void openEditProjectWindow(Project selectedProject) {
-        // Öffnen Sie das Bearbeitungsfenster und übergeben Sie das ausgewählte Projekt
+
         getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
     }
 
