@@ -3,6 +3,8 @@ package com.github.tschalk.project_tracker.view;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.model.Project;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -53,13 +55,18 @@ public class MainWindowView extends VBox {
         TableColumn<Project, String> responsibleColumn = new TableColumn<>("Responsible");
         responsibleColumn.setCellValueFactory(new PropertyValueFactory<>("responsible"));
 
-        TableColumn<Project, Integer> durationColumn = new TableColumn<>("Duration");
-        durationColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Project, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Project, Integer> p) {
-                int duration = mainWindowController.getProjectDuration(p.getValue());
-                return new SimpleIntegerProperty(duration).asObject();
-            }
+        // Hier wird die Dauer berechnet
+        TableColumn<Project, Number> durationColumn = new TableColumn<>("Duration");
+        durationColumn.setCellValueFactory(p -> { // callback p -> { ... }
+            int durationInSeconds = mainWindowController.getProjectDuration(p.getValue());
+
+            // Hier die Zeit in Stunden umrechnen und runden
+            DoubleBinding durationInHours = Bindings.createDoubleBinding(
+                    // * 100 um zwei kommastellen zu verschieben, dann runden und danach / 100.0 um wieder zu teilen
+                    () -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0,
+                    new SimpleIntegerProperty(durationInSeconds)
+            );
+            return durationInHours;
         });
 
 
@@ -89,15 +96,17 @@ public class MainWindowView extends VBox {
 
         Button exportButton = new Button("Export to CSV");
 
-
         Button startStopButton = new Button("Start/Stop");
         startStopButton.setOnAction(e -> {
             if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
                 mainWindowController.startStopwatch(selectedProject);
                 startStopButton.setText("Stop");
+                startStopButton.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
             } else {
                 mainWindowController.stopStopwatch(selectedProject);
                 startStopButton.setText("Start");
+                startStopButton.setStyle("");
+
                 updateProjectTableView();
             }
         });

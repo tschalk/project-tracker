@@ -65,7 +65,6 @@ public class MainWindowController {
         secondsElapsed = 0;
     }
 
-
     public void updateProjectDuration() {
         if (selectedProject != null) {
             TimesheetEntry timesheetEntry = new TimesheetEntry();
