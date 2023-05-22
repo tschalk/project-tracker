@@ -5,12 +5,9 @@ import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.TimesheetEntry;
 import com.github.tschalk.project_tracker.model.User;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,53 +17,32 @@ public class MainWindowController {
     private UserLoginController userLoginController;
     private TimesheetEntryDAO timesheetEntryDAO;
     private Project selectedProject;
-    private Timeline timeline;
-    private int secondsElapsed;
     private StopwatchState stopwatchState;
-
+    private SimpleLongProperty secondsElapsed;
 
     public MainWindowController(ProjectDAO projectDAO, UserLoginController userLoginController) {
         this.projectDAO = projectDAO;
         this.userLoginController = userLoginController;
         this.timesheetEntryDAO = projectDAO.getTimesheetEntryDAO();
         this.stopwatchState = StopwatchState.STOPPED;
+        this.secondsElapsed = new SimpleLongProperty(0);
     }
 
     public void startStopwatch(Project selectedProject) {
-
         System.out.println("Start Stopwatch");
         this.selectedProject = selectedProject;
-        if (this.stopwatchState == StopwatchState.STOPPED) {
-            this.stopwatchState = StopwatchState.RUNNING;
-
-            timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                secondsElapsed++;
-            }));
-
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-        }
+        this.stopwatchState = StopwatchState.RUNNING;
     }
-
 
     public void stopStopwatch() {
-
         this.stopwatchState = StopwatchState.STOPPED;
-
-        if (timeline != null) {
-            timeline.stop();
-            timeline = null;
-        }
-        updateProjectDuration();
-
-        secondsElapsed = 0; // reset stopwatch
     }
 
-    public void updateProjectDuration() {
+    public void updateProjectDuration(long secondsElapsed) {
         if (selectedProject != null) {
             TimesheetEntry timesheetEntry = new TimesheetEntry();
             timesheetEntry.setStartDateTime(LocalDateTime.now().minusSeconds(secondsElapsed));
-            timesheetEntry.setDuration(secondsElapsed);
+            timesheetEntry.setDuration((int)secondsElapsed);
             timesheetEntryDAO.addTimesheetEntry(timesheetEntry, selectedProject.getId());
 
             int totalDuration = projectDAO.getProjectDuration(selectedProject.getId());
@@ -87,10 +63,6 @@ public class MainWindowController {
         return FXCollections.observableArrayList();
     }
 
-    public int getSecondsElapsed() {
-        return secondsElapsed;
-    }
-
     public ProjectDAO getProjectDAO() {
         return projectDAO;
     }
@@ -107,4 +79,3 @@ public class MainWindowController {
         return this.stopwatchState;
     }
 }
-

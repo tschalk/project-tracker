@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -30,11 +31,14 @@ public class MainWindowView extends VBox {
     private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
+    private SimpleLongProperty secondsElapsed = new SimpleLongProperty(0);
+//    private Label titleLabel; // Show elapsed time
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage) {
         this.stage = stage;
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
+        this.secondsElapsed = new SimpleLongProperty(0);
 
         initUI();
     }
@@ -55,7 +59,7 @@ public class MainWindowView extends VBox {
         responsibleColumn.setCellValueFactory(new PropertyValueFactory<>("responsible"));
 
         // Hier wird die Dauer berechnet
-        TableColumn<Project, Number> durationColumn = new TableColumn<>("Duration");
+        TableColumn<Project, Number> durationColumn = new TableColumn<>("Duration [h]");
         durationColumn.setCellValueFactory(p -> { // callback p -> { ... }
             int durationInSeconds = mainWindowController.getProjectDuration(p.getValue());
 
@@ -65,6 +69,7 @@ public class MainWindowView extends VBox {
                     () -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0,
                     new SimpleIntegerProperty(durationInSeconds)
             );
+
             return durationInHours;
         });
 
@@ -115,7 +120,7 @@ public class MainWindowView extends VBox {
 
                 startUpdateTitleLabelTimeline();
             } else {
-                mainWindowController.stopStopwatch(/*selectedProject*/);
+                mainWindowController.stopStopwatch();
                 startStopButton.setText("Start");
                 startStopButton.setStyle("");
                 selectedProject = null;
@@ -138,17 +143,19 @@ public class MainWindowView extends VBox {
         updateProjectTableView();
     }
 
+
     private void startUpdateTitleLabelTimeline() {
+        setupTimeline();
+        updateTimeLabelTimeline.play();
+    }
+
+    private void setupTimeline() {
         updateTimeLabelTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-
-            int elapsed = mainWindowController.getSecondsElapsed();
-            String formattedTime = String.format("%02d:%02d:%02d", elapsed / 3600, (elapsed % 3600) / 60, elapsed % 60);
-
+            secondsElapsed.set(secondsElapsed.get() + 1);
+            String formattedTime = String.format("%02d:%02d:%02d", secondsElapsed.get() / 3600, (secondsElapsed.get() % 3600) / 60, secondsElapsed.get() % 60);
             titleLabel.setText("Selected Project: " + activeProject.getDescription() + " | Time: " + formattedTime);
         }));
-
         updateTimeLabelTimeline.setCycleCount(Timeline.INDEFINITE);
-        updateTimeLabelTimeline.play();
     }
 
     private void stopUpdateTitleLabelTimeline() {
@@ -156,17 +163,20 @@ public class MainWindowView extends VBox {
             updateTimeLabelTimeline.stop();
             updateTimeLabelTimeline = null;
         }
-    }
-
-    private void openEditProjectWindow(Project selectedProject) {
-
-        getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
+        mainWindowController.updateProjectDuration(secondsElapsed.get());
+        secondsElapsed.set(0);
     }
 
     public void updateProjectTableView() {
         ObservableList<Project> projectList = mainWindowController.getProjectList();
         projectTableView.setItems(projectList);
         System.out.println("Project list updated!");
+    }
+
+
+    private void openEditProjectWindow(Project selectedProject) {
+
+        getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
     }
 
 }
