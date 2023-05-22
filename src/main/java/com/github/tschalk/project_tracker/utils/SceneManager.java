@@ -47,37 +47,36 @@ public class SceneManager {
     public void showCustomScene(String name, Stage stage) {
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-
         stage.setScene(scene);
         stage.setTitle(name);
         stage.setResizable(false);
         stage.centerOnScreen();
+
         stage.show();
     }
 
     public void showNewWindowWithCustomScene(String sceneName) {
         Scene scene = scenes.get(sceneName);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
-
         Stage newStage = new Stage();
         newStage.setScene(scene);
         newStage.setTitle(sceneName);
         newStage.setResizable(false);
         newStage.centerOnScreen();
+
         newStage.show();
     }
 
     public void showNewWindowWithCustomScene(String sceneName, Project selectedProject) {
         // Hole die Szene aus der Map
         Scene scene = this.scenes.get(sceneName);
-
         // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
         if(scene.getRoot() instanceof EditProjectView editProjectView) {
             editProjectView.setSelectedProject(selectedProject);
         }
-
         Stage newStage = new Stage();
         newStage.setScene(scene);
+
         newStage.show();
     }
 

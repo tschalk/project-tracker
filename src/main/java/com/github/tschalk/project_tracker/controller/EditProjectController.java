@@ -2,7 +2,10 @@ package com.github.tschalk.project_tracker.controller;
 
 import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.model.TimesheetEntry;
 import com.github.tschalk.project_tracker.view.MainWindowView;
+
+import java.util.List;
 
 public class EditProjectController {
 
@@ -29,5 +32,9 @@ public class EditProjectController {
 
     public MainWindowView getMainWindowView() {
         return mainWindowView;
+    }
+
+    public List<TimesheetEntry> getTimesheetEntriesForProject(Project project) {
+        return projectDAO.readAllTimesheetEntriesForProject(project.getId());
     }
 }

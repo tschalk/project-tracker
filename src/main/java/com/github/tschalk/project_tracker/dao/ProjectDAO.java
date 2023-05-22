@@ -1,10 +1,7 @@
 package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.model.CostCenter;
-import com.github.tschalk.project_tracker.model.Project;
-import com.github.tschalk.project_tracker.model.Responsible;
-import com.github.tschalk.project_tracker.model.User;
+import com.github.tschalk.project_tracker.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProjectDAO {
@@ -94,5 +93,28 @@ public class ProjectDAO {
     public TimesheetEntryDAO getTimesheetEntryDAO() {
         return timesheetEntryDAO;
     }
+
+    public List<TimesheetEntry> readAllTimesheetEntriesForProject(int projectId) {
+        List<TimesheetEntry> timesheetEntries = new ArrayList<>();
+        String query = "SELECT * FROM timesheetentry WHERE project_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                TimesheetEntry entry = new TimesheetEntry();
+                entry.setId(rs.getInt("id"));
+                entry.setStartDateTime(rs.getTimestamp("start_time").toLocalDateTime());
+                entry.setDuration(rs.getInt("duration"));
+                timesheetEntries.add(entry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return timesheetEntries;
+    }
+
 
 }
