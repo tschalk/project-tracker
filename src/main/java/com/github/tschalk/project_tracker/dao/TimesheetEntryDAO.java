@@ -49,6 +49,20 @@ public class TimesheetEntryDAO {
         }
     }
 
+    public void updateTimesheetEntry(TimesheetEntry entry) {
+        String query = "UPDATE TimesheetEntry SET duration = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, entry.getDuration());
+            pstmt.setInt(2, entry.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 
 

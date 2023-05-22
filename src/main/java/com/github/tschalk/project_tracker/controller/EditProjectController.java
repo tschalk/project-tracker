@@ -54,4 +54,7 @@ public class EditProjectController {
     }
 
 
+    public TimesheetEntryDAO getTimesheetEntryDAO() {
+        return timesheetEntryDAO;
+    }
 }

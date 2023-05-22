@@ -6,14 +6,13 @@ import com.github.tschalk.project_tracker.model.TimesheetEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class EditProjectView extends VBox {
 
@@ -62,8 +61,52 @@ public class EditProjectView extends VBox {
             }
         });
 
-        this.getChildren().addAll(timesheetEntryTableView, removeDateTimeButton, removeProjectButton);
+        Button editButton = new Button("Edit Duration");
+        editButton.setOnAction(event -> {
+            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
+            if (selectedEntry != null) {
+                editDuration(selectedEntry);
+                editProjectController.getMainWindowView().updateProjectTableView();
+            }
+        });
+
+
+        this.getChildren().addAll(timesheetEntryTableView, removeDateTimeButton, removeProjectButton, editButton);
     }
+
+    private void editDuration(TimesheetEntry entry) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Edit Duration");
+
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        TextField textField = new TextField();
+        textField.setText(String.valueOf(entry.getDuration()));
+        dialog.getDialogPane().setContent(textField);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == okButtonType) {
+                return textField.getText();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            int newDuration;
+            try {
+                newDuration = Integer.parseInt(result.get());
+                entry.setDuration(newDuration);
+                editProjectController.getTimesheetEntryDAO().updateTimesheetEntry(entry);
+                timesheetEntryTableView.refresh();
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+            }
+        }
+    }
+
 
     public void setSelectedProject(Project selectedProject) {
         this.selectedProject = selectedProject;
