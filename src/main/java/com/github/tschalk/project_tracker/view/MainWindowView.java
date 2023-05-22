@@ -24,7 +24,6 @@ import static com.github.tschalk.project_tracker.view.UserLoginView.EDIT_PROJECT
 
 public class MainWindowView extends VBox {
 
-    private final Stage stage;
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView;
     private Project selectedProject;
@@ -34,8 +33,7 @@ public class MainWindowView extends VBox {
     private SimpleLongProperty secondsElapsed = new SimpleLongProperty(0);
 //    private Label titleLabel; // Show elapsed time
 
-    public MainWindowView(MainWindowController mainWindowController, Stage stage) {
-        this.stage = stage;
+    public MainWindowView(MainWindowController mainWindowController) {
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
         this.secondsElapsed = new SimpleLongProperty(0);
@@ -99,7 +97,6 @@ public class MainWindowView extends VBox {
         Button exportButton = new Button("Export to CSV");
 
         Button startStopButton = new Button("Start/Stop");
-
         startStopButton.setOnAction(e -> {
 
             if (selectedProject == null) {
@@ -116,7 +113,7 @@ public class MainWindowView extends VBox {
                 activeProject = selectedProject;
                 mainWindowController.startStopwatch(selectedProject);
                 startStopButton.setText("Stop");
-                startStopButton.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+                startStopButton.setStyle("-fx-background-color: rgba(199,78,79,0.9)");
 
                 startUpdateTitleLabelTimeline();
             } else {
@@ -142,7 +139,6 @@ public class MainWindowView extends VBox {
 
         updateProjectTableView();
     }
-
 
     private void startUpdateTitleLabelTimeline() {
         setupTimeline();
@@ -173,9 +169,7 @@ public class MainWindowView extends VBox {
         System.out.println("Project list updated!");
     }
 
-
     private void openEditProjectWindow(Project selectedProject) {
-
         getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
     }
 

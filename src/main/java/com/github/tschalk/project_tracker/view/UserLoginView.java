@@ -107,7 +107,7 @@ public class UserLoginView extends VBox {
         ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO , timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
-        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
+        MainWindowView mainWindowView = new MainWindowView(mainWindowController);
 
         AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController, stage);

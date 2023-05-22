@@ -13,19 +13,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class MainWindowController {
-    private ProjectDAO projectDAO;
-    private UserLoginController userLoginController;
-    private TimesheetEntryDAO timesheetEntryDAO;
+    private final ProjectDAO projectDAO;
+    private final UserLoginController userLoginController;
+    private final TimesheetEntryDAO timesheetEntryDAO;
     private Project selectedProject;
     private StopwatchState stopwatchState;
-    private SimpleLongProperty secondsElapsed;
 
     public MainWindowController(ProjectDAO projectDAO, UserLoginController userLoginController) {
         this.projectDAO = projectDAO;
         this.userLoginController = userLoginController;
         this.timesheetEntryDAO = projectDAO.getTimesheetEntryDAO();
         this.stopwatchState = StopwatchState.STOPPED;
-        this.secondsElapsed = new SimpleLongProperty(0);
     }
 
     public void startStopwatch(Project selectedProject) {
