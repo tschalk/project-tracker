@@ -6,7 +6,7 @@ import com.github.tschalk.project_tracker.model.TimesheetEntry;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -32,20 +32,37 @@ public class EditProjectView extends VBox {
 
     private void initUI() {
         this.setSpacing(10);
-        this.setPadding(new Insets(10));;
+        this.setPadding(new Insets(10));
 
         timesheetEntryTableView = new TableView<>();
 
         TableColumn<TimesheetEntry, LocalDateTime> startDateTimeColumn = new TableColumn<>("Start Date/Time");
         startDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
 
-
         TableColumn<TimesheetEntry, Number> durationColumn = new TableColumn<>("Duration");
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
         timesheetEntryTableView.getColumns().addAll(startDateTimeColumn, durationColumn);
 
-        this.getChildren().add(timesheetEntryTableView);
+        Button removeDateTimeButton = new Button("Remove Time");
+        removeDateTimeButton.setOnAction(event -> {
+            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
+            if (selectedEntry != null) {
+                timesheetEntryTableView.getItems().remove(selectedEntry);
+                removeEntryFromDatabase(selectedEntry);
+            }
+        });
+
+        Button removeProjectButton = new Button("Remove Project");
+        removeProjectButton.setOnAction(event -> {
+            if (selectedProject != null) {
+                editProjectController.deleteProject(selectedProject);
+                selectedProject = null;
+                editProjectController.getMainWindowView().updateProjectTableView();
+            }
+        });
+
+        this.getChildren().addAll(timesheetEntryTableView, removeDateTimeButton, removeProjectButton);
     }
 
     public void setSelectedProject(Project selectedProject) {
@@ -54,4 +71,10 @@ public class EditProjectView extends VBox {
 
         timesheetEntryTableView.setItems(timesheetEntries);
     }
+    private void removeEntryFromDatabase(TimesheetEntry selectedEntry) {
+        editProjectController.removeTimesheetEntry(selectedEntry);
+        editProjectController.getMainWindowView().updateProjectTableView();
+    }
+
+
 }

@@ -104,7 +104,7 @@ public class UserLoginView extends VBox {
         CostCenterDAO costCenterDAO = new CostCenterDAO(databaseConnectionManager);
         ResponsibleDAO responsibleDAO = new ResponsibleDAO(databaseConnectionManager);
         TimesheetEntryDAO timesheetDAO = new TimesheetEntryDAO(databaseConnectionManager);
-        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO , timesheetDAO);
+        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO, timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
         MainWindowView mainWindowView = new MainWindowView(mainWindowController);
@@ -121,9 +121,9 @@ public class UserLoginView extends VBox {
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
-        sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH,ADD_PROJECT_VIEW_HEIGHT));
-        sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH,EDIT_PROJECT_VIEW_HEIGHT));
-        sceneManager.addScene(EXPORT_SCENE, new Scene(exportView, EXPORT_VIEW_WIDTH,EXPORT_VIEW_HEIGHT));
+        sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH, ADD_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH, EDIT_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(EXPORT_SCENE, new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
 
         sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
 

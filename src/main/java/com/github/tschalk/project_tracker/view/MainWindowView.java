@@ -174,4 +174,7 @@ public class MainWindowView extends VBox {
         getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
     }
 
+    public MainWindowController getMainWindowController() {
+        return mainWindowController;
+    }
 }

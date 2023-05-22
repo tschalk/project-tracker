@@ -116,5 +116,19 @@ public class ProjectDAO {
         return timesheetEntries;
     }
 
+    public void deleteProject(int projectId) {
+        // zuerst alle TimesheetEntries für dieses Projekt löschen
+        timesheetEntryDAO.deleteTimesheetEntriesForProject(projectId);
+
+        String query = "DELETE FROM Project WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, projectId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
 }

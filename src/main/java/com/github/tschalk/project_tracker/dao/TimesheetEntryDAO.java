@@ -26,6 +26,29 @@ public class TimesheetEntryDAO {
             e.printStackTrace();
         }
     }
+
+    public void removeEntry(TimesheetEntry entry) {
+        String query = "DELETE FROM timesheetentry WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, entry.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Appropriate error handling here
+        }
+    }
+
+    public void deleteTimesheetEntriesForProject(int projectId) {
+        String query = "DELETE FROM TimesheetEntry WHERE project_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, projectId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
 
 
