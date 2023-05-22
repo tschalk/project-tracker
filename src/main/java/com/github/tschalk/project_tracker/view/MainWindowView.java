@@ -155,6 +155,7 @@ public class MainWindowView extends VBox {
     }
 
     private void stopUpdateTitleLabelTimeline() {
+        // Hier wird die Zeit gestoppt
         if (updateTimeLabelTimeline != null) {
             updateTimeLabelTimeline.stop();
             updateTimeLabelTimeline = null;
