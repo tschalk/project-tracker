@@ -20,6 +20,7 @@ public class CostCenterDAO {
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, costCenter.getName());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,46 +58,42 @@ public class CostCenterDAO {
                 CostCenter costCenter = new CostCenter();
                 costCenter.setId(rs.getInt("id"));
                 costCenter.setName(rs.getString("name"));
+
                 return costCenter;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return null;
     }
 
+    public void remove(CostCenter costCenter) {
+        try {
+            if (!isCostCenterInUse(costCenter)) {
+                String sql = "DELETE FROM costcenter WHERE id = ?";
 
-    public int getCostCenterId(String costCenterName) {
-        String query = "SELECT id FROM CostCenter WHERE name = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-
-            pstmt.setString(1, costCenterName);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id");
+                try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                    pstmt.setInt(1, costCenter.getId());
+                    pstmt.executeUpdate();
+                }
+            } else {
+                System.out.println("Cannot remove CostCenter. It is still in use.");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-        return -1;
     }
 
-    public void remove(CostCenter costCenter) {
+    private boolean isCostCenterInUse(CostCenter costCenter) {
+        String checkQuery = "SELECT cost_center_id FROM project WHERE cost_center_id = ?";
 
-        // TODO: Prüfe ob CostCenter in Verwendung ist.
-
-        String sql = "DELETE FROM costcenter WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, costCenter.getId());
-            pstmt.executeUpdate();
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+            checkStmt.setInt(1, costCenter.getId());
+            ResultSet rs = checkStmt.executeQuery();
+            return rs.next();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return true;
         }
     }
 }

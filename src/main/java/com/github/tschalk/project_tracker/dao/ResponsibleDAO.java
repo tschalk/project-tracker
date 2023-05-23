@@ -23,6 +23,7 @@ public class ResponsibleDAO {
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, responsible.getName());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,46 +61,43 @@ public class ResponsibleDAO {
                 Responsible responsible = new Responsible();
                 responsible.setId(rs.getInt("id"));
                 responsible.setName(rs.getString("name"));
+
                 return responsible;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return null;
     }
 
+    public void remove(Responsible responsible) {
+        try {
+            if (!isResponsibleInUse(responsible)) {
+                String query = "DELETE FROM responsible WHERE id = ?";
 
-    public int getResponsibleId(String responsibleName) {
-        String query = "SELECT id FROM Responsible WHERE name = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-
-            pstmt.setString(1, responsibleName);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id");
+                try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                    pstmt.setInt(1, responsible.getId());
+                    pstmt.executeUpdate();
+                }
+            } else {
+                System.err.println("Cannot remove Responsible. It is still in use.");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println( e.getMessage());
         }
-
-        return -1;
     }
 
-    public void remove(Responsible responsible) {
+    private boolean isResponsibleInUse(Responsible responsible) {
+        String checkQuery = "SELECT responsible_id FROM project WHERE responsible_id = ?";
 
-        // TODO: Prüfe ob Responsible in Verwendung ist.
-
-        String sql = "DELETE FROM responsible WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, responsible.getId());
-            pstmt.executeUpdate();
+        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+            checkStmt.setInt(1, responsible.getId());
+            ResultSet rs = checkStmt.executeQuery();
+            return rs.next();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println( e.getMessage());
+            return true;
         }
     }
+
 }

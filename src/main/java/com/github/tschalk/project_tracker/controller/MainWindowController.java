@@ -5,6 +5,7 @@ import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.TimesheetEntry;
 import com.github.tschalk.project_tracker.model.User;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,4 +77,9 @@ public class MainWindowController {
     public StopwatchState getStopwatchState() {
         return this.stopwatchState;
     }
+
+    public void handleCloseRequest() {
+        Platform.exit();
+    }
+
 }

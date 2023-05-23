@@ -58,29 +58,6 @@ public class UserDAO {
         }
     }
 
-//    public boolean checkPassword(User user, String password) {
-//        String query = "SELECT password FROM User WHERE id = ?";
-//
-//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-//
-//            pstmt.setInt(1, user.getId());
-//
-//            ResultSet rs = pstmt.executeQuery();
-//
-//            if (rs.next()) {
-//                String storedPasswordHash = rs.getString("password");
-//                return checkPasswordHash(password, storedPasswordHash); // Sie müssen diese Methode implementieren, um den gehashten Passwort-String zu überprüfen
-//            } else {
-//                return false;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }

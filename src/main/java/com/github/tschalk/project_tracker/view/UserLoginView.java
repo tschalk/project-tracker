@@ -107,7 +107,7 @@ public class UserLoginView extends VBox {
         ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO, timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
-        MainWindowView mainWindowView = new MainWindowView(mainWindowController);
+        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
 
         AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
@@ -115,8 +115,8 @@ public class UserLoginView extends VBox {
         EditProjectController editProjectController = new EditProjectController(projectDAO, userLoginController, mainWindowView);
         EditProjectView editProjectView = new EditProjectView(editProjectController, stage);
 
-        ExportController exportController = new ExportController(projectDAO, userLoginController);
-        ExportView exportView = new ExportView(exportController, stage);
+        ExportController exportController = new ExportController(projectDAO, timesheetDAO, userLoginController);
+        ExportView exportView = new ExportView(exportController);
 
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();

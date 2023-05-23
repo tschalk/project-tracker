@@ -18,9 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.List;
+
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
-import static com.github.tschalk.project_tracker.view.UserLoginView.ADD_PROJECT_SCENE;
-import static com.github.tschalk.project_tracker.view.UserLoginView.EDIT_PROJECT_SCENE;
+import static com.github.tschalk.project_tracker.view.UserLoginView.*;
 
 public class MainWindowView extends VBox {
 
@@ -31,12 +32,14 @@ public class MainWindowView extends VBox {
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
     private SimpleLongProperty secondsElapsed = new SimpleLongProperty(0);
+    private Stage stage;
 //    private Label titleLabel; // Show elapsed time
 
-    public MainWindowView(MainWindowController mainWindowController) {
+    public MainWindowView(MainWindowController mainWindowController, Stage stage) {
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
         this.secondsElapsed = new SimpleLongProperty(0);
+        this.stage = stage;
 
         initUI();
     }
@@ -63,7 +66,7 @@ public class MainWindowView extends VBox {
 
             // Hier die Zeit in Stunden umrechnen und runden
             DoubleBinding durationInHours = Bindings.createDoubleBinding(
-                    // * 100 um zwei kommastellen zu verschieben, dann runden und danach / 100.0 um wieder zu teilen
+                    // * 100 um zwei Kommastellen zu verschieben, dann runden und danach / 100.0 um wieder zu teilen
                     () -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0,
                     new SimpleIntegerProperty(durationInSeconds)
             );
@@ -88,13 +91,17 @@ public class MainWindowView extends VBox {
         editButton.setOnAction(e -> {
             if (selectedProject != null) {
                 System.out.println("Edit project: " + selectedProject.getDescription());
-                openEditProjectWindow(selectedProject);
+                getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
             } else {
                 System.out.println("No project selected!");
             }
         });
 
         Button exportButton = new Button("Export to CSV");
+        exportButton.setOnAction(e -> {
+            getInstance().showNewWindowWithCustomScene(EXPORT_SCENE);
+        });
+
 
         Button startStopButton = new Button("Start/Stop");
         startStopButton.setOnAction(e -> {
@@ -136,6 +143,7 @@ public class MainWindowView extends VBox {
         buttonContainer.getStyleClass().add("button-container");
 
         this.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
+        stage.setOnCloseRequest(event -> mainWindowController.handleCloseRequest());
 
         updateProjectTableView();
     }
@@ -168,10 +176,6 @@ public class MainWindowView extends VBox {
         ObservableList<Project> projectList = mainWindowController.getProjectList();
         projectTableView.setItems(projectList);
         System.out.println("Project list updated!");
-    }
-
-    private void openEditProjectWindow(Project selectedProject) {
-        getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
     }
 
     public MainWindowController getMainWindowController() {

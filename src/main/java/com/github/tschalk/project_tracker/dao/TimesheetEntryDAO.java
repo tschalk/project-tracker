@@ -5,7 +5,11 @@ import com.github.tschalk.project_tracker.model.TimesheetEntry;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TimesheetEntryDAO {
 
@@ -21,33 +25,42 @@ public class TimesheetEntryDAO {
             pstmt.setInt(1, projectId);
             pstmt.setTimestamp(2, java.sql.Timestamp.valueOf(entry.getStartDateTime()));
             pstmt.setInt(3, entry.getDuration());
+
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void removeEntry(TimesheetEntry entry) {
-        String query = "DELETE FROM timesheetentry WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, entry.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Appropriate error handling here
-        }
-    }
+    public Map<LocalDate, Integer> getDailyDurationSumForProject(int projectId, LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Integer> dailySums = new LinkedHashMap<>();
 
-    public void deleteTimesheetEntriesForProject(int projectId) {
-        String query = "DELETE FROM TimesheetEntry WHERE project_id = ?";
+        String query = "SELECT DATE(start_time) AS date, SUM(duration) AS sum FROM TimesheetEntry " +
+                "WHERE project_id = ? AND DATE(start_time) BETWEEN ? AND ? " +
+                "GROUP BY DATE(start_time)" +
+                "ORDER BY DATE(start_time)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, projectId);
-            pstmt.executeUpdate();
+            pstmt.setDate(2, java.sql.Date.valueOf(startDate));
+            pstmt.setDate(3, java.sql.Date.valueOf(endDate));
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                LocalDate date = rs.getDate("date").toLocalDate();
+                int durationSum = rs.getInt("sum");
+
+                dailySums.put(date, durationSum);
+            }
+
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
+
+        return dailySums;
     }
+
 
     public void updateTimesheetEntry(TimesheetEntry entry) {
         String query = "UPDATE TimesheetEntry SET duration = ? WHERE id = ?";
@@ -59,6 +72,29 @@ public class TimesheetEntryDAO {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeEntry(TimesheetEntry entry) {
+        String query = "DELETE FROM TimesheetEntry WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, entry.getId());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTimesheetEntriesForProject(int projectId) {
+        String query = "DELETE FROM TimesheetEntry WHERE project_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, projectId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
