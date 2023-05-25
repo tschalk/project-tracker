@@ -3,6 +3,8 @@ package com.github.tschalk.project_tracker.view;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.utils.CustomTitleBar;
+import com.github.tschalk.project_tracker.utils.SVGManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -13,43 +15,72 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.List;
+import java.io.File;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
 import static com.github.tschalk.project_tracker.view.UserLoginView.*;
 
-public class MainWindowView extends VBox {
+public class MainWindowView extends BorderPane {
 
     private final MainWindowController mainWindowController;
-    private final TableView<Project> projectTableView;
+    private final TableView<Project> projectTableView; // Sollte es eine lokale Variable sein?
+    private final SimpleLongProperty secondsElapsed;
+    private final Stage stage;
+    private final SVGManager svgManager = SVGManager.getInstance();
     private Project selectedProject;
     private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
-    private SimpleLongProperty secondsElapsed = new SimpleLongProperty(0);
-    private Stage stage;
-//    private Label titleLabel; // Show elapsed time
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage) {
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
         this.secondsElapsed = new SimpleLongProperty(0);
         this.stage = stage;
-
-        initUI();
+        initializeUI();
     }
 
-    private void initUI() {
-        this.setSpacing(10);
-        this.setPadding(new Insets(10));
+    private void initializeUI() {
 
+        // This
+        this.setPadding(new Insets(0, 0, 15, 0));
+
+        // Top
+        CustomTitleBar titleBar = new CustomTitleBar(this.stage, "Project Tracker");
+        this.setTop(titleBar);
+
+        // Center
         this.titleLabel = new Label("Project Tracker");
 
+        initializeTableView();
+
+        Button addButton = createAddButton();
+        Button editButton = createEditButton();
+        Button exportButton = createExportButton();
+        Button startStopButton = createStartStopButton();
+        //Button importButton = importButton();
+
+        HBox buttonContainer = new HBox(10);
+        buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton/*, importButton*/);
+        buttonContainer.getStyleClass().add("button-container");
+        handleAdminAction(buttonContainer);
+
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(10));
+        contentBox.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
+        this.setCenter(contentBox);
+
+        updateProjectTableView();
+    }
+
+    private void initializeTableView() {
         TableColumn<Project, String> descriptionColumn = new TableColumn<>("Description");
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
@@ -75,19 +106,27 @@ public class MainWindowView extends VBox {
         });
 
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
-
-        Button addButton = new Button("Add");
-        addButton.setOnAction(e -> {
-            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE);
-        });
-
         projectTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedProject = newSelection;
             }
         });
+    }
 
-        Button editButton = new Button("Edit");
+    private Button createAddButton() {
+        Button addButton = new Button();
+        addButton.getStyleClass().add("svg-button");
+        addButton.setGraphic(svgManager.getSVGPath("addIcon"));
+        addButton.setOnAction(e -> {
+            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE);
+        });
+        return addButton;
+    }
+
+    private Button createEditButton() {
+        Button editButton = new Button();
+        editButton.getStyleClass().add("svg-button");
+        editButton.setGraphic(svgManager.getSVGPath("editIcon"));
         editButton.setOnAction(e -> {
             if (selectedProject != null) {
                 System.out.println("Edit project: " + selectedProject.getDescription());
@@ -96,14 +135,13 @@ public class MainWindowView extends VBox {
                 System.out.println("No project selected!");
             }
         });
+        return editButton;
+    }
 
-        Button exportButton = new Button("Export to CSV");
-        exportButton.setOnAction(e -> {
-            getInstance().showNewWindowWithCustomScene(EXPORT_SCENE);
-        });
-
-
-        Button startStopButton = new Button("Start/Stop");
+    private Button createStartStopButton() {
+        Button startStopButton = new Button();
+        startStopButton.getStyleClass().add("svg-button");
+        startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
         startStopButton.setOnAction(e -> {
 
             if (selectedProject == null) {
@@ -119,13 +157,13 @@ public class MainWindowView extends VBox {
             if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
                 activeProject = selectedProject;
                 mainWindowController.startStopwatch(selectedProject);
-                startStopButton.setText("Stop");
+                startStopButton.setGraphic(svgManager.getSVGPath("stopIcon"));
                 startStopButton.setStyle("-fx-background-color: rgba(199,78,79,0.9)");
 
                 startUpdateTitleLabelTimeline();
             } else {
                 mainWindowController.stopStopwatch();
-                startStopButton.setText("Start");
+                startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
                 startStopButton.setStyle("");
                 selectedProject = null;
                 activeProject = null;
@@ -137,15 +175,44 @@ public class MainWindowView extends VBox {
                 updateProjectTableView();
             }
         });
+        return startStopButton;
+    }
 
-        HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton);
-        buttonContainer.getStyleClass().add("button-container");
+    private Button createExportButton() {
+        Button exportButton = new Button();
+        exportButton.getStyleClass().add("svg-button");
+        exportButton.setGraphic(svgManager.getSVGPath("exportIcon"));
+        exportButton.setOnAction(e -> {
+            getInstance().showNewWindowWithCustomScene(EXPORT_SCENE);
+        });
+        return exportButton;
+    }
 
-        this.getChildren().addAll(titleLabel, projectTableView, buttonContainer);
-        stage.setOnCloseRequest(event -> mainWindowController.handleCloseRequest());
+    private Button importButton() {
+        Button importButton = new Button();
+        importButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
-        updateProjectTableView();
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                // mainWindowController.importCsv(selectedFile.toPath().toString());
+            }
+        });
+        return importButton;
+    }
+
+    private void handleAdminAction(HBox buttonContainer) {
+        if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
+            Button userManagementButton = new Button();
+            userManagementButton.getStyleClass().add("svg-button");
+            userManagementButton.setGraphic(svgManager.getSVGPath("userManagementIcon"));
+            userManagementButton.setOnAction(e -> {
+                getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE);
+            });
+
+            buttonContainer.getChildren().add(userManagementButton);
+        }
     }
 
     private void startUpdateTitleLabelTimeline() {
