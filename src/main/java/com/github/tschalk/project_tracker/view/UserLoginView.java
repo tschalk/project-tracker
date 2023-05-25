@@ -6,24 +6,28 @@ import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
+import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
-public class UserLoginView extends VBox {
+public class UserLoginView extends BorderPane {
 
     public static final String MAIN_WINDOW_SCENE = "Main Window";
     public static final String ADD_PROJECT_SCENE = "Add Project";
     public static final String EDIT_PROJECT_SCENE = "Edit Project";
     public static final String EXPORT_SCENE = "Export";
+    public static final String ADMIN_CHANGE_PASSWORD_SCENE = "Admin Change Password";
+    public static final String USER_MANAGEMENT_SCENE = "User Management";
 
-    public static final int MAIN_WINDOW_VIEW_WIDTH = 335;
+    public static final int MAIN_WINDOW_VIEW_WIDTH = 350;
     public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     public static final int ADD_PROJECT_VIEW_WIDTH = 300;
     public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
@@ -31,13 +35,17 @@ public class UserLoginView extends VBox {
     public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
     public static final int EXPORT_VIEW_WIDTH = 300;
     public static final int EXPORT_VIEW_HEIGHT = 300;
+    public static final int ADMIN_CHANGE_PASSWORD_VIEW_WIDTH = 300;
+    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 300;
+    public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
+    public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 
     private final TextField usernameField;
     private final PasswordField passwordField;
     private final Stage stage;
     private final UserLoginController userLoginController;
 
-    public UserLoginView(UserLoginController userLoginController, Stage stage) {
+    public UserLoginView(UserLoginController userLoginController, Stage stage)  {
         this.userLoginController = userLoginController;
         this.stage = stage;
 
@@ -48,8 +56,11 @@ public class UserLoginView extends VBox {
     }
 
     private void initUI() {
-        this.setSpacing(10);
-        this.setPadding(new Insets(10));
+
+        CustomTitleBar titleBar = new CustomTitleBar(this.stage, "Project Tracker");
+         this.setTop(titleBar);
+
+        //        this.setPadding(new Insets(0,0, 10, 0));
 
         Label titleLabel = new Label("User Login");
 
@@ -72,7 +83,10 @@ public class UserLoginView extends VBox {
         buttonContainer.getChildren().add(loginButton);
         buttonContainer.getStyleClass().add("button-container");
 
-        this.getChildren().addAll(titleLabel, gridPane, buttonContainer);
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(10, 10, 10, 10));
+        contentBox.getChildren().addAll(titleLabel, gridPane, buttonContainer);
+        this.setCenter(contentBox);
     }
 
     private void login() {
@@ -80,8 +94,10 @@ public class UserLoginView extends VBox {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-        username = "Max";
+        username = "admin";
         password = "123";
+//        username = "Max";
+//        password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");
@@ -125,7 +141,26 @@ public class UserLoginView extends VBox {
         sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH, EDIT_PROJECT_VIEW_HEIGHT));
         sceneManager.addScene(EXPORT_SCENE, new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
 
-        sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
+        if (userLoginController.getCurrentUser().getRole().equals("user")) {
+            sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
+        }
+
+        if (userLoginController.getCurrentUser().getRole().equals("admin")) {
+            AdminChangePasswordController adminChangePasswordController = new AdminChangePasswordController(userLoginController);
+            AdminChangePasswordView adminChangePasswordView = new AdminChangePasswordView(adminChangePasswordController, stage);
+
+            UserManagementController userManagementController = new UserManagementController(userLoginController);
+            UserManagementView userManagementView = new UserManagementView(userManagementController, stage);
+
+            sceneManager.addScene(ADMIN_CHANGE_PASSWORD_SCENE, new Scene(adminChangePasswordView, ADMIN_CHANGE_PASSWORD_VIEW_WIDTH, ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT));
+            sceneManager.addScene(USER_MANAGEMENT_SCENE, new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
+
+            if (userLoginController.getCurrentUser().getRole().equals("admin") && userLoginController.getCurrentUser().getPassword().equals("admin")) {
+                sceneManager.showCustomScene(ADMIN_CHANGE_PASSWORD_SCENE, stage);
+            } else {
+                sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
+            }
+        }
 
     }
 
