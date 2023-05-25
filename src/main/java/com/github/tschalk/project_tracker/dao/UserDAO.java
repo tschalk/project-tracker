@@ -26,7 +26,8 @@ public class UserDAO {
                     return new User(
                             resultSet.getInt("id"),
                             resultSet.getString("username"),
-                            resultSet.getString("password")
+                            resultSet.getString("password"),
+                                    resultSet.getString("role")
                     );
                 } else {
                     return null;
@@ -57,6 +58,23 @@ public class UserDAO {
             return -1;
         }
     }
+
+    public boolean updatePassword(int userId, String newPassword) {
+        String query = "UPDATE User SET password = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, newPassword);
+            pstmt.setInt(2, userId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public void setConnection(Connection connection) {
         this.connection = connection;
