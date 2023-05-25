@@ -11,14 +11,17 @@ import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.Responsible;
+import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import com.github.tschalk.project_tracker.view.AddProjectView;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
 import com.github.tschalk.project_tracker.view.MainWindowView;
 import com.github.tschalk.project_tracker.view.UserLoginView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
@@ -26,7 +29,7 @@ public class Main extends Application {
     public static final String USER_LOGIN_SCENE = "User Login";
 
     public static final int USER_LOGIN_VIEW_WIDTH = 250;
-    public static final int USER_LOGIN_VIEW_HEIGHT = 150;
+    public static final int USER_LOGIN_VIEW_HEIGHT = 190;
     public static final int DATABASE_LOGIN_VIEW_WIDTH = 250;
     public static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
 
@@ -39,6 +42,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setOnCloseRequest(event -> Platform.exit());
+
         // Hier wird die Verbindung zur Datenbank hergestellt.
         DatabaseConfig config = new DatabaseConfig();
         DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config);
