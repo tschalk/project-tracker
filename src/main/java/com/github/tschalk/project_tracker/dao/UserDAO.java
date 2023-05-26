@@ -20,11 +20,10 @@ public class UserDAO {
         this.connection = databaseConnectionManager.getConnection();
     }
 
-    public boolean addUser(String username, String role) {
+    public boolean addUser(String username, String role, String password) {
         String query = "INSERT INTO User (username, password, role) VALUES (?, ?, ?)";
 
-        Random rand = new Random();
-        String password = String.format("%04d", rand.nextInt(10000)); // Zufällige vierstellige Zahl
+
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 

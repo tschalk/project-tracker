@@ -3,6 +3,7 @@ package com.github.tschalk.project_tracker.controller;
 import com.github.tschalk.project_tracker.model.User;
 
 import java.util.List;
+import java.util.Random;
 
 public class UserManagementController {
     UserLoginController userLoginController;
@@ -18,12 +19,13 @@ public class UserManagementController {
             System.out.println("User already exists.");
             return false;
         }
-        return userLoginController.getUserDAO().addUser(username, role);
+        String password = String.format("%04d", new Random().nextInt(10000));
+        return userLoginController.getUserDAO().addUser(username, role, password);
     }
 
-        public List<User> getAllUsers() {
-            return userLoginController.getUserDAO().getAllUsers();
-        }
+    public List<User> getAllUsers() {
+        return userLoginController.getUserDAO().getAllUsers();
+    }
 
     public boolean deleteUser(String username) {
         User user = userLoginController.getUserDAO().getUser(username);
@@ -31,7 +33,6 @@ public class UserManagementController {
             System.out.println("Admin user cannot be deleted.");
             return false;
         }
-
         return userLoginController.getUserDAO().deleteUser(username);
     }
 
