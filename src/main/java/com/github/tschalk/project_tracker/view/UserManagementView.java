@@ -81,9 +81,18 @@ public class UserManagementView extends VBox {
         boolean addUserSuccessful = userManagementController.addUser(username, role);
         if (addUserSuccessful) {
             System.out.println("User added successfully!");
-            showAlert("User added successfully!");
             usernameField.clear();
             roleChoiceBox.setValue(null);
+            User createdUser = userManagementController.getUser(username);
+
+            updateUserList();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("User created with password: " + createdUser.getPassword());
+
+            alert.showAndWait();
         } else {
             showAlert("Adding user failed!");
         }

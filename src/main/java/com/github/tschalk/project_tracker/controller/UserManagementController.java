@@ -14,6 +14,10 @@ public class UserManagementController {
     }
 
     public boolean addUser(String username, String role) {
+        if (userLoginController.getUserDAO().getUser(username) != null) {
+            System.out.println("User already exists.");
+            return false;
+        }
         return userLoginController.getUserDAO().addUser(username, role);
     }
 
@@ -31,4 +35,11 @@ public class UserManagementController {
         return userLoginController.getUserDAO().deleteUser(username);
     }
 
+    public User getUser(String username) {
+        User user = userLoginController.getUserDAO().getUser(username);
+        if (user == null) {
+            System.out.println("User not found.");
+        }
+        return user;
+    }
 }
