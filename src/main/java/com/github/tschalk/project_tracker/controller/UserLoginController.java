@@ -15,22 +15,27 @@ public class UserLoginController {
 
     public boolean login(String username, String password) {
 
-            userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
-            currentUser = userDAO.getUser(username);
+        userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
+        currentUser = userDAO.getUser(username);
 
-            if (currentUser != null && currentUser.getPassword().equals(password)) {
-                return true;
-            } else {
-                System.err.println("Login failed!");
-                return false;
-            }
+        if (currentUser != null && currentUser.getPassword().equals(password)) {
+            return true;
+        } else {
+            System.err.println("Login failed!");
+            return false;
+        }
+    }
+
+
+    public UserDAO getUserDAO() {
+        return userDAO;
     }
 
     public User getCurrentUser() {
+        currentUser = userDAO.getUser(currentUser.getName());
+        System.out.println("Current User: " + currentUser);
         return currentUser;
     }
-
-
 
     public DatabaseConnectionManager getDatabaseConnectionManager() {
         return userDAO.getDatabaseManager();

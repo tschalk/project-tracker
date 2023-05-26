@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 public class CustomTitleBar extends HBox {
     private double xOffset = 0;
     private double yOffset = 0;
+    private final Button closeButton;
+
+    public CustomTitleBar(String titleText) {
+        this(null, "Project Tracker");
+    }
 
     public CustomTitleBar(Stage stage, String titleText) {
 
@@ -24,7 +29,7 @@ public class CustomTitleBar extends HBox {
         title.setTextFill(Color.WHITE);
         title.setStyle("-fx-font-size: 16;");
 
-        Button closeButton = new Button();
+        closeButton = new Button();
         closeButton.setGraphic(SVGManager.getInstance().getSVGPath("windowCloseIcon"));
         closeButton.setTextFill(Color.WHITE);
         closeButton.getStyleClass().add("window-close-button");
@@ -45,4 +50,9 @@ public class CustomTitleBar extends HBox {
 
         this.getChildren().addAll(title, spacer, closeButton);
     }
+
+    public void showCloseButton(boolean setVisible) {
+        closeButton.setVisible(setVisible);
+    }
+
 }

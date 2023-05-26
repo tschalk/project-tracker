@@ -4,6 +4,8 @@ import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.view.EditProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +14,30 @@ import java.util.Objects;
 import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
 public class SceneManager {
 
+    public static final String MAIN_WINDOW_SCENE = "Main Window";
+    public static final String ADD_PROJECT_SCENE = "Add Project";
+    public static final String EDIT_PROJECT_SCENE = "Edit Project";
+    public static final String EXPORT_SCENE = "Export";
+    public static final String ADMIN_CHANGE_PASSWORD_SCENE = "Admin Change Password";
+    public static final String USER_MANAGEMENT_SCENE = "User Management";
+
+    public static final int MAIN_WINDOW_VIEW_WIDTH = 350;
+    public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
+    public static final int ADD_PROJECT_VIEW_WIDTH = 350;
+    public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
+    public static final int EDIT_PROJECT_VIEW_WIDTH = 300;
+    public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
+    public static final int EXPORT_VIEW_WIDTH = 300;
+    public static final int EXPORT_VIEW_HEIGHT = 300;
+    public static final int ADMIN_CHANGE_PASSWORD_VIEW_WIDTH = 300;
+    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 300;
+    public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
+    public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
+
     private static SceneManager sceneManager = null;
 
     private final Map<String, Scene> scenes = new HashMap<>();
+//    private final Map<String, Stage> stages = new HashMap<>();
 
     // Privater Konsruktor damit nur eine Instanz von SceneManager existiert
     private SceneManager() {}
@@ -44,7 +67,7 @@ public class SceneManager {
         return scene;
     }
 
-    public void showCustomScene(String name, Stage stage) {
+    public void showCustomScene(String name, @NotNull Stage stage) {
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
         stage.setScene(scene);
@@ -63,7 +86,11 @@ public class SceneManager {
         newStage.setTitle(sceneName);
         newStage.setResizable(false);
         newStage.centerOnScreen();
+//        newStage.initStyle(StageStyle.UNDECORATED);
 
+//        stages.put(sceneName, newStage); // Damit man die Stage später abrufen kann
+        System.out.println("newStage = " + newStage);
+        System.out.println("scene = " + scene);
         newStage.show();
     }
 
@@ -79,27 +106,4 @@ public class SceneManager {
 
         newStage.show();
     }
-
-
-//    public void showNewWindowWithCustomSceneAndProject(String sceneName, Project project) {
-//        Scene scene = scenes.get(sceneName);
-//        if (scene == null) {
-//            System.out.println("Scene \"" + sceneName + "\" not found!");
-//            return;
-//        }
-//
-//        // Setzen des Projekts im EditProjectController bevor die Szene gezeigt wird
-//        if (sceneName.equals(UserLoginView.EDIT_PROJECT_SCENE)) {
-//            // Hier die Instanz des EditProjectController erhalten
-//            EditProjectController editProjectController = (EditProjectController) scene.getUserData();
-//            editProjectController.setProject(project);
-//        }
-//
-//        Stage newStage = new Stage();
-//        newStage.setScene(scene);
-//        newStage.show();
-//    }
-
-
-
 }

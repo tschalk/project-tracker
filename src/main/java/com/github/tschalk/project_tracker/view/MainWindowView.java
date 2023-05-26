@@ -24,7 +24,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.getInstance;
+import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 import static com.github.tschalk.project_tracker.view.UserLoginView.*;
 
 public class MainWindowView extends BorderPane {
@@ -61,10 +61,10 @@ public class MainWindowView extends BorderPane {
 
         initializeTableView();
 
-        Button addButton = createAddButton();
-        Button editButton = createEditButton();
-        Button exportButton = createExportButton();
-        Button startStopButton = createStartStopButton();
+        Button addButton = getAddButton();
+        Button editButton = getEditButton();
+        Button exportButton = getExportButton();
+        Button startStopButton = getStartStopButton();
         //Button importButton = importButton();
 
         HBox buttonContainer = new HBox(10);
@@ -113,7 +113,7 @@ public class MainWindowView extends BorderPane {
         });
     }
 
-    private Button createAddButton() {
+    private Button getAddButton() {
         Button addButton = new Button();
         addButton.getStyleClass().add("svg-button");
         addButton.setGraphic(svgManager.getSVGPath("addIcon"));
@@ -123,7 +123,7 @@ public class MainWindowView extends BorderPane {
         return addButton;
     }
 
-    private Button createEditButton() {
+    private Button getEditButton() {
         Button editButton = new Button();
         editButton.getStyleClass().add("svg-button");
         editButton.setGraphic(svgManager.getSVGPath("editIcon"));
@@ -138,7 +138,7 @@ public class MainWindowView extends BorderPane {
         return editButton;
     }
 
-    private Button createStartStopButton() {
+    private Button getStartStopButton() {
         Button startStopButton = new Button();
         startStopButton.getStyleClass().add("svg-button");
         startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
@@ -178,7 +178,7 @@ public class MainWindowView extends BorderPane {
         return startStopButton;
     }
 
-    private Button createExportButton() {
+    private Button getExportButton() {
         Button exportButton = new Button();
         exportButton.getStyleClass().add("svg-button");
         exportButton.setGraphic(svgManager.getSVGPath("exportIcon"));

@@ -22,8 +22,8 @@ public class ExportView extends VBox {
     private static final String CHOOSE_DIRECTORY_TEXT = "Choose Directory";
     private static final String EXPORT_TEXT = "Export";
 
-    private ExportController exportController;
-    private DirectoryChooser directoryChooser;
+    private final ExportController exportController;
+    private final DirectoryChooser directoryChooser;
     private File directory;
 
     public ExportView(ExportController exportController) {
@@ -31,6 +31,19 @@ public class ExportView extends VBox {
         this.directoryChooser = initializeDirectoryChooser();
         this.directory = directoryChooser.getInitialDirectory();
         initializeUI();
+    }
+
+    private void initializeUI() {
+
+        this.setPadding(new Insets(10));
+
+        DatePicker fromDatePicker = createFromDatePicker();
+        DatePicker toDatePicker = createToDatePicker();
+
+        Button directoryButton = createDirectoryButton();
+        Button exportButton = createExportButton(fromDatePicker, toDatePicker);
+
+        this.getChildren().addAll(fromDatePicker, toDatePicker, directoryButton, exportButton);
     }
 
     private DirectoryChooser initializeDirectoryChooser() {
@@ -48,20 +61,6 @@ public class ExportView extends VBox {
         } else {
             return Paths.get(System.getProperty("user.home"));
         }
-    }
-
-    private void initializeUI() {
-
-        this.setSpacing(10);
-        this.setPadding(new Insets(10));
-
-        DatePicker fromDatePicker = createFromDatePicker();
-        DatePicker toDatePicker = createToDatePicker();
-
-        Button directoryButton = createDirectoryButton();
-        Button exportButton = createExportButton(fromDatePicker, toDatePicker);
-
-        this.getChildren().addAll(fromDatePicker, toDatePicker, directoryButton, exportButton);
     }
 
     private DatePicker createFromDatePicker() {

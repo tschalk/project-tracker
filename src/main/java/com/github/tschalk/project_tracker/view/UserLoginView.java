@@ -17,28 +17,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static com.github.tschalk.project_tracker.utils.SceneManager.*;
+
 
 public class UserLoginView extends BorderPane {
 
-    public static final String MAIN_WINDOW_SCENE = "Main Window";
-    public static final String ADD_PROJECT_SCENE = "Add Project";
-    public static final String EDIT_PROJECT_SCENE = "Edit Project";
-    public static final String EXPORT_SCENE = "Export";
-    public static final String ADMIN_CHANGE_PASSWORD_SCENE = "Admin Change Password";
-    public static final String USER_MANAGEMENT_SCENE = "User Management";
 
-    public static final int MAIN_WINDOW_VIEW_WIDTH = 350;
-    public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
-    public static final int ADD_PROJECT_VIEW_WIDTH = 300;
-    public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
-    public static final int EDIT_PROJECT_VIEW_WIDTH = 300;
-    public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
-    public static final int EXPORT_VIEW_WIDTH = 300;
-    public static final int EXPORT_VIEW_HEIGHT = 300;
-    public static final int ADMIN_CHANGE_PASSWORD_VIEW_WIDTH = 300;
-    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 300;
-    public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
-    public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 
     private final TextField usernameField;
     private final PasswordField passwordField;
@@ -126,7 +110,7 @@ public class UserLoginView extends BorderPane {
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
 
         AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
-        AddProjectView addProjectView = new AddProjectView(addProjectController, stage);
+        AddProjectView addProjectView = new AddProjectView(addProjectController);
 
         EditProjectController editProjectController = new EditProjectController(projectDAO, userLoginController, mainWindowView);
         EditProjectView editProjectView = new EditProjectView(editProjectController, stage);
@@ -136,8 +120,8 @@ public class UserLoginView extends BorderPane {
 
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
-        sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
         sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH, ADD_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
         sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH, EDIT_PROJECT_VIEW_HEIGHT));
         sceneManager.addScene(EXPORT_SCENE, new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
 
@@ -150,7 +134,7 @@ public class UserLoginView extends BorderPane {
             AdminChangePasswordView adminChangePasswordView = new AdminChangePasswordView(adminChangePasswordController, stage);
 
             UserManagementController userManagementController = new UserManagementController(userLoginController);
-            UserManagementView userManagementView = new UserManagementView(userManagementController, stage);
+            UserManagementView userManagementView = new UserManagementView(userManagementController);
 
             sceneManager.addScene(ADMIN_CHANGE_PASSWORD_SCENE, new Scene(adminChangePasswordView, ADMIN_CHANGE_PASSWORD_VIEW_WIDTH, ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT));
             sceneManager.addScene(USER_MANAGEMENT_SCENE, new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));

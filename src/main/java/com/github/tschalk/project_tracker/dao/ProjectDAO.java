@@ -5,10 +5,7 @@ import com.github.tschalk.project_tracker.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +23,38 @@ public class ProjectDAO {
         this.responsibleDAO = responsibleDAO;
         this.timesheetEntryDAO = timesheetEntryDAO;
     }
+
+//    public Project addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
+//        String query = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
+//
+//        try (PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+//
+//            pstmt.setString(1, description);
+//            pstmt.setInt(2, costCenter.getId());
+//            pstmt.setInt(3, responsible.getId());
+//            pstmt.setInt(4, user.getId());
+//
+//            pstmt.executeUpdate();
+//
+//            ResultSet rs = pstmt.getGeneratedKeys();
+//            if (rs.next()) {
+//                int projectId = rs.getInt(1);
+//
+//                Project project = new Project();
+//                project.setId(projectId);
+//                project.setDescription(description);
+//                project.setCostCenter(costCenter.getName());
+//                project.setResponsible(responsible.getName());
+//
+//                return project;
+//            }
+//        } catch (SQLException e) {
+//            System.err.println("Error adding project: " + e.getMessage());
+//        }
+//
+//        return null;
+//    }
+
 
     public void addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
         String query = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
@@ -96,7 +125,7 @@ public class ProjectDAO {
 
     public List<TimesheetEntry> readAllTimesheetEntriesForProject(int projectId) {
         List<TimesheetEntry> timesheetEntries = new ArrayList<>();
-        String query = "SELECT * FROM timesheetentry WHERE project_id = ?";
+            String query = "SELECT * FROM timesheetentry WHERE project_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, projectId);
