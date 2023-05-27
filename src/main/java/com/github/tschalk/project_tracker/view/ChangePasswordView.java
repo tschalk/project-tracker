@@ -11,13 +11,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class AdminChangePasswordView extends VBox {
+public class ChangePasswordView extends VBox {
     private final PasswordField newPasswordField;
     private final PasswordField confirmNewPasswordField;
     private final AdminChangePasswordController controller;
     private final Stage stage;
 
-    public AdminChangePasswordView(AdminChangePasswordController controller, Stage stage) {
+    public ChangePasswordView(AdminChangePasswordController controller, Stage stage) {
         this.controller = controller;
         this.stage = stage;
 

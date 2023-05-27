@@ -25,7 +25,6 @@ import javafx.util.Duration;
 import java.io.File;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
-import static com.github.tschalk.project_tracker.view.UserLoginView.*;
 
 public class MainWindowView extends BorderPane {
 

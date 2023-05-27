@@ -33,23 +33,11 @@ public class AddProjectView extends BorderPane {
 
     public AddProjectView(AddProjectController addProjectController) {
         this.addProjectController = addProjectController;
-
         this.descriptionField = new TextField();
         this.costCenterComboBox = new ComboBox<>();
         this.responsibleComboBox = new ComboBox<>();
         svgManager = SVGManager.getInstance();
-
         initializeUI();
-    }
-
-    private static Button getCancelButton() {
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setOnAction(event -> {
-
-            Stage currentStage = (Stage) cancelButton.getScene().getWindow();
-            currentStage.close();
-        });
-        return cancelButton;
     }
 
     private void initializeUI() {
@@ -65,7 +53,7 @@ public class AddProjectView extends BorderPane {
         // Center
         Label titleLabel = new Label("Add new project");
 
-        Button addProjectButton = getAddProjectButton();
+        Button addProjectButton = getOkButton();
         Button cancelButton = getCancelButton();
         setButtonStyle(addProjectButton, cancelButton);
 
@@ -238,9 +226,9 @@ public class AddProjectView extends BorderPane {
         return removeResponsibleButton;
     }
 
-    private Button getAddProjectButton() {
-        Button addButton = new Button("Ok");
-        addButton.setOnAction(event -> {
+    private Button getOkButton() {
+        Button okButton = new Button("Ok");
+        okButton.setOnAction(event -> {
             if (descriptionField.getText() != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
                 addProjectController.getProjectDAO().addProject(
                         descriptionField.getText(),
@@ -248,7 +236,7 @@ public class AddProjectView extends BorderPane {
                         responsibleComboBox.getValue(),
                         addProjectController.getCurrentUser());
 
-                Stage currentStage = (Stage) addButton.getScene().getWindow();
+                Stage currentStage = (Stage) okButton.getScene().getWindow();
 
                 addProjectController.getMainWindowView().updateProjectTableView();
 
@@ -262,7 +250,16 @@ public class AddProjectView extends BorderPane {
                 alert.showAndWait();
             }
         });
-        return addButton;
+        return okButton;
+    }
+
+    private Button getCancelButton() {
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(event -> {
+            Stage currentStage = (Stage) cancelButton.getScene().getWindow();
+            currentStage.close();
+        });
+        return cancelButton;
     }
 
     private void setButtonStyle(Button... buttons) {
@@ -280,4 +277,8 @@ public class AddProjectView extends BorderPane {
         }
     }
 
+
+    public Stage getStage() {
+        return (Stage) this.getScene().getWindow();
+    }
 }

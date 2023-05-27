@@ -131,12 +131,12 @@ public class UserLoginView extends BorderPane {
 
         if (userLoginController.getCurrentUser().getRole().equals("admin")) {
             AdminChangePasswordController adminChangePasswordController = new AdminChangePasswordController(userLoginController);
-            AdminChangePasswordView adminChangePasswordView = new AdminChangePasswordView(adminChangePasswordController, stage);
+            ChangePasswordView changePasswordView = new ChangePasswordView(adminChangePasswordController, stage);
 
             UserManagementController userManagementController = new UserManagementController(userLoginController);
             UserManagementView userManagementView = new UserManagementView(userManagementController);
 
-            sceneManager.addScene(ADMIN_CHANGE_PASSWORD_SCENE, new Scene(adminChangePasswordView, ADMIN_CHANGE_PASSWORD_VIEW_WIDTH, ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT));
+            sceneManager.addScene(ADMIN_CHANGE_PASSWORD_SCENE, new Scene(changePasswordView, ADMIN_CHANGE_PASSWORD_VIEW_WIDTH, ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT));
             sceneManager.addScene(USER_MANAGEMENT_SCENE, new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
 
             if (userLoginController.getCurrentUser().getRole().equals("admin") && userLoginController.getCurrentUser().getPassword().equals("admin")) {
