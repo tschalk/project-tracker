@@ -83,6 +83,11 @@ public class MainWindowController {
         return this.stopwatchState;
     }
 
+    public String getWelcomeMessage() {
+        User currentUser = getCurrentUser();
+        return currentUser != null ? "Welcome " + currentUser.getName() : "Welcome";
+    }
+
 
 //    public void importCsv(String filePath) {
 //        User currentUser = getCurrentUser();

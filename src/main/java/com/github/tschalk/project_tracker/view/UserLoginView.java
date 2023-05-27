@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 
@@ -23,31 +24,48 @@ import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 public class UserLoginView extends BorderPane {
 
 
-
     private final TextField usernameField;
     private final PasswordField passwordField;
     private final Stage stage;
     private final UserLoginController userLoginController;
 
-    public UserLoginView(UserLoginController userLoginController, Stage stage)  {
+    public UserLoginView(UserLoginController userLoginController, Stage stage) {
         this.userLoginController = userLoginController;
         this.stage = stage;
-
         this.usernameField = new TextField();
         this.passwordField = new PasswordField();
-
         initUI();
     }
 
     private void initUI() {
+        // This
+        this.setPadding(new Insets(0, 0, 10, 0));
 
+        // Top
         CustomTitleBar titleBar = new CustomTitleBar(this.stage, "Project Tracker");
-         this.setTop(titleBar);
+        this.setTop(titleBar);
 
-        //        this.setPadding(new Insets(0,0, 10, 0));
-
+        // Center
         Label titleLabel = new Label("User Login");
 
+        GridPane gridPane = getGridPane();
+
+        Button loginButton = new Button("Login");
+        loginButton.setOnAction(e -> login());
+
+        HBox buttonContainer = new HBox(10);
+        buttonContainer.getChildren().add(loginButton);
+        buttonContainer.getStyleClass().add("button-container");
+
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(10, 10, 10, 10));
+        contentBox.getChildren().addAll(titleLabel, gridPane, buttonContainer);
+
+        this.setCenter(contentBox);
+    }
+
+    @NotNull
+    private GridPane getGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -60,17 +78,7 @@ public class UserLoginView extends BorderPane {
         gridPane.add(passwordLabel, 0, 1);
         gridPane.add(passwordField, 1, 1);
 
-        Button loginButton = new Button("Login");
-        loginButton.setOnAction(e -> login());
-
-        HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().add(loginButton);
-        buttonContainer.getStyleClass().add("button-container");
-
-        VBox contentBox = new VBox(10);
-        contentBox.setPadding(new Insets(10, 10, 10, 10));
-        contentBox.getChildren().addAll(titleLabel, gridPane, buttonContainer);
-        this.setCenter(contentBox);
+        return gridPane;
     }
 
     private void login() {
@@ -113,7 +121,7 @@ public class UserLoginView extends BorderPane {
         AddProjectView addProjectView = new AddProjectView(addProjectController);
 
         EditProjectController editProjectController = new EditProjectController(projectDAO, userLoginController, mainWindowView);
-        EditProjectView editProjectView = new EditProjectView(editProjectController, stage);
+        EditProjectView editProjectView = new EditProjectView(editProjectController);
 
         ExportController exportController = new ExportController(projectDAO, timesheetDAO, userLoginController);
         ExportView exportView = new ExportView(exportController);

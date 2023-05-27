@@ -53,10 +53,11 @@ public class AddProjectView extends BorderPane {
         // Center
         Label titleLabel = new Label("Add new project");
 
-        Button addProjectButton = getOkButton();
+        Button addOkButton = getOkButton();
         Button cancelButton = getCancelButton();
-        setButtonStyle(addProjectButton, cancelButton);
+        setButtonStyle(addOkButton, cancelButton);
 
+        // Buttons für das GridPane
         addCostCenterButton = getAddCostcenterButton();
         addResponsibleButton = getAddResponsibleButton();
         removeCostCenterButton = getRemoveCostcenterButton();
@@ -66,7 +67,7 @@ public class AddProjectView extends BorderPane {
         GridPane gridPane = getGridPane();
 
         HBox actionButtonContainer = new HBox(10);
-        actionButtonContainer.getChildren().addAll(addProjectButton, cancelButton);
+        actionButtonContainer.getChildren().addAll(addOkButton, cancelButton);
         actionButtonContainer.getStyleClass().add("button-container");
 
         VBox contentBox = new VBox(10);
@@ -276,7 +277,6 @@ public class AddProjectView extends BorderPane {
             button.getStyleClass().add("svg-button");
         }
     }
-
 
     public Stage getStage() {
         return (Stage) this.getScene().getWindow();

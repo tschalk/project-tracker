@@ -14,6 +14,8 @@ import java.util.Objects;
 import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
 public class SceneManager {
 
+    public static final String DATABASE_LOGIN_SCENE = "Database Login";
+    public static final String USER_LOGIN_SCENE = "User Login";
     public static final String MAIN_WINDOW_SCENE = "Main Window";
     public static final String ADD_PROJECT_SCENE = "Add Project";
     public static final String EDIT_PROJECT_SCENE = "Edit Project";
@@ -21,6 +23,10 @@ public class SceneManager {
     public static final String ADMIN_CHANGE_PASSWORD_SCENE = "Admin Change Password";
     public static final String USER_MANAGEMENT_SCENE = "User Management";
 
+    public static final int USER_LOGIN_VIEW_WIDTH = 250;
+    public static final int USER_LOGIN_VIEW_HEIGHT = 190;
+    public static final int DATABASE_LOGIN_VIEW_WIDTH = 250;
+    public static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
     public static final int MAIN_WINDOW_VIEW_WIDTH = 350;
     public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     public static final int ADD_PROJECT_VIEW_WIDTH = 350;
@@ -28,9 +34,9 @@ public class SceneManager {
     public static final int EDIT_PROJECT_VIEW_WIDTH = 300;
     public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
     public static final int EXPORT_VIEW_WIDTH = 300;
-    public static final int EXPORT_VIEW_HEIGHT = 300;
+    public static final int EXPORT_VIEW_HEIGHT = 200;
     public static final int ADMIN_CHANGE_PASSWORD_VIEW_WIDTH = 300;
-    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 300;
+    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 200;
     public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
     public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 
@@ -97,6 +103,7 @@ public class SceneManager {
     public void showNewWindowWithCustomScene(String sceneName, Project selectedProject) {
         // Hole die Szene aus der Map
         Scene scene = this.scenes.get(sceneName);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
         // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
         if(scene.getRoot() instanceof EditProjectView editProjectView) {
             editProjectView.setSelectedProject(selectedProject);

@@ -2,9 +2,14 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.ExportController;
 import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 
@@ -15,7 +20,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ExportView extends VBox {
+public class ExportView extends BorderPane {
 
     private static final String FROM_PROMPT_TEXT = "From";
     private static final String TO_PROMPT_TEXT = "To";
@@ -34,16 +39,45 @@ public class ExportView extends VBox {
     }
 
     private void initializeUI() {
+        // This
+        this.setPadding(new Insets(0, 0, 15, 0));
 
-        this.setPadding(new Insets(10));
+        // Top
+        CustomTitleBar customTitleBar = new CustomTitleBar(/*SceneManager.getInstance().getStage(SceneManager.ADD_PROJECT_SCENE),*/"Edit Project");
+        customTitleBar.showCloseButton(false);
+        this.setTop(customTitleBar);
 
-        DatePicker fromDatePicker = createFromDatePicker();
-        DatePicker toDatePicker = createToDatePicker();
+        // Center
+        Label titleLabel = new Label("Export project");
 
-        Button directoryButton = createDirectoryButton();
-        Button exportButton = createExportButton(fromDatePicker, toDatePicker);
+        DatePicker fromDatePicker = getFromDatePicker();
+        DatePicker toDatePicker = getToDatePicker();
 
-        this.getChildren().addAll(fromDatePicker, toDatePicker, directoryButton, exportButton);
+        Button directoryButton = getDirectoryButton();
+        Button exportButton = getExportButton(fromDatePicker, toDatePicker);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+
+        Label fromLabel = new Label("From");
+        gridPane.add(fromLabel, 0, 0);
+        gridPane.add(fromDatePicker, 1, 0);
+
+        Label toLabel = new Label("To");
+        gridPane.add(toLabel, 0, 1);
+        gridPane.add(toDatePicker, 1, 1);
+
+        HBox actionButtonContainer = new HBox(10);
+        actionButtonContainer.getChildren().addAll(directoryButton, exportButton);
+        actionButtonContainer.getStyleClass().add("button-container");
+
+        VBox centerContainer = new VBox(10);
+        centerContainer.setPadding(new Insets(10));
+        centerContainer.getChildren().addAll(titleLabel, gridPane, actionButtonContainer);
+
+        this.setCenter(centerContainer);
+
     }
 
     private DirectoryChooser initializeDirectoryChooser() {
@@ -63,7 +97,7 @@ public class ExportView extends VBox {
         }
     }
 
-    private DatePicker createFromDatePicker() {
+    private DatePicker getFromDatePicker() {
         DatePicker fromDatePicker = new DatePicker();
         fromDatePicker.setPromptText(FROM_PROMPT_TEXT);
         LocalDate now = LocalDate.now();
@@ -75,7 +109,7 @@ public class ExportView extends VBox {
         return fromDatePicker;
     }
 
-    private DatePicker createToDatePicker() {
+    private DatePicker getToDatePicker() {
         DatePicker datePicker = new DatePicker();
         datePicker.setPromptText(TO_PROMPT_TEXT);
         datePicker.setValue(LocalDate.now());
@@ -83,14 +117,14 @@ public class ExportView extends VBox {
         return datePicker;
     }
 
-    private Button createDirectoryButton() {
+    private Button getDirectoryButton() {
         Button directoryButton = new Button(CHOOSE_DIRECTORY_TEXT);
         directoryButton.setOnAction(e -> directory = directoryChooser.showDialog(getScene().getWindow()));
 
         return directoryButton;
     }
 
-    private Button createExportButton(DatePicker fromDatePicker, DatePicker toDatePicker) {
+    private Button getExportButton(DatePicker fromDatePicker, DatePicker toDatePicker) {
         Button exportButton = new Button(EXPORT_TEXT);
         exportButton.setOnAction(e -> {
             List<Project> projects = exportController.getProjects();

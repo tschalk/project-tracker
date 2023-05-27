@@ -16,7 +16,7 @@ public class CustomTitleBar extends HBox {
     private final Button closeButton;
 
     public CustomTitleBar(String titleText) {
-        this(null, "Project Tracker");
+        this(null, titleText);
     }
 
     public CustomTitleBar(Stage stage, String titleText) {

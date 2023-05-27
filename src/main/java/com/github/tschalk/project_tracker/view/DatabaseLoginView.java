@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import static com.github.tschalk.project_tracker.Main.USER_LOGIN_SCENE;
+import static com.github.tschalk.project_tracker.utils.SceneManager.USER_LOGIN_SCENE;
 
 public class DatabaseLoginView extends VBox {
 
@@ -22,7 +22,6 @@ public class DatabaseLoginView extends VBox {
     private final PasswordField passwordField;
 
     public DatabaseLoginView(DatabaseLoginController databaseLoginController, Stage stage) {
-
         this.databaseLoginController = databaseLoginController;
         this.stage = stage;
         this.hostField = new TextField();
@@ -30,18 +29,17 @@ public class DatabaseLoginView extends VBox {
         this.usernameField = new TextField();
         this.passwordField = new PasswordField();
         this.databaseNameField = new TextField();
-
         loadDatabaseProperties(); // database.properties Datei laden
-        initUI();
+        initializeUI();
     }
 
     private void loadDatabaseProperties() {
-
         String host = databaseLoginController.getDatabaseProperty("host");
         String port = databaseLoginController.getDatabaseProperty("port");
         String user = databaseLoginController.getDatabaseProperty("user");
         String password = databaseLoginController.getDatabaseProperty("password");
         String databaseName = databaseLoginController.getDatabaseProperty("database");
+
         if (host != null && !host.isEmpty()) {
             hostField.setText(host);
         } else {
@@ -70,8 +68,7 @@ public class DatabaseLoginView extends VBox {
     }
 
     // Hier werden die Textfelder und der Connect Button erstellt
-    private void initUI() {
-
+    private void initializeUI() {
         this.setSpacing(10);
         this.setPadding(new Insets(10));
 
@@ -112,7 +109,6 @@ public class DatabaseLoginView extends VBox {
     }
 
     private void connect() {
-
         String host = hostField.getText();
         String port = portField.getText();
         String username = usernameField.getText();
@@ -132,14 +128,11 @@ public class DatabaseLoginView extends VBox {
     }
 
     private void switchToLoginView() {
-
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
-
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String header, String message) {
-
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(header);

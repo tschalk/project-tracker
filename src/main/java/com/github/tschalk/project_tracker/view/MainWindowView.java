@@ -56,7 +56,7 @@ public class MainWindowView extends BorderPane {
         this.setTop(titleBar);
 
         // Center
-        this.titleLabel = new Label("Project Tracker");
+        this.titleLabel = new Label(mainWindowController.getWelcomeMessage());
 
         initializeTableView();
 
@@ -169,7 +169,7 @@ public class MainWindowView extends BorderPane {
 
                 // Stop updating the titleLabel
                 stopUpdateTitleLabelTimeline();
-                titleLabel.setText("Project Tracker");
+                titleLabel.setText(mainWindowController.getWelcomeMessage());
 
                 updateProjectTableView();
             }

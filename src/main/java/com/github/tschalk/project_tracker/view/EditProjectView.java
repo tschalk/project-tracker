@@ -3,36 +3,103 @@ package com.github.tschalk.project_tracker.view;
 import com.github.tschalk.project_tracker.controller.EditProjectController;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.TimesheetEntry;
+import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class EditProjectView extends VBox {
+public class EditProjectView extends BorderPane {
 
-    EditProjectController editProjectController;
-    Stage stage;
-    Project selectedProject;
+    private final EditProjectController editProjectController;
+    private Stage stage;
+    private Project selectedProject;
     private TableView<TimesheetEntry> timesheetEntryTableView;
 
-    public EditProjectView(EditProjectController editProjectController, Stage stage) {
+    public EditProjectView(EditProjectController editProjectController) {
         this.editProjectController = editProjectController;
-        this.stage = stage;
-        initUI();
-//        System.out.println("EditProjectView: " +   selectedProject.getDescription());
+        initializeUI();
     }
 
+    private void initializeUI() {
 
-    private void initUI() {
-        this.setSpacing(10);
-        this.setPadding(new Insets(10));
+        // This
+        this.setPadding(new Insets(0, 0, 15, 0));
 
+        // Top
+        CustomTitleBar customTitleBar = new CustomTitleBar(/*SceneManager.getInstance().getStage(SceneManager.ADD_PROJECT_SCENE),*/"Edit Project");
+        customTitleBar.showCloseButton(false);
+        this.setTop(customTitleBar);
+
+        // Center
+        Label titleLabel = new Label("Edit project");
+
+        setTimesheetTableView();
+
+        Button removeDateTimeButton = getremoveDateTimeButton();
+        Button removeProjectButton = getRemoveProjectButton();
+        Button editButton = getEditButton();
+
+        HBox actionButtonContainer = new HBox(10);
+        actionButtonContainer.getChildren().addAll(removeDateTimeButton, removeProjectButton, editButton);
+        actionButtonContainer.getStyleClass().add("button-container");
+
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(10));
+        contentBox.getChildren().addAll(titleLabel, timesheetEntryTableView, actionButtonContainer);
+
+         this.setCenter(contentBox);
+    }
+
+    @NotNull
+    private Button getEditButton() {
+        Button editButton = new Button("Edit Duration");
+        editButton.setOnAction(event -> {
+            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
+            if (selectedEntry != null) {
+                editDuration(selectedEntry);
+                editProjectController.getMainWindowView().updateProjectTableView();
+            }
+        });
+        return editButton;
+    }
+
+    @NotNull
+    private Button getRemoveProjectButton() {
+        Button removeProjectButton = new Button("Remove Project");
+        removeProjectButton.setOnAction(event -> {
+            if (selectedProject != null) {
+                editProjectController.deleteProject(selectedProject);
+                selectedProject = null;
+                editProjectController.getMainWindowView().updateProjectTableView();
+            }
+        });
+        return removeProjectButton;
+    }
+
+    @NotNull
+    private Button getremoveDateTimeButton() {
+        Button removeDateTimeButton = new Button("Remove Time");
+        removeDateTimeButton.setOnAction(event -> {
+            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
+            if (selectedEntry != null) {
+                timesheetEntryTableView.getItems().remove(selectedEntry);
+                removeEntryFromDatabase(selectedEntry);
+            }
+        });
+        return removeDateTimeButton;
+    }
+
+    private void setTimesheetTableView() {
         timesheetEntryTableView = new TableView<>();
 
         TableColumn<TimesheetEntry, LocalDateTime> startDateTimeColumn = new TableColumn<>("Start Date/Time");
@@ -42,36 +109,6 @@ public class EditProjectView extends VBox {
         durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
         timesheetEntryTableView.getColumns().addAll(startDateTimeColumn, durationColumn);
-
-        Button removeDateTimeButton = new Button("Remove Time");
-        removeDateTimeButton.setOnAction(event -> {
-            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
-            if (selectedEntry != null) {
-                timesheetEntryTableView.getItems().remove(selectedEntry);
-                removeEntryFromDatabase(selectedEntry);
-            }
-        });
-
-        Button removeProjectButton = new Button("Remove Project");
-        removeProjectButton.setOnAction(event -> {
-            if (selectedProject != null) {
-                editProjectController.deleteProject(selectedProject);
-                selectedProject = null;
-                editProjectController.getMainWindowView().updateProjectTableView();
-            }
-        });
-
-        Button editButton = new Button("Edit Duration");
-        editButton.setOnAction(event -> {
-            TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
-            if (selectedEntry != null) {
-                editDuration(selectedEntry);
-                editProjectController.getMainWindowView().updateProjectTableView();
-            }
-        });
-
-
-        this.getChildren().addAll(timesheetEntryTableView, removeDateTimeButton, removeProjectButton, editButton);
     }
 
     private void editDuration(TimesheetEntry entry) {
@@ -107,7 +144,6 @@ public class EditProjectView extends VBox {
         }
     }
 
-
     public void setSelectedProject(Project selectedProject) {
         this.selectedProject = selectedProject;
         ObservableList<TimesheetEntry> timesheetEntries = FXCollections.observableArrayList(editProjectController.getTimesheetEntriesForProject(selectedProject));
@@ -118,6 +154,5 @@ public class EditProjectView extends VBox {
         editProjectController.removeTimesheetEntry(selectedEntry);
         editProjectController.getMainWindowView().updateProjectTableView();
     }
-
 
 }

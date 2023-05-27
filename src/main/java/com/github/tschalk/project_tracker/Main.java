@@ -23,15 +23,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import static com.github.tschalk.project_tracker.utils.SceneManager.*;
+
 public class Main extends Application {
 
-    public static final String DATABASE_LOGIN_SCENE = "Database Login";
-    public static final String USER_LOGIN_SCENE = "User Login";
 
-    public static final int USER_LOGIN_VIEW_WIDTH = 250;
-    public static final int USER_LOGIN_VIEW_HEIGHT = 190;
-    public static final int DATABASE_LOGIN_VIEW_WIDTH = 250;
-    public static final int DATABASE_LOGIN_VIEW_HEIGHT = 260;
 
     public static final String STYLESHEET_PATH = "/css/styles.css";
 
