@@ -114,6 +114,7 @@ public class MainWindowView extends BorderPane {
 
     private Button getAddButton() {
         Button addButton = new Button();
+        addButton.setTooltip(new Tooltip("Add new project"));
         addButton.getStyleClass().add("svg-button");
         addButton.setGraphic(svgManager.getSVGPath("addIcon"));
         addButton.setOnAction(e -> {
@@ -124,6 +125,7 @@ public class MainWindowView extends BorderPane {
 
     private Button getEditButton() {
         Button editButton = new Button();
+        editButton.setTooltip(new Tooltip("Edit selected project"));
         editButton.getStyleClass().add("svg-button");
         editButton.setGraphic(svgManager.getSVGPath("editIcon"));
         editButton.setOnAction(e -> {
@@ -144,6 +146,7 @@ public class MainWindowView extends BorderPane {
 
     private Button getStartStopButton() {
         Button startStopButton = new Button();
+        startStopButton.setTooltip(new Tooltip("Start/Stop stopwatch to track time for selected project"));
         startStopButton.getStyleClass().add("svg-button");
         startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
         startStopButton.setOnAction(e -> {
@@ -184,6 +187,7 @@ public class MainWindowView extends BorderPane {
 
     private Button getExportButton() {
         Button exportButton = new Button();
+        exportButton.setTooltip(new Tooltip("Export all projects to CSV with semicolon as delimiter"));
         exportButton.getStyleClass().add("svg-button");
         exportButton.setGraphic(svgManager.getSVGPath("exportIcon"));
         exportButton.setOnAction(e -> {

@@ -92,10 +92,10 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-//        username = "Admin";
-//        password = "123";
-        username = "Max";
+        username = "Admin";
         password = "123";
+//        username = "Max";
+//        password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");
