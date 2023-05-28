@@ -130,12 +130,7 @@ public class AddProjectView extends BorderPane {
             dialog.getDialogPane().setContent(textField);
             dialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == okButtonType) {
-                    return textField.getText();
-                }
-                return null;
-            });
+            handleDialogInput(dialog, okButtonType, textField);
 
             Optional<String> result = dialog.showAndWait();
 
@@ -164,12 +159,7 @@ public class AddProjectView extends BorderPane {
             dialog.getDialogPane().setContent(textField);
             dialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == okButtonType) {
-                    return textField.getText();
-                }
-                return null;
-            });
+            handleDialogInput(dialog, okButtonType, textField);
 
             Optional<String> result = dialog.showAndWait();
 
@@ -179,6 +169,41 @@ public class AddProjectView extends BorderPane {
             });
         });
         return addResponsibleButton;
+    }
+
+    private void handleDialogInput(Dialog<String> dialog, ButtonType okButtonType, TextField textField) {
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                String text = textField.getText();
+                int startIndex = 0;
+                int endIndex = text.length() - 1;
+
+                // Leerzeichen am Anfang der Zeichenkette entfernen
+                while (startIndex <= endIndex && Character.isWhitespace(text.charAt(startIndex))) {
+                    startIndex++;
+                }
+
+                // Leerzeichen am Ende der Zeichenkette entfernen
+                while (endIndex >= startIndex && Character.isWhitespace(text.charAt(endIndex))) {
+                    endIndex--;
+                }
+
+                // Kein sichtbarer Text vorhanden
+                if (startIndex > endIndex) {
+                    return null;
+                }
+
+                // Neue Zeichenkette ohne Leerzeichen am Anfang und am Ende erstellen
+                String trimmedText = text.substring(startIndex, endIndex + 1);
+
+                if (trimmedText.contains(";")) {
+                    return trimmedText.replace(";", ",");
+                } else {
+                    return trimmedText;
+                }
+            }
+            return null;
+        });
     }
 
     private Button getRemoveCostcenterButton() {
