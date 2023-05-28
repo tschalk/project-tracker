@@ -13,16 +13,17 @@ import javafx.scene.layout.VBox;
 public class UserManagementView extends VBox {
 
     private final TextField usernameField;
-    private final TextField roleField;
-    private final ChoiceBox<String> roleChoiceBox;
+    //    private final TextField roleField;
+    private final ComboBox<String> roleComboBox;
+
     private final UserManagementController userManagementController;
     private final ListView<User> userList;
 
     public UserManagementView(UserManagementController userManagementController) {
         this.userManagementController = userManagementController;
         this.usernameField = new TextField();
-        this.roleField = new TextField();
-        this.roleChoiceBox = new ChoiceBox<>();
+//        this.roleField = new TextField();
+        this.roleComboBox = new ComboBox<>();
         this.userList = new ListView<>();
         updateUserList();
         initUI();
@@ -42,8 +43,8 @@ public class UserManagementView extends VBox {
 
         Label roleLabel = new Label("Role:");
         gridPane.add(roleLabel, 0, 1);
-        roleChoiceBox.getItems().addAll("admin", "user");
-        gridPane.add(roleChoiceBox, 1, 1);
+        gridPane.add(roleComboBox, 1, 1);
+        roleComboBox.getItems().addAll("admin", "user");
 
         Button addButton = new Button("Add User");
         addButton.setOnAction(e -> addUser());
@@ -59,7 +60,7 @@ public class UserManagementView extends VBox {
         userList.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue != null) {
                 usernameField.setText(newValue.getName());
-                roleChoiceBox.setValue(newValue.getRole());
+                roleComboBox.setValue(newValue.getRole());
             }
         });
 
@@ -71,7 +72,7 @@ public class UserManagementView extends VBox {
 
     private void addUser() {
         String username = usernameField.getText();
-        String role = roleChoiceBox.getValue();
+        String role = roleComboBox.getValue();
 
         if (username.isEmpty() || role == null) {
             showAlert("Username or Role cannot be empty.");
@@ -82,7 +83,7 @@ public class UserManagementView extends VBox {
         if (addUserSuccessful) {
             System.out.println("User added successfully!");
             usernameField.clear();
-            roleChoiceBox.setValue(null);
+            roleComboBox.setValue(null);
             User createdUser = userManagementController.getUser(username);
 
             updateUserList();
@@ -94,7 +95,7 @@ public class UserManagementView extends VBox {
 
             alert.showAndWait();
         } else {
-            showAlert("Adding user failed!");
+            showAlert("Adding user failed! User already exists.");
         }
     }
 
@@ -113,7 +114,7 @@ public class UserManagementView extends VBox {
             System.out.println("User deleted successfully!");
             showAlert("User deleted successfully!");
             usernameField.clear();
-            roleChoiceBox.setValue(null);
+            roleComboBox.setValue(null);
         } else {
             showAlert("Deleting user failed!");
         }

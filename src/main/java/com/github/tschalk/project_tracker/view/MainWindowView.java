@@ -131,7 +131,12 @@ public class MainWindowView extends BorderPane {
                 System.out.println("Edit project: " + selectedProject.getDescription());
                 getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
             } else {
-                System.out.println("No project selected!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("No project selected!");
+                alert.setContentText("Please select a project to edit!");
+
+                alert.showAndWait();
             }
         });
         return editButton;
