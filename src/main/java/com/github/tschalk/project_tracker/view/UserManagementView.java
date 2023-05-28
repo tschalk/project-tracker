@@ -42,7 +42,7 @@ public class UserManagementView extends VBox {
 
         Label roleLabel = new Label("Role:");
         gridPane.add(roleLabel, 0, 1);
-        roleChoiceBox.getItems().addAll("Admin", "User");
+        roleChoiceBox.getItems().addAll("admin", "user");
         gridPane.add(roleChoiceBox, 1, 1);
 
         Button addButton = new Button("Add User");

@@ -34,10 +34,10 @@ public class UserLoginView extends BorderPane {
         this.stage = stage;
         this.usernameField = new TextField();
         this.passwordField = new PasswordField();
-        initUI();
+        initializeUI();
     }
 
-    private void initUI() {
+    private void initializeUI() {
         // This
         this.setPadding(new Insets(0, 0, 10, 0));
 
@@ -86,8 +86,8 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-        username = "admin";
-        password = "123";
+//        username = "admin";
+//        password = "123";
 //        username = "Max";
 //        password = "123";
 
@@ -100,60 +100,81 @@ public class UserLoginView extends BorderPane {
         if (loginSuccessful) {
             System.out.println("Login successful!");
             stage.close();
-            switchToMainWindowView();
+            switchToMainWindowView(username, password);
         } else {
             showAlert("Login failed!");
         }
     }
 
-    private void switchToMainWindowView() {
+    private void switchToMainWindowView(String username, String password) {
         DatabaseConnectionManager databaseConnectionManager = userLoginController.getDatabaseConnectionManager();
 
         CostCenterDAO costCenterDAO = new CostCenterDAO(databaseConnectionManager);
         ResponsibleDAO responsibleDAO = new ResponsibleDAO(databaseConnectionManager);
         TimesheetEntryDAO timesheetDAO = new TimesheetEntryDAO(databaseConnectionManager);
-        ProjectDAO projectDAO = new ProjectDAO(databaseConnectionManager, costCenterDAO, responsibleDAO, timesheetDAO);
+        ProjectDAO projectDAO = new ProjectDAO(
+                databaseConnectionManager, costCenterDAO, responsibleDAO, timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
 
-        AddProjectController addProjectController = new AddProjectController(projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
+        AddProjectController addProjectController = new AddProjectController(
+                projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController);
 
-        EditProjectController editProjectController = new EditProjectController(projectDAO, userLoginController, mainWindowView);
+        EditProjectController editProjectController = new EditProjectController(
+                projectDAO, userLoginController, mainWindowView);
         EditProjectView editProjectView = new EditProjectView(editProjectController);
 
-        ExportController exportController = new ExportController(projectDAO, timesheetDAO, userLoginController);
+        ExportController exportController = new ExportController(
+                projectDAO, timesheetDAO, userLoginController);
         ExportView exportView = new ExportView(exportController);
+
+        ChangePasswordController changePasswordController = new ChangePasswordController(userLoginController);
+        ChangePasswordView changePasswordView = new ChangePasswordView(changePasswordController, stage);
+
 
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
-        sceneManager.addScene(ADD_PROJECT_SCENE, new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH, ADD_PROJECT_VIEW_HEIGHT));
-        sceneManager.addScene(MAIN_WINDOW_SCENE, new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
-        sceneManager.addScene(EDIT_PROJECT_SCENE, new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH, EDIT_PROJECT_VIEW_HEIGHT));
-        sceneManager.addScene(EXPORT_SCENE, new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
+        sceneManager.addScene(ADD_PROJECT_SCENE,
+                new Scene(addProjectView, ADD_PROJECT_VIEW_WIDTH, ADD_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(MAIN_WINDOW_SCENE,
+                new Scene(mainWindowView, MAIN_WINDOW_VIEW_WIDTH, MAIN_WINDOW_VIEW_HEIGHT));
+        sceneManager.addScene(EDIT_PROJECT_SCENE,
+                new Scene(editProjectView, EDIT_PROJECT_VIEW_WIDTH, EDIT_PROJECT_VIEW_HEIGHT));
+        sceneManager.addScene(EXPORT_SCENE,
+                new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
+        sceneManager.addScene(CHANGE_PASSWORD_SCENE,
+                new Scene(changePasswordView, CHANGE_PASSWORD_VIEW_WIDTH, CHANGE_PASSWORD_VIEW_HEIGHT));
 
+
+        // Case: User
         if (userLoginController.getCurrentUser().getRole().equals("user")) {
-            sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
-        }
 
-        if (userLoginController.getCurrentUser().getRole().equals("admin")) {
-            AdminChangePasswordController adminChangePasswordController = new AdminChangePasswordController(userLoginController);
-            ChangePasswordView changePasswordView = new ChangePasswordView(adminChangePasswordController, stage);
-
-            UserManagementController userManagementController = new UserManagementController(userLoginController);
-            UserManagementView userManagementView = new UserManagementView(userManagementController);
-
-            sceneManager.addScene(ADMIN_CHANGE_PASSWORD_SCENE, new Scene(changePasswordView, ADMIN_CHANGE_PASSWORD_VIEW_WIDTH, ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT));
-            sceneManager.addScene(USER_MANAGEMENT_SCENE, new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
-
-            if (userLoginController.getCurrentUser().getRole().equals("admin") && userLoginController.getCurrentUser().getPassword().equals("admin")) {
-                sceneManager.showCustomScene(ADMIN_CHANGE_PASSWORD_SCENE, stage);
+            if (password.startsWith(username) &&
+                    isNumeric(password.substring(username.length()))) {
+                sceneManager.showCustomScene(CHANGE_PASSWORD_SCENE, stage);
             } else {
                 sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
             }
         }
 
+        // Case: Admin
+        if (userLoginController.getCurrentUser().getRole().equals("admin")) {
+
+            UserManagementController userManagementController = new UserManagementController(userLoginController);
+            UserManagementView userManagementView = new UserManagementView(userManagementController);
+
+
+            sceneManager.addScene(USER_MANAGEMENT_SCENE,
+                    new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
+
+            if (userLoginController.getCurrentUser().getPassword().equals("admin")) {
+                sceneManager.showCustomScene(CHANGE_PASSWORD_SCENE, stage);
+            } else {
+                sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
+            }
+        }
     }
 
     private void showAlert(String message) {
@@ -165,5 +186,17 @@ public class UserLoginView extends BorderPane {
         alert.showAndWait();
     }
 
-
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(strNum);
+            System.out.println("isNumeric: " + strNum);
+        } catch (NumberFormatException e) {
+            System.err.println("isNumeric: " + strNum + " is not a number");
+            return false;
+        }
+        return true;
+    }
 }

@@ -3,12 +3,12 @@ package com.github.tschalk.project_tracker.controller;
 import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.model.User;
 
-public class AdminChangePasswordController {
+public class ChangePasswordController {
 
     private final UserDAO userDAO;
     private User currentUser;
 
-    public AdminChangePasswordController( UserLoginController userLoginController) {
+    public ChangePasswordController(UserLoginController userLoginController) {
         this.userDAO = userLoginController.getUserDAO();
         this.currentUser = userLoginController.getCurrentUser();
     }

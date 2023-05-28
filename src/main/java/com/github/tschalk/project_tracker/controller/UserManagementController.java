@@ -19,7 +19,7 @@ public class UserManagementController {
             System.out.println("User already exists.");
             return false;
         }
-        String password = String.format("%04d", new Random().nextInt(10000));
+        String password = String.format(username + "%04d", new Random().nextInt(10000));
         return userLoginController.getUserDAO().addUser(username, role, password);
     }
 

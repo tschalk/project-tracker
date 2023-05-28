@@ -4,7 +4,6 @@ import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.view.EditProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class SceneManager {
     public static final String ADD_PROJECT_SCENE = "Add Project";
     public static final String EDIT_PROJECT_SCENE = "Edit Project";
     public static final String EXPORT_SCENE = "Export";
-    public static final String ADMIN_CHANGE_PASSWORD_SCENE = "Admin Change Password";
+    public static final String CHANGE_PASSWORD_SCENE = "Admin Change Password";
     public static final String USER_MANAGEMENT_SCENE = "User Management";
 
     public static final int USER_LOGIN_VIEW_WIDTH = 250;
@@ -35,8 +34,8 @@ public class SceneManager {
     public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
     public static final int EXPORT_VIEW_WIDTH = 300;
     public static final int EXPORT_VIEW_HEIGHT = 200;
-    public static final int ADMIN_CHANGE_PASSWORD_VIEW_WIDTH = 300;
-    public static final int ADMIN_CHANGE_PASSWORD_VIEW_HEIGHT = 200;
+    public static final int CHANGE_PASSWORD_VIEW_WIDTH = 300;
+    public static final int CHANGE_PASSWORD_VIEW_HEIGHT = 200;
     public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
     public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 
