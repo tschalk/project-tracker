@@ -4,14 +4,13 @@ import com.github.tschalk.project_tracker.controller.ExportController;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -19,6 +18,7 @@ import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class ExportView extends BorderPane {
 
@@ -127,9 +127,32 @@ public class ExportView extends BorderPane {
     private Button getExportButton(DatePicker fromDatePicker, DatePicker toDatePicker) {
         Button exportButton = new Button(EXPORT_TEXT);
         exportButton.setOnAction(e -> {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Exporting data");
+            alert.setContentText("Are you sure you want to export the data?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() != ButtonType.OK){
+                return;
+            }
+
             List<Project> projects = exportController.getProjects();
             Path directoryPath = Paths.get(directory.getPath());
-            exportController.generateCSV(projects, fromDatePicker.getValue(), toDatePicker.getValue(), directoryPath);
+
+            boolean hasExported = exportController.generateCSV(projects, fromDatePicker.getValue(), toDatePicker.getValue(), directoryPath);
+            if(!hasExported) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error Dialog");
+                errorAlert.setHeaderText("Errod while exporting data");
+                errorAlert.setContentText("Please proof the data and try again.");
+
+                errorAlert.showAndWait();
+                return;
+            }
+            Stage stage = (Stage) this.getScene().getWindow();
+            stage.close();
         });
         return exportButton;
     }

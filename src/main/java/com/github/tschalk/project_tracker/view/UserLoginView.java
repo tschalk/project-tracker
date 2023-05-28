@@ -86,8 +86,8 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-//        username = "admin";
-//        password = "123";
+        username = "Admin";
+        password = "123";
 //        username = "Max";
 //        password = "123";
 

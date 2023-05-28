@@ -2,13 +2,17 @@ package com.github.tschalk.project_tracker.utils;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class CustomTitleBar extends HBox {
     private double xOffset = 0;
@@ -33,7 +37,18 @@ public class CustomTitleBar extends HBox {
         closeButton.setGraphic(SVGManager.getInstance().getSVGPath("windowCloseIcon"));
         closeButton.setTextFill(Color.WHITE);
         closeButton.getStyleClass().add("window-close-button");
-        closeButton.setOnAction(event -> Platform.exit());
+        closeButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setHeaderText(null);
+            alert.setContentText("Do you want to exit?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                Platform.exit();
+            }
+        });
+
 
         this.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
