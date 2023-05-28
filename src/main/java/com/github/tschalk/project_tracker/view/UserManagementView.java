@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 
 public class UserManagementView extends VBox {
 
@@ -18,6 +19,7 @@ public class UserManagementView extends VBox {
 
     private final UserManagementController userManagementController;
     private final ListView<User> userList;
+    private final CheckBox activeUserChekBox;
 
     public UserManagementView(UserManagementController userManagementController) {
         this.userManagementController = userManagementController;
@@ -25,14 +27,47 @@ public class UserManagementView extends VBox {
 //        this.roleField = new TextField();
         this.roleComboBox = new ComboBox<>();
         this.userList = new ListView<>();
+        this.activeUserChekBox = new CheckBox();
         updateUserList();
-        initUI();
+        initializeUI();
     }
 
-    private void initUI() {
+    private void initializeUI() {
 
         Label titleLabel = new Label("User Management");
 
+        GridPane gridPane = getGridPane();
+
+        Button addButton = new Button("Add User");
+        addButton.setOnAction(e -> addUser());
+
+        Button updateButton = new Button("Update User");
+        updateButton.setOnAction(e -> updateUser());
+
+        Button deleteButton = new Button("Delete User");
+        deleteButton.setOnAction(e -> deleteUser());
+
+        HBox buttonContainer = new HBox(10);
+        buttonContainer.getChildren().addAll(addButton, updateButton, deleteButton);
+        buttonContainer.getStyleClass().add("button-container");
+
+        userList.setPrefHeight(150);
+        userList.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue != null) {
+                usernameField.setText(newValue.getName());
+                roleComboBox.setValue(newValue.getRole());
+                activeUserChekBox.setSelected(newValue.isActive());
+            }
+        });
+
+        VBox contentBox = new VBox(10);
+        contentBox.setPadding(new Insets(10, 10, 10, 10));
+        contentBox.getChildren().addAll(titleLabel, gridPane, userList, buttonContainer);
+        this.getChildren().add(contentBox);
+    }
+
+    @NotNull
+    private GridPane getGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -46,28 +81,11 @@ public class UserManagementView extends VBox {
         gridPane.add(roleComboBox, 1, 1);
         roleComboBox.getItems().addAll("admin", "user");
 
-        Button addButton = new Button("Add User");
-        addButton.setOnAction(e -> addUser());
+        Label activeUserLabel = new Label("Active User:");
+        gridPane.add(activeUserLabel, 0, 2);
+        gridPane.add(activeUserChekBox, 1, 2);
 
-        Button deleteButton = new Button("Delete User");
-        deleteButton.setOnAction(e -> deleteUser());
-
-        HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(addButton, deleteButton);
-        buttonContainer.getStyleClass().add("button-container");
-
-        userList.setPrefHeight(150);
-        userList.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (newValue != null) {
-                usernameField.setText(newValue.getName());
-                roleComboBox.setValue(newValue.getRole());
-            }
-        });
-
-        VBox contentBox = new VBox(10);
-        contentBox.setPadding(new Insets(10, 10, 10, 10));
-        contentBox.getChildren().addAll(titleLabel, gridPane, userList, buttonContainer);
-        this.getChildren().add(contentBox);
+        return gridPane;
     }
 
     private void addUser() {
@@ -98,6 +116,46 @@ public class UserManagementView extends VBox {
             showAlert("Adding user failed! User already exists.");
         }
     }
+
+    private void updateUser() {
+        String username = usernameField.getText();
+        String role = roleComboBox.getValue();
+
+        if (username.isEmpty() || role == null) {
+            showAlert("Username or Role cannot be empty.");
+            return;
+        }
+
+        // Hier wird der aktuelle User geholt um zu prüfen, ob sich etwas geändert hat
+        User currentUser = userManagementController.getUser(username);
+        String currentRole = currentUser.getRole();
+        boolean currentIsActive = currentUser.isActive();
+
+        if (currentRole.equals("admin")) {
+            showAlert("Admin cannot be updated!");
+            return;
+        }
+
+        boolean updateUserSuccessful = userManagementController.updateUser(username, role, activeUserChekBox.isSelected());
+        if (updateUserSuccessful) {
+            usernameField.clear();
+            roleComboBox.setValue(null);
+            User updatedUser = userManagementController.getUser(username);
+
+            // Check, ob die Rolle geändert wurde
+            if (!currentRole.equals(updatedUser.getRole())) {
+                showAlert("User role updated to: " + updatedUser.getRole());
+            }
+            // Check, ob der Status geändert wurde
+            if (currentIsActive != updatedUser.isActive()) {
+                showAlert("User active status updated to: " + (updatedUser.isActive() ? "Active" : "Inactive"));
+            }
+            updateUserList();
+        } else {
+            showAlert("Updating user failed! User already exists.");
+        }
+    }
+
 
     private void deleteUser() {
         String username = usernameField.getText();

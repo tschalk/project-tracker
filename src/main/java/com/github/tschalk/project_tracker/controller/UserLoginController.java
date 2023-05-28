@@ -18,7 +18,7 @@ public class UserLoginController {
         userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
         currentUser = userDAO.getUser(username);
 
-        if (currentUser != null && currentUser.getPassword().equals(password)) {
+        if (currentUser != null && currentUser.isActive() && currentUser.getPassword().equals(password)) {
             return true;
         } else {
             System.err.println("Login failed!");

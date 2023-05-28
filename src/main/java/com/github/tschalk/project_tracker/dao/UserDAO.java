@@ -49,7 +49,8 @@ public class UserDAO {
                             resultSet.getInt("id"),
                             resultSet.getString("username"),
                             resultSet.getString("password"),
-                            resultSet.getString("role")
+                            resultSet.getString("role"),
+                            resultSet.getBoolean("is_active")
                     );
                 } else {
                     return null;
@@ -71,7 +72,8 @@ public class UserDAO {
                             resultSet.getInt("id"),
                             resultSet.getString("username"),
                             resultSet.getString("password"),
-                            resultSet.getString("role")
+                            resultSet.getString("role"),
+                            resultSet.getBoolean("is_active")
                     ));
                 }
             }
@@ -140,5 +142,22 @@ public class UserDAO {
 
     public DatabaseConnectionManager getDatabaseManager() {
         return databaseConnectionManager;
+    }
+
+    public boolean updateUser(String username, String role, boolean isActive) {
+        String query = "UPDATE User SET role = ?, is_active = ? WHERE username = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, role);
+            pstmt.setBoolean(2, isActive);
+            pstmt.setString(3, username);
+
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

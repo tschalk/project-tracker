@@ -43,4 +43,8 @@ public class UserManagementController {
         }
         return user;
     }
+
+    public boolean updateUser(String username, String role, boolean isActive) {
+        return userLoginController.getUserDAO().updateUser(username, role, isActive);
+    }
 }

@@ -50,8 +50,7 @@ public class UserLoginView extends BorderPane {
 
         GridPane gridPane = getGridPane();
 
-        Button loginButton = new Button("Login");
-        loginButton.setOnAction(e -> login());
+        Button loginButton = getloginButton();
 
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().add(loginButton);
@@ -62,6 +61,13 @@ public class UserLoginView extends BorderPane {
         contentBox.getChildren().addAll(titleLabel, gridPane, buttonContainer);
 
         this.setCenter(contentBox);
+    }
+
+    @NotNull
+    private Button getloginButton() {
+        Button loginButton = new Button("Login");
+        loginButton.setOnAction(e -> login());
+        return loginButton;
     }
 
     @NotNull
@@ -86,10 +92,10 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-        username = "Admin";
-        password = "123";
-//        username = "Max";
+//        username = "Admin";
 //        password = "123";
+        username = "Max";
+        password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");

@@ -5,7 +5,8 @@ CREATE TABLE User (
                       id INT(11) PRIMARY KEY AUTO_INCREMENT,
                       username VARCHAR(255) NOT NULL,
                       password VARCHAR(255) NOT NULL,
-                      role VARCHAR(255) NOT NULL
+                      role VARCHAR(255) NOT NULL,
+                      is_active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE CostCenter (
@@ -38,4 +39,4 @@ CREATE TABLE TimesheetEntry (
 );
 
 INSERT INTO User (username, password, role)
-VALUES ('admin', 'admin', 'admin');
+VALUES ('Admin', 'Admin', 'admin');
