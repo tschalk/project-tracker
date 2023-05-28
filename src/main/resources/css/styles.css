@@ -102,6 +102,9 @@
     -fx-text-fill: white;
     -fx-font-size: 14px;
 }
+.remove-button:hover {
+    -fx-background-color: #c74e4f;
+}
 
 
 

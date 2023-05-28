@@ -115,6 +115,7 @@ public class AddProjectView extends BorderPane {
 
     private Button getAddCostcenterButton() {
         Button addCostCenterButton = new Button("Add Cost Center");
+        addCostCenterButton.setTooltip(new Tooltip("Add a new Cost Center"));
         addCostCenterButton.setGraphic(svgManager.getSVGPath("addIcon"));
         addCostCenterButton.setOnAction(event -> {
 
@@ -144,6 +145,7 @@ public class AddProjectView extends BorderPane {
 
     private Button getAddResponsibleButton() {
         Button addResponsibleButton = new Button("Add Responsible");
+        addResponsibleButton.setTooltip(new Tooltip("Add a new Responsible"));
         addResponsibleButton.setGraphic(svgManager.getSVGPath("addIcon"));
         addResponsibleButton.setOnAction(event -> {
 
@@ -208,6 +210,8 @@ public class AddProjectView extends BorderPane {
 
     private Button getRemoveCostcenterButton() {
         Button removeCostCenterButton = new Button("Remove Cost Center");
+        removeCostCenterButton.getStyleClass().add("remove-button");
+        removeCostCenterButton.setTooltip(new Tooltip("Remove the selected Cost Center"));
         removeCostCenterButton.setGraphic(svgManager.getSVGPath("removeIcon"));
         removeCostCenterButton.setOnAction(event -> {
 
@@ -231,6 +235,8 @@ public class AddProjectView extends BorderPane {
 
     private Button getRemoveResponsibleButton() {
         Button removeResponsibleButton = new Button("Remove Responsible");
+        removeResponsibleButton.getStyleClass().add("remove-button");
+        removeResponsibleButton.setTooltip(new Tooltip("Remove the selected Responsible"));
         removeResponsibleButton.setGraphic(svgManager.getSVGPath("removeIcon"));
         removeResponsibleButton.setOnAction(event -> {
 

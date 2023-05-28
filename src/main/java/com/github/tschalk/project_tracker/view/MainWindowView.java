@@ -213,6 +213,7 @@ public class MainWindowView extends BorderPane {
     private void handleAdminAction(HBox buttonContainer) {
         if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
             Button userManagementButton = new Button();
+            userManagementButton.setTooltip(new Tooltip("Manage users"));
             userManagementButton.getStyleClass().add("svg-button");
             userManagementButton.setGraphic(svgManager.getSVGPath("userManagementIcon"));
             userManagementButton.setOnAction(e -> {
