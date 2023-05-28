@@ -36,7 +36,7 @@ public class EditProjectView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar(/*SceneManager.getInstance().getStage(SceneManager.ADD_PROJECT_SCENE),*/"Edit Project");
+        CustomTitleBar customTitleBar = new CustomTitleBar("Edit Project");
         customTitleBar.showCloseButton(false);
         this.setTop(customTitleBar);
 
@@ -57,7 +57,7 @@ public class EditProjectView extends BorderPane {
         contentBox.setPadding(new Insets(10));
         contentBox.getChildren().addAll(titleLabel, timesheetEntryTableView, actionButtonContainer);
 
-         this.setCenter(contentBox);
+        this.setCenter(contentBox);
     }
 
     @NotNull
@@ -77,10 +77,25 @@ public class EditProjectView extends BorderPane {
     private Button getRemoveProjectButton() {
         Button removeProjectButton = new Button("Remove Project");
         removeProjectButton.setOnAction(event -> {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Project " + this.selectedProject.getDescription());
+            alert.setHeaderText("Are you sure you want to remove the  Project " + this.selectedProject.getDescription() + "?");
+            alert.setContentText("This action cannot be undone.");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.NO) {
+                return;
+            }
+
             if (selectedProject != null) {
                 editProjectController.deleteProject(selectedProject);
                 selectedProject = null;
                 editProjectController.getMainWindowView().updateProjectTableView();
+
+                Stage stage = (Stage) this.getScene().getWindow();
+                stage.close();
             }
         });
         return removeProjectButton;
@@ -90,6 +105,17 @@ public class EditProjectView extends BorderPane {
     private Button getremoveDateTimeButton() {
         Button removeDateTimeButton = new Button("Remove Time");
         removeDateTimeButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Time");
+            alert.setHeaderText("Are you sure you want to remove this time?");
+            alert.setContentText("This action cannot be undone.");
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.NO) {
+                return;
+            }
+
             TimesheetEntry selectedEntry = timesheetEntryTableView.getSelectionModel().getSelectedItem();
             if (selectedEntry != null) {
                 timesheetEntryTableView.getItems().remove(selectedEntry);
@@ -150,6 +176,7 @@ public class EditProjectView extends BorderPane {
 
         timesheetEntryTableView.setItems(timesheetEntries);
     }
+
     private void removeEntryFromDatabase(TimesheetEntry selectedEntry) {
         editProjectController.removeTimesheetEntry(selectedEntry);
         editProjectController.getMainWindowView().updateProjectTableView();
