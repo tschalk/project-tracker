@@ -119,10 +119,18 @@ public class ExportView extends BorderPane {
 
     private Button getDirectoryButton() {
         Button directoryButton = new Button(CHOOSE_DIRECTORY_TEXT);
-        directoryButton.setOnAction(e -> directory = directoryChooser.showDialog(getScene().getWindow()));
+    directoryButton.setOnAction(e -> {
+        File selectedDirectory = directoryChooser.showDialog(getScene().getWindow());
+        if (selectedDirectory != null) {
+            directory = selectedDirectory;
+        } else {
+            directory = directoryChooser.getInitialDirectory();
+        }
+    });
 
         return directoryButton;
     }
+
 
     private Button getExportButton(DatePicker fromDatePicker, DatePicker toDatePicker) {
         Button exportButton = new Button(EXPORT_TEXT);
@@ -145,7 +153,7 @@ public class ExportView extends BorderPane {
             if(!hasExported) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Error Dialog");
-                errorAlert.setHeaderText("Errod while exporting data");
+                errorAlert.setHeaderText("Error while exporting data");
                 errorAlert.setContentText("Please proof the data and try again.");
 
                 errorAlert.showAndWait();

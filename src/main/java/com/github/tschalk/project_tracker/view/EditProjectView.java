@@ -105,6 +105,10 @@ public class EditProjectView extends BorderPane {
     private Button getremoveDateTimeButton() {
         Button removeDateTimeButton = new Button("Remove Time");
         removeDateTimeButton.setOnAction(event -> {
+            // Wenn das ausgewählte Element null ist, dann wird nichts gemacht
+            if (timesheetEntryTableView.getSelectionModel().getSelectedItem() == null) {
+                return;
+            }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Remove Time");
             alert.setHeaderText("Are you sure you want to remove this time?");

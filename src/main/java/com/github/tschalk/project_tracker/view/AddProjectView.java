@@ -115,12 +115,12 @@ public class AddProjectView extends BorderPane {
 
     private Button getAddCostcenterButton() {
         Button addCostCenterButton = new Button("Add Cost Center");
-        addCostCenterButton.setTooltip(new Tooltip("Add a new Cost Center"));
+        addCostCenterButton.setTooltip(new Tooltip("Add a new cost center"));
         addCostCenterButton.setGraphic(svgManager.getSVGPath("addIcon"));
         addCostCenterButton.setOnAction(event -> {
 
             Dialog<String> dialog = new Dialog<>();
-            dialog.setTitle("Add Cost Center");
+            dialog.setTitle("Add cost center");
 
             ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
@@ -145,7 +145,7 @@ public class AddProjectView extends BorderPane {
 
     private Button getAddResponsibleButton() {
         Button addResponsibleButton = new Button("Add Responsible");
-        addResponsibleButton.setTooltip(new Tooltip("Add a new Responsible"));
+        addResponsibleButton.setTooltip(new Tooltip("Add a new responsible"));
         addResponsibleButton.setGraphic(svgManager.getSVGPath("addIcon"));
         addResponsibleButton.setOnAction(event -> {
 
@@ -211,7 +211,7 @@ public class AddProjectView extends BorderPane {
     private Button getRemoveCostcenterButton() {
         Button removeCostCenterButton = new Button("Remove Cost Center");
         removeCostCenterButton.getStyleClass().add("remove-button");
-        removeCostCenterButton.setTooltip(new Tooltip("Remove the selected Cost Center"));
+        removeCostCenterButton.setTooltip(new Tooltip("Remove the selected cost center"));
         removeCostCenterButton.setGraphic(svgManager.getSVGPath("removeIcon"));
         removeCostCenterButton.setOnAction(event -> {
 
@@ -245,7 +245,7 @@ public class AddProjectView extends BorderPane {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Dialog");
                 alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to remove the selected Responsible?");
+                alert.setContentText("Are you sure you want to remove the selected responsible?");
 
                 Optional<ButtonType> result = alert.showAndWait();
 

@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -109,13 +111,25 @@ public class UserManagementView extends VBox {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            alert.setContentText("User created with password: " + createdUser.getPassword());
+
+            Button button = new Button("Copy Password to Clipboard");
+            button.setOnAction(e -> {
+                final Clipboard clipboard = Clipboard.getSystemClipboard();
+                final ClipboardContent content = new ClipboardContent();
+                content.putString(createdUser.getPassword());
+                clipboard.setContent(content);
+            });
+
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(new Label("User created with password: " + createdUser.getPassword()), button);
+            alert.getDialogPane().setContent(vbox);
 
             alert.showAndWait();
         } else {
             showAlert("Adding user failed! User already exists.");
         }
     }
+
 
     private void updateUser() {
         String username = usernameField.getText();
@@ -131,8 +145,8 @@ public class UserManagementView extends VBox {
         String currentRole = currentUser.getRole();
         boolean currentIsActive = currentUser.isActive();
 
-        if (currentRole.equals("admin")) {
-            showAlert("Admin cannot be updated!");
+        if (currentUser.getName().equals("admin")) {
+            showAlert("This admin cannot be updated!");
             return;
         }
 
