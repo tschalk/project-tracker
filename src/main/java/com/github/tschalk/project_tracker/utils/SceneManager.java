@@ -20,6 +20,7 @@ public class SceneManager {
     public static final String EDIT_PROJECT_SCENE = "Edit Project";
     public static final String EXPORT_SCENE = "Export";
     public static final String CHANGE_PASSWORD_SCENE = "Admin Change Password";
+    public static final String CHANGE_PASSWORD_LOGGED_USER_SCENE = "Change Password";
     public static final String USER_MANAGEMENT_SCENE = "User Management";
 
     public static final int USER_LOGIN_VIEW_WIDTH = 250;
@@ -36,6 +37,8 @@ public class SceneManager {
     public static final int EXPORT_VIEW_HEIGHT = 200;
     public static final int CHANGE_PASSWORD_VIEW_WIDTH = 300;
     public static final int CHANGE_PASSWORD_VIEW_HEIGHT = 200;
+    public static final int CHANGE_PASSWORD_LOGGED_USER_VIEW_WIDTH = 300;
+    public static final int CHANGE_PASSWORD_LOGGED_USER_VIEW_HEIGHT = 250;
     public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
     public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 

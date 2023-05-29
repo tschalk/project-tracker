@@ -16,11 +16,11 @@ public class ChangePasswordView extends BorderPane {
     private final PasswordField confirmNewPasswordField;
     private final ChangePasswordController changePasswordController;
     private final Stage stage;
-
-    boolean hasUppercase;
-    boolean hasLowercase;
-    boolean hasNumber;
-    boolean hasSpecialChar;
+    private boolean hasUppercase;
+    private boolean hasLowercase;
+    private boolean hasNumber;
+    private boolean hasSpecialChar;
+    private boolean isUserLoggedIn;
 
     public ChangePasswordView(ChangePasswordController changePasswordController, Stage stage) {
         this.changePasswordController = changePasswordController;
@@ -30,6 +30,17 @@ public class ChangePasswordView extends BorderPane {
         initializeUI();
     }
 
+    public ChangePasswordView(ChangePasswordController changePasswordController, Stage stage, boolean isUserLoggedIn) {
+        this.changePasswordController = changePasswordController;
+        this.stage = stage;
+        this.newPasswordField = new PasswordField();
+        this.confirmNewPasswordField = new PasswordField();
+
+        this.isUserLoggedIn = isUserLoggedIn;
+        initializeUI();
+    }
+
+
     private void initializeUI() {
         // This
         this.setPadding(new Insets(0, 0, 15, 0));
@@ -37,6 +48,7 @@ public class ChangePasswordView extends BorderPane {
         // Top
         CustomTitleBar customTitleBar = new CustomTitleBar(stage, "Edit Project");
         this.setTop(customTitleBar);
+        if (isUserLoggedIn) customTitleBar.showCloseButton(false);
 
         // Center
         Label titleLabel = new Label("Change Password:");
@@ -71,13 +83,20 @@ public class ChangePasswordView extends BorderPane {
         gridPane.setHgap(10);
         gridPane.setVgap(10);
 
+        if (isUserLoggedIn) {
+            Label currentPasswordLabel = new Label("Current Password:");
+            PasswordField currentPasswordField = new PasswordField();
+            gridPane.add(currentPasswordLabel, 0, 0); // column, row
+            gridPane.add(currentPasswordField, 1, 0);
+        }
+
         Label newPasswordLabel = new Label("New Password:");
-        gridPane.add(newPasswordLabel, 0, 0); // column, row
-        gridPane.add(newPasswordField, 1, 0);
+        gridPane.add(newPasswordLabel, 0, isUserLoggedIn ? 1 : 0);
+        gridPane.add(newPasswordField, 1, isUserLoggedIn ? 1 : 0);
 
         Label confirmNewPasswordLabel = new Label("Confirm Password:");
-        gridPane.add(confirmNewPasswordLabel, 0, 1);
-        gridPane.add(confirmNewPasswordField, 1, 1);
+        gridPane.add(confirmNewPasswordLabel, 0, isUserLoggedIn ? 2 : 1);
+        gridPane.add(confirmNewPasswordField, 1, isUserLoggedIn ? 2 : 1);
 
         return gridPane;
     }
@@ -129,7 +148,12 @@ public class ChangePasswordView extends BorderPane {
     private void showPasswordChangeResult(boolean success) {
         if (success) {
             showAlert("Password changed successfully!", Alert.AlertType.INFORMATION);
-            SceneManager.getInstance().showCustomScene(MAIN_WINDOW_SCENE, stage);
+            if (isUserLoggedIn) {
+                Stage stage = (Stage) this.getScene().getWindow();
+                stage.close();
+            } else {
+                SceneManager.getInstance().showCustomScene(MAIN_WINDOW_SCENE, stage);
+            }
         } else {
             showAlert("Password change failed!", Alert.AlertType.ERROR);
         }

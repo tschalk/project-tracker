@@ -92,7 +92,7 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-        username = "Admin";
+        username = "admin";
         password = "123";
 //        username = "Max";
 //        password = "123";
@@ -138,7 +138,7 @@ public class UserLoginView extends BorderPane {
 
         ChangePasswordController changePasswordController = new ChangePasswordController(userLoginController);
         ChangePasswordView changePasswordView = new ChangePasswordView(changePasswordController, stage);
-
+        ChangePasswordView changePasswordLoggedUserView = new ChangePasswordView(changePasswordController, stage, true);
 
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
@@ -152,7 +152,8 @@ public class UserLoginView extends BorderPane {
                 new Scene(exportView, EXPORT_VIEW_WIDTH, EXPORT_VIEW_HEIGHT));
         sceneManager.addScene(CHANGE_PASSWORD_SCENE,
                 new Scene(changePasswordView, CHANGE_PASSWORD_VIEW_WIDTH, CHANGE_PASSWORD_VIEW_HEIGHT));
-
+        sceneManager.addScene(CHANGE_PASSWORD_LOGGED_USER_SCENE,
+                new Scene(changePasswordLoggedUserView, CHANGE_PASSWORD_LOGGED_USER_VIEW_WIDTH, CHANGE_PASSWORD_LOGGED_USER_VIEW_HEIGHT));
 
         // Case: User
         if (userLoginController.getCurrentUser().getRole().equals("user")) {

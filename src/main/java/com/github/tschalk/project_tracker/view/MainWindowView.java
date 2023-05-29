@@ -3,6 +3,7 @@ package com.github.tschalk.project_tracker.view;
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.model.User;
 import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import com.github.tschalk.project_tracker.utils.SVGManager;
 import javafx.animation.KeyFrame;
@@ -33,6 +34,7 @@ public class MainWindowView extends BorderPane {
     private final SimpleLongProperty secondsElapsed;
     private final Stage stage;
     private final SVGManager svgManager = SVGManager.getInstance();
+    private User currentUser;
     private Project selectedProject;
     private Project activeProject;
     private Label titleLabel;
@@ -64,10 +66,11 @@ public class MainWindowView extends BorderPane {
         Button editButton = getEditButton();
         Button exportButton = getExportButton();
         Button startStopButton = getStartStopButton();
+        Button userSettingsButton = getUserSettingsButton();
         //Button importButton = importButton();
 
         HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(addButton, editButton, exportButton, startStopButton/*, importButton*/);
+        buttonContainer.getChildren().addAll(startStopButton, addButton, editButton, exportButton, userSettingsButton);
         buttonContainer.getStyleClass().add("button-container");
         handleAdminAction(buttonContainer);
 
@@ -196,6 +199,17 @@ public class MainWindowView extends BorderPane {
         return exportButton;
     }
 
+    private Button getUserSettingsButton() {
+        Button userSettingsButton = new Button();
+        userSettingsButton.setTooltip(new Tooltip("Change password"));
+        userSettingsButton.getStyleClass().add("svg-button");
+        userSettingsButton.setGraphic(svgManager.getSVGPath("settingsIcon"));
+        userSettingsButton.setOnAction(e -> {
+            getInstance().showNewWindowWithCustomScene(CHANGE_PASSWORD_LOGGED_USER_SCENE);
+        });
+        return userSettingsButton;
+    }
+
     private Button importButton() {
         Button importButton = new Button();
         importButton.setOnAction(e -> {
@@ -257,4 +271,5 @@ public class MainWindowView extends BorderPane {
     public MainWindowController getMainWindowController() {
         return mainWindowController;
     }
+
 }

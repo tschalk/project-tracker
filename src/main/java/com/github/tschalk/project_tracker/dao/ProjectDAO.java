@@ -12,12 +12,14 @@ import java.util.List;
 
 public class ProjectDAO {
 
+    private final DatabaseConnectionManager databaseConnectionManager;
     private final Connection connection;
     private final CostCenterDAO costCenterDAO;
     private final ResponsibleDAO responsibleDAO;
     private final TimesheetEntryDAO timesheetEntryDAO;
 
     public ProjectDAO(DatabaseConnectionManager databaseConnectionManager, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, TimesheetEntryDAO timesheetEntryDAO) {
+        this.databaseConnectionManager = databaseConnectionManager;
         this.connection = databaseConnectionManager.getConnection();
         this.costCenterDAO = costCenterDAO;
         this.responsibleDAO = responsibleDAO;
@@ -159,5 +161,7 @@ public class ProjectDAO {
     }
 
 
-
+    public DatabaseConnectionManager getDatabaseConnectionManager() {
+        return databaseConnectionManager;
+    }
 }
