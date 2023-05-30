@@ -22,7 +22,7 @@ Anwender -- "Datenbank Login"
 Anwender -- "Anwendungs-Login"
 Anwender -- "Projekte anzeigen"
 
-"Projekte anzeigen" .> "Neues Projekt hinzufügen" : <<include>>
+"Projekte anzeigen" <. "Neues Projekt hinzufügen" : <<extends>>
 "Projekte anzeigen" <. "Projekt bearbeiten" : <<extends>>
 "Projekt bearbeiten" <. "Verantwortliche verwalten" : <<extends>>
 "Projekt bearbeiten" <. "Kontierung verwalten" : <<extends>>
