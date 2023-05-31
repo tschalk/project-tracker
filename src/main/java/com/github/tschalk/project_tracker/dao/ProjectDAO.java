@@ -121,10 +121,6 @@ public class ProjectDAO {
         return duration;
     }
 
-    public TimesheetEntryDAO getTimesheetEntryDAO() {
-        return timesheetEntryDAO;
-    }
-
     public List<TimesheetEntry> readAllTimesheetEntriesForProject(int projectId) {
         List<TimesheetEntry> timesheetEntries = new ArrayList<>();
             String query = "SELECT * FROM timesheetentry WHERE project_id = ?";
@@ -138,14 +134,54 @@ public class ProjectDAO {
                 entry.setId(rs.getInt("id"));
                 entry.setStartDateTime(rs.getTimestamp("start_time").toLocalDateTime());
                 entry.setDuration(rs.getInt("duration"));
+
                 timesheetEntries.add(entry);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return timesheetEntries;
     }
+
+    public void updateProject(Project project) {
+        String query = "UPDATE project SET description = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, project.getDescription());
+            pstmt.setInt(2, project.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateProjectCostCenter(Project project, CostCenter costCenter) {
+        String query = "UPDATE project SET cost_center_id = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, costCenter.getId());
+            pstmt.setInt(2, project.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateProjectResponsible(Project project, Responsible responsible) {
+        String query = "UPDATE project SET responsible_id = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, responsible.getId());
+            pstmt.setInt(2, project.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     public void deleteProject(int projectId) {
         // zuerst alle TimesheetEntries für dieses Projekt löschen
@@ -153,15 +189,28 @@ public class ProjectDAO {
 
         String query = "DELETE FROM Project WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+
             pstmt.setInt(1, projectId);
             pstmt.executeUpdate();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-
     public DatabaseConnectionManager getDatabaseConnectionManager() {
         return databaseConnectionManager;
+    }
+
+    public CostCenterDAO getCostCenterDAO() {
+        return costCenterDAO;
+    }
+
+    public ResponsibleDAO getResponsibleDAO() {
+        return responsibleDAO;
+    }
+
+    public TimesheetEntryDAO getTimesheetEntryDAO() {
+        return timesheetEntryDAO;
     }
 }

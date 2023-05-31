@@ -70,6 +70,26 @@ public class ResponsibleDAO {
         return null;
     }
 
+    public Responsible getResponsibleByName(String responsibleName) {
+        String query = "SELECT * FROM responsible WHERE name = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, responsibleName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Responsible responsible = new Responsible();
+                responsible.setId(rs.getInt("id"));
+                responsible.setName(rs.getString("name"));
+
+                return responsible;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void remove(Responsible responsible) {
         try {
             if (!isResponsibleInUse(responsible)) {

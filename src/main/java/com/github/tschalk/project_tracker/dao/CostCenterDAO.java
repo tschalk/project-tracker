@@ -67,6 +67,27 @@ public class CostCenterDAO {
         return null;
     }
 
+    public CostCenter getCostCenterByName(String costCenterName) {
+        String query = "SELECT * FROM costcenter WHERE name = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, costCenterName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                CostCenter costCenter = new CostCenter();
+                costCenter.setId(rs.getInt("id"));
+                costCenter.setName(rs.getString("name"));
+
+                return costCenter;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+
     public void remove(CostCenter costCenter) {
         try {
             if (!isCostCenterInUse(costCenter)) {

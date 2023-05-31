@@ -49,7 +49,6 @@ public class MainWindowView extends BorderPane {
     }
 
     private void initializeUI() {
-
         // This
         this.setPadding(new Insets(0, 0, 15, 0));
 
