@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.User;
+import com.github.tschalk.project_tracker.utils.Sanitizer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,21 +10,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class UserDAO {
     DatabaseConnectionManager databaseConnectionManager;
     Connection connection;
+    Sanitizer sanitizer;
 
-    public UserDAO(DatabaseConnectionManager databaseConnectionManager) {
+    public UserDAO(DatabaseConnectionManager databaseConnectionManager, Sanitizer sanitizer) {
         this.databaseConnectionManager = databaseConnectionManager;
         this.connection = databaseConnectionManager.getConnection();
+        this.sanitizer = sanitizer;
     }
 
     public boolean addUser(String username, String role, String password) {
         String query = "INSERT INTO User (username, password, role) VALUES (?, ?, ?)";
 
+        String[] parameters = {username, role, password};
+        String[] sanitizedParameters = {
+                sanitizer.sanitize(username),
+                sanitizer.sanitize(role),
+        };
 
+        for (int i = 0; i < parameters.length; i++) {
+            // Nur das Passwort überspringen
+            if(i != 2 && parameters[i].length() != sanitizedParameters[i].length()) {
+                return false;
+            }
+        }
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
@@ -41,6 +54,9 @@ public class UserDAO {
 
     public User getUser(String username) {
         String query = "SELECT * FROM user WHERE username = ?";
+
+        username = sanitizer.sanitize(username);
+
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -65,6 +81,7 @@ public class UserDAO {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM User";
+
         try(PreparedStatement statement = connection.prepareStatement(query)) {
             try(ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
