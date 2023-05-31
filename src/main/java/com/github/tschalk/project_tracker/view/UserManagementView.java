@@ -126,7 +126,7 @@ public class UserManagementView extends VBox {
 
             alert.showAndWait();
         } else {
-            showAlert("Adding user failed! User already exists.");
+            showAlert("Adding user failed! User already exists or you used special characters.");
         }
     }
 

@@ -12,6 +12,7 @@ import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.Responsible;
 import com.github.tschalk.project_tracker.utils.CustomTitleBar;
+import com.github.tschalk.project_tracker.utils.Sanitizer;
 import com.github.tschalk.project_tracker.utils.SceneManager;
 import com.github.tschalk.project_tracker.view.AddProjectView;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
@@ -46,9 +47,8 @@ public class Main extends Application {
         DatabaseConfig config = new DatabaseConfig();
         DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config);
         databaseConnectionManager.connect();
-
-        UserDAO userDAO = new UserDAO(databaseConnectionManager);
-
+        Sanitizer sanitizer = Sanitizer.getDefault();
+        UserDAO userDAO = new UserDAO(databaseConnectionManager, sanitizer);
         DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
