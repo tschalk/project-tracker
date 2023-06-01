@@ -117,8 +117,8 @@ public class AddProjectView extends BorderPane {
         Button addCostCenterButton = new Button("Add Cost Center");
         addCostCenterButton.setTooltip(new Tooltip("Add a new cost center"));
         addCostCenterButton.setGraphic(svgManager.getSVGPath("addIcon"));
-        addCostCenterButton.setOnAction(event -> {
 
+        addCostCenterButton.setOnAction(event -> {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Add cost center");
 
@@ -135,20 +135,26 @@ public class AddProjectView extends BorderPane {
 
             Optional<String> result = dialog.showAndWait();
 
-            result.ifPresent(name -> {
+            result.ifPresentOrElse(name -> {
                 addProjectController.addCostCenter(name);
                 costCenterComboBox.setItems(addProjectController.getCostCenters());
+            }, () -> {
+                // Hier wird der Code ausgeführt, wenn der Wert in result null ist
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("An error occurred while adding the responsible. Semi-colons are not allowed. Please try again.");
+                alert.showAndWait();
             });
-        });
-        return addCostCenterButton;
+        }); return addCostCenterButton;
     }
 
     private Button getAddResponsibleButton() {
         Button addResponsibleButton = new Button("Add Responsible");
         addResponsibleButton.setTooltip(new Tooltip("Add a new responsible"));
         addResponsibleButton.setGraphic(svgManager.getSVGPath("addIcon"));
-        addResponsibleButton.setOnAction(event -> {
 
+        addResponsibleButton.setOnAction(event -> {
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Add Responsible");
 
@@ -165,9 +171,16 @@ public class AddProjectView extends BorderPane {
 
             Optional<String> result = dialog.showAndWait();
 
-            result.ifPresent(name -> {
+            result.ifPresentOrElse(name -> {
                 addProjectController.addResponsible(name);
                 responsibleComboBox.setItems(addProjectController.getResponsible());
+            }, () -> {
+                // Hier wird der Code ausgeführt, wenn der Wert in result null ist
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("An error occurred while adding the responsible. Semi-colons are not allowed. Please try again.");
+                alert.showAndWait();
             });
         });
         return addResponsibleButton;
@@ -199,7 +212,8 @@ public class AddProjectView extends BorderPane {
                 String trimmedText = text.substring(startIndex, endIndex + 1);
 
                 if (trimmedText.contains(";")) {
-                    return trimmedText.replace(";", ",");
+//                    return trimmedText.replace(";", ",");
+                    return null;
                 } else {
                     return trimmedText;
                 }
@@ -261,9 +275,20 @@ public class AddProjectView extends BorderPane {
     private Button getOkButton() {
         Button okButton = new Button("Ok");
         okButton.setOnAction(event -> {
-            if (descriptionField.getText() != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
+        String description = descriptionField.getText();
+        if (description != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
+            if (description.contains(";")) {
+                // Display error message if description contains a semicolon
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText(null);
+                alert.setContentText("Description cannot contain a semicolon (;).");
+                alert.showAndWait();
+                return;
+            }
+
                 addProjectController.getProjectDAO().addProject(
-                        descriptionField.getText(),
+                    description,
                         costCenterComboBox.getValue(),
                         responsibleComboBox.getValue(),
                         addProjectController.getCurrentUser());
