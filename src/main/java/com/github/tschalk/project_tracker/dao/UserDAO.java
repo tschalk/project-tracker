@@ -1,6 +1,7 @@
 package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
+import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
 import com.github.tschalk.project_tracker.model.User;
 import com.github.tschalk.project_tracker.utils.Sanitizer;
 
@@ -12,14 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
-    DatabaseConnectionManager databaseConnectionManager;
-    Connection connection;
-    Sanitizer sanitizer;
+    private final DatabaseConnectionManager databaseConnectionManager;
+    private final Sanitizer sanitizer;
+    private Connection connection;
 
     public UserDAO(DatabaseConnectionManager databaseConnectionManager, Sanitizer sanitizer) {
         this.databaseConnectionManager = databaseConnectionManager;
         this.connection = databaseConnectionManager.getConnection();
         this.sanitizer = sanitizer;
+
     }
 
     public boolean addUser(String username, String role, String password) {
@@ -33,15 +35,17 @@ public class UserDAO {
 
         for (int i = 0; i < parameters.length; i++) {
             // Nur das Passwort überspringen
-            if(i != 2 && parameters[i].length() != sanitizedParameters[i].length()) {
+            if (i != 2 && parameters[i].length() != sanitizedParameters[i].length()) {
                 return false;
             }
         }
 
+        String encryptedPassword = SimplePasswordEncryption.encrypt(password); // Passwort verschlüsseln
+
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            pstmt.setString(2, encryptedPassword);
             pstmt.setString(3, role);
 
             int rowsAffected = pstmt.executeUpdate();
@@ -61,10 +65,14 @@ public class UserDAO {
             statement.setString(1, username);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+
+                    String encryptedPassword = resultSet.getString("password");
+                    String decryptedPassword = SimplePasswordEncryption.decrypt(encryptedPassword);
+
                     return new User(
                             resultSet.getInt("id"),
                             resultSet.getString("username"),
-                            resultSet.getString("password"),
+                            decryptedPassword,  // entschlüsseltes Passwort verwenden
                             resultSet.getString("role"),
                             resultSet.getBoolean("is_active")
                     );
@@ -78,17 +86,22 @@ public class UserDAO {
         }
     }
 
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM User";
 
-        try(PreparedStatement statement = connection.prepareStatement(query)) {
-            try(ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+
+                    String encryptedPassword = resultSet.getString("password");
+                    String decryptedPassword = SimplePasswordEncryption.decrypt(encryptedPassword);
+
                     users.add(new User(
                             resultSet.getInt("id"),
                             resultSet.getString("username"),
-                            resultSet.getString("password"),
+                            decryptedPassword,
                             resultSet.getString("role"),
                             resultSet.getBoolean("is_active")
                     ));

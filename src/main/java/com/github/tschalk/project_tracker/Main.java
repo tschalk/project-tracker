@@ -1,23 +1,14 @@
 package com.github.tschalk.project_tracker;
 
-import com.github.tschalk.project_tracker.controller.AddProjectController;
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
-import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.UserLoginController;
-import com.github.tschalk.project_tracker.dao.CostCenterDAO;
-import com.github.tschalk.project_tracker.dao.ProjectDAO;
-import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.model.Responsible;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import com.github.tschalk.project_tracker.utils.Sanitizer;
 import com.github.tschalk.project_tracker.utils.SceneManager;
-import com.github.tschalk.project_tracker.view.AddProjectView;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
-import com.github.tschalk.project_tracker.view.MainWindowView;
 import com.github.tschalk.project_tracker.view.UserLoginView;
 import javafx.application.Application;
 import javafx.application.Platform;

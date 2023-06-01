@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.UserManagementController;
 import com.github.tschalk.project_tracker.model.User;
+import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -105,6 +106,7 @@ public class UserManagementView extends VBox {
             usernameField.clear();
             roleComboBox.setValue(null);
             User createdUser = userManagementController.getUser(username);
+            String password = createdUser.getPassword();
 
             updateUserList();
 
@@ -116,12 +118,12 @@ public class UserManagementView extends VBox {
             button.setOnAction(e -> {
                 final Clipboard clipboard = Clipboard.getSystemClipboard();
                 final ClipboardContent content = new ClipboardContent();
-                content.putString(createdUser.getPassword());
+                content.putString(password);
                 clipboard.setContent(content);
             });
 
             VBox vbox = new VBox();
-            vbox.getChildren().addAll(new Label("User created with password: " + createdUser.getPassword()), button);
+            vbox.getChildren().addAll(new Label("User created with password: " + password), button);
             alert.getDialogPane().setContent(vbox);
 
             alert.showAndWait();
@@ -129,7 +131,6 @@ public class UserManagementView extends VBox {
             showAlert("Adding user failed! User already exists or you used special characters.");
         }
     }
-
 
     private void updateUser() {
         String username = usernameField.getText();
