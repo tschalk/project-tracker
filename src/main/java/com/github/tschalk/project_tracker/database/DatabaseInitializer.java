@@ -36,7 +36,6 @@ public class DatabaseInitializer {
         }
     }
 
-
     private static void executeSQLCommand(Connection connection, String command) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute(command);
@@ -50,5 +49,4 @@ public class DatabaseInitializer {
     private static void handleSQLException(String errorMessage) {
         System.out.println("Error while executing the SQL script: " + errorMessage);
     }
-
 }

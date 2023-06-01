@@ -131,7 +131,6 @@ public class ExportView extends BorderPane {
         return directoryButton;
     }
 
-
     private Button getExportButton(DatePicker fromDatePicker, DatePicker toDatePicker) {
         Button exportButton = new Button(EXPORT_TEXT);
         exportButton.setOnAction(e -> {

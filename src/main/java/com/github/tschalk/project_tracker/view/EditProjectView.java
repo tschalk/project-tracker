@@ -23,7 +23,6 @@ import java.util.Optional;
 public class EditProjectView extends BorderPane {
 
     private final EditProjectController editProjectController;
-    private Stage stage;
     private Project selectedProject;
     private TableView<TimesheetEntry> timesheetEntryTableView;
     private final ComboBox<CostCenter> costCenterComboBox;
@@ -37,7 +36,6 @@ public class EditProjectView extends BorderPane {
     }
 
     private void initializeUI() {
-
         // This
         this.setPadding(new Insets(0, 0, 15, 0));
 
@@ -265,5 +263,4 @@ public class EditProjectView extends BorderPane {
         editProjectController.removeTimesheetEntry(selectedEntry);
         editProjectController.getMainWindowView().updateProjectTableView();
     }
-
 }

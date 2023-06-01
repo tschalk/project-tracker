@@ -8,8 +8,6 @@ public class TimesheetEntry {
     private LocalDateTime startDateTime;
     private int duration;
 
-    // getters and setters
-
     public int getId() {
         return id;
     }

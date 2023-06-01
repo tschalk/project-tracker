@@ -97,5 +97,4 @@ public class SVGManager {
         clone.getStyleClass().addAll(original.getStyleClass());
         return clone;
     }
-
 }

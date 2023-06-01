@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TimesheetEntryDAO {
-
     Connection connection;
 
     public TimesheetEntryDAO(DatabaseConnectionManager databaseConnectionManager) {
@@ -61,7 +60,6 @@ public class TimesheetEntryDAO {
         return dailySums;
     }
 
-
     public void updateTimesheetEntry(TimesheetEntry entry) {
         String query = "UPDATE TimesheetEntry SET duration = ? WHERE id = ?";
 
@@ -97,8 +95,6 @@ public class TimesheetEntryDAO {
             System.out.println(e.getMessage());
         }
     }
-
-
 }
 
 

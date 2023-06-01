@@ -6,6 +6,7 @@ package com.github.tschalk.project_tracker.utils;
  */
 
 public class SimplePasswordEncryption {
+
     public static String encrypt(String password) {
         String encryptedPassword = "";
         for (int i = 0; i < password.length(); i++) {

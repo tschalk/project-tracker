@@ -10,14 +10,14 @@ import java.sql.SQLException;
  */
 
 public class DatabaseConnectionManager {
+    private final DatabaseConfig config;
+    private final DatabaseBackupManager databaseBackupManager;
     private String host;
     private String port;
     private String username;
     private String password;
     private String databaseName;
-    private final DatabaseConfig config;
     private Connection connection;
-    private final DatabaseBackupManager databaseBackupManager;
 
     public DatabaseConnectionManager(DatabaseConfig config, DatabaseBackupManager databaseBackupManager) {
         this.config = config;
@@ -90,7 +90,6 @@ public class DatabaseConnectionManager {
         config.setProperty("database.databaseName", databaseName);
     }
 
-
     public DatabaseConfig getDatabaseConfig() {
         return config;
     }
@@ -105,13 +104,7 @@ public class DatabaseConnectionManager {
 
     @Override
     public String toString() {
-        return "DatabaseManager{" +
-                "connection=" + connection +
-                ", host='" + host + '\'' +
-                ", port='" + port + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return "DatabaseManager{" + "connection=" + connection + ", host='" + host + '\'' + ", port='" + port + '\'' + ", username='" + username + '\'' + ", password='" + password + '\'' + '}';
     }
 }
 

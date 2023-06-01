@@ -5,7 +5,6 @@ import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.User;
 
 public class UserLoginController {
-
     private final UserDAO userDAO;
     private User currentUser;
 
@@ -14,7 +13,6 @@ public class UserLoginController {
     }
 
     public boolean login(String username, String password) {
-
         userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
         currentUser = userDAO.getUser(username);
 
@@ -25,7 +23,6 @@ public class UserLoginController {
             return false;
         }
     }
-
 
     public UserDAO getUserDAO() {
         return userDAO;

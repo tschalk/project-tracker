@@ -13,12 +13,11 @@ import javafx.collections.ObservableList;
 import java.util.List;
 
 public class AddProjectController {
-
-    private ProjectDAO projectDAO;
-    private CostCenterDAO costCenterDAO;
-    private ResponsibleDAO responsibleDAO;
-    private UserLoginController userLoginController;
-    private MainWindowView mainWindowView;
+    private final ProjectDAO projectDAO;
+    private final CostCenterDAO costCenterDAO;
+    private final ResponsibleDAO responsibleDAO;
+    private final UserLoginController userLoginController;
+    private final MainWindowView mainWindowView;
 
     public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, UserLoginController userLoginController, MainWindowView mainWindowView) {
         this.projectDAO = projectDAO;

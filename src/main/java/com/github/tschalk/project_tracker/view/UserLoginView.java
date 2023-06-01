@@ -21,10 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 
-
 public class UserLoginView extends BorderPane {
-
-
     private final TextField usernameField;
     private final PasswordField passwordField;
     private final Stage stage;
@@ -95,8 +92,6 @@ public class UserLoginView extends BorderPane {
         // FIXME: DEBUGGING & TESTING:
         username = "admin";
         password = "123";
-//        username = "Max";
-//        password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert("Username or password cannot be empty.");
@@ -172,7 +167,6 @@ public class UserLoginView extends BorderPane {
 
             UserManagementController userManagementController = new UserManagementController(userLoginController);
             UserManagementView userManagementView = new UserManagementView(userManagementController);
-
 
             sceneManager.addScene(USER_MANAGEMENT_SCENE,
                     new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));

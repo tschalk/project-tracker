@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class DatabaseBackupManager {
-
     public static final String MY_SQL_BACKUPS_PATH = "C:/MySQL-Backups";
 
     private final DatabaseConfig config;
@@ -54,8 +53,7 @@ public class DatabaseBackupManager {
 
         return String.format(
                 // -h% ... Host -P% ... Port -u% ... Username -p% ... Password -B% ... Database -r% ... Output file
-                "mysqldump -h%s -P%d -u%s -p%s --add-drop-database -B %s -r %s",
-                host, port, username, password, databaseName, backupFilePath);
+                "mysqldump -h%s -P%d -u%s -p%s --add-drop-database -B %s -r %s", host, port, username, password, databaseName, backupFilePath);
     }
 
     private void executeBackupCommand(String executeCmd, String successMessage, String errorMessage) {
@@ -86,11 +84,7 @@ public class DatabaseBackupManager {
         // Hier werden alle Backups gelöscht, die älter als die angegebene Anzahl von Wochen sind und das Format "...-ProjectTracker-MySQLdump.sql" haben.
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(backupsDirectory, "*-ProjectTracker-MySQLdump.sql")) {
             for (Path backupFile : directoryStream) {
-                LocalDateTime lastModified = Files
-                        .getLastModifiedTime(backupFile)
-                        .toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime();
+                LocalDateTime lastModified = Files.getLastModifiedTime(backupFile).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 if (lastModified.toLocalDate().isBefore(thresholdDate)) {
                     Files.delete(backupFile);
@@ -103,7 +97,7 @@ public class DatabaseBackupManager {
     }
 
     //public void restoreDatabase(LocalDate date) { // Hier sollte der path ur date sein und ein localDate übergeben werden
-        public void restoreDatabase(Path backupFileForGivenDate) {
+    public void restoreDatabase(Path backupFileForGivenDate) {
 //        Path backupFileForGivenDate = generateBackupFilePathForDate(date);
         if (Files.exists(backupFileForGivenDate)) {
             String executeCmd = getRestoreCommand(backupFileForGivenDate);
@@ -122,8 +116,7 @@ public class DatabaseBackupManager {
 
         return String.format(
                 // -h% ... Host -P% ... Port -u% ... Username -p% ... Password -e ... execute command
-                "mysql --host=%s --port=%d --user=%s --password=%s -e \"source %s\"",
-                host, port, username, password, backupFilePath);
+                "mysql --host=%s --port=%d --user=%s --password=%s -e \"source %s\"", host, port, username, password, backupFilePath);
     }
 
     private Path generateBackupFilePathForDate(LocalDate date) {

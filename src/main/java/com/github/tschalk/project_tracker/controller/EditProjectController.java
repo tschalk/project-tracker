@@ -14,22 +14,15 @@ import java.util.List;
 
 public class EditProjectController {
 
-    private ProjectDAO projectDAO;
-    private Project project;
-    private UserLoginController userLoginController;
-    private MainWindowView mainWindowView;
-    private TimesheetEntryDAO timesheetEntryDAO;
+    private final ProjectDAO projectDAO;
+    private final MainWindowView mainWindowView;
+    private final TimesheetEntryDAO timesheetEntryDAO;
+
     public EditProjectController(ProjectDAO projectDAO, UserLoginController userLoginController, MainWindowView mainWindowView) {
         this.projectDAO = projectDAO;
-        this.userLoginController = userLoginController;
         this.mainWindowView = mainWindowView;
         this.timesheetEntryDAO = projectDAO.getTimesheetEntryDAO();
     }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
 
     public MainWindowView getMainWindowView() {
         return mainWindowView;
@@ -71,18 +64,9 @@ public class EditProjectController {
         }
     }
 
-
-
     public void updateProject(Project project) {
         projectDAO.updateProject(project);
     }
-
-
-
-    public void refreshProjectTable() {
-        mainWindowView.updateProjectTableView();
-    }
-
 
     public TimesheetEntryDAO getTimesheetEntryDAO() {
         return timesheetEntryDAO;

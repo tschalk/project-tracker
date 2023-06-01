@@ -128,7 +128,6 @@ public class UserDAO {
         }
     }
 
-
     public int getUserId(String username) {
         String query = "SELECT id FROM User WHERE username = ?";
 

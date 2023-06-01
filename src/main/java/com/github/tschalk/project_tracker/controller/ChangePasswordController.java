@@ -5,7 +5,6 @@ import com.github.tschalk.project_tracker.model.User;
 import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
 
 public class ChangePasswordController {
-
     private final UserDAO userDAO;
     private final User currentUser;
 
@@ -14,26 +13,10 @@ public class ChangePasswordController {
         this.currentUser = userLoginController.getCurrentUser();
     }
 
-    public ChangePasswordController(UserDAO userDAO, User currentUser) {
-        this.userDAO = userDAO;
-        this.currentUser = currentUser;
-    }
-
     public boolean updatePassword(String newPassword) {
         String encryptedPassword = SimplePasswordEncryption.encrypt(newPassword);
         return this.currentUser != null
                 ? userDAO.updatePassword(currentUser.getId(), encryptedPassword)
                 : false;
-    }
-
-    public boolean updatePassword(String newPassword, User currentUser) {
-        String encryptedPassword = SimplePasswordEncryption.encrypt(newPassword);
-        return currentUser != null
-                ? userDAO.updatePassword(currentUser.getId(), encryptedPassword)
-                : false;
-    }
-
-    public User getCurrentUser() {
-        return this.currentUser;
     }
 }

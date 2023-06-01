@@ -1,8 +1,6 @@
 package com.github.tschalk.project_tracker.model;
 
 public class Project {
-
-    // benötige ich immeer beides Resposnible und ResponsibleId??
     private int id;
     private String description;
     private String responsible;

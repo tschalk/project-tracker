@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CostCenterDAO {
-
     private final Connection connection;
 
     public CostCenterDAO(DatabaseConnectionManager databaseConnectionManager) {

@@ -49,7 +49,6 @@ public class CustomTitleBar extends HBox {
             }
         });
 
-
         this.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
@@ -69,5 +68,4 @@ public class CustomTitleBar extends HBox {
     public void showCloseButton(boolean setVisible) {
         closeButton.setVisible(setVisible);
     }
-
 }

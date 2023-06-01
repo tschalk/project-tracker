@@ -45,8 +45,8 @@ public class AddProjectView extends BorderPane {
         // This
         this.setPadding(new Insets(0, 0, 15, 0));
 
-        // Top // FIXME: Scene lässt sich nicht verschieben, alternativ mit (primary-)Stage arbeiten
-        CustomTitleBar customTitleBar = new CustomTitleBar(/*SceneManager.getInstance().getStage(SceneManager.ADD_PROJECT_SCENE),*/"Add new project");
+        // Top
+        CustomTitleBar customTitleBar = new CustomTitleBar("Add new project");
         customTitleBar.showCloseButton(false);
         this.setTop(customTitleBar);
 
@@ -332,9 +332,5 @@ public class AddProjectView extends BorderPane {
         for (Button button : buttons) {
             button.getStyleClass().add("svg-button");
         }
-    }
-
-    public Stage getStage() {
-        return (Stage) this.getScene().getWindow();
     }
 }

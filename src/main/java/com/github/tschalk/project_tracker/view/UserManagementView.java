@@ -2,7 +2,6 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.UserManagementController;
 import com.github.tschalk.project_tracker.model.User;
-import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,11 +14,8 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 public class UserManagementView extends VBox {
-
     private final TextField usernameField;
-    //    private final TextField roleField;
     private final ComboBox<String> roleComboBox;
-
     private final UserManagementController userManagementController;
     private final ListView<User> userList;
     private final CheckBox activeUserChekBox;
@@ -27,7 +23,6 @@ public class UserManagementView extends VBox {
     public UserManagementView(UserManagementController userManagementController) {
         this.userManagementController = userManagementController;
         this.usernameField = new TextField();
-//        this.roleField = new TextField();
         this.roleComboBox = new ComboBox<>();
         this.userList = new ListView<>();
         this.activeUserChekBox = new CheckBox();

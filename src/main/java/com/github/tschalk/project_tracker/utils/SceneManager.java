@@ -45,7 +45,6 @@ public class SceneManager {
     private static SceneManager sceneManager = null;
 
     private final Map<String, Scene> scenes = new HashMap<>();
-//    private final Map<String, Stage> stages = new HashMap<>();
 
     // Privater Konsruktor damit nur eine Instanz von SceneManager existiert
     private SceneManager() {}
@@ -60,19 +59,6 @@ public class SceneManager {
 
     public void addScene(String name, Scene scene) {
         scenes.put(name, scene);
-    }
-
-    public void removeScene(String name) {
-        scenes.remove(name);
-    }
-
-    public Scene loadScene(String name, Stage stage) {
-        Scene scene = scenes.get(name);
-
-        if (scene != null) {
-            stage.setScene(scene);
-        }
-        return scene;
     }
 
     public void showCustomScene(String name, @NotNull Stage stage) {
@@ -94,11 +80,7 @@ public class SceneManager {
         newStage.setTitle(sceneName);
         newStage.setResizable(false);
         newStage.centerOnScreen();
-//        newStage.initStyle(StageStyle.UNDECORATED);
 
-//        stages.put(sceneName, newStage); // Damit man die Stage später abrufen kann
-        System.out.println("newStage = " + newStage);
-        System.out.println("scene = " + scene);
         newStage.show();
     }
 
@@ -106,6 +88,7 @@ public class SceneManager {
         // Hole die Szene aus der Map
         Scene scene = this.scenes.get(sceneName);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
+
         // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
         if(scene.getRoot() instanceof EditProjectView editProjectView) {
             editProjectView.setSelectedProject(selectedProject);

@@ -1,7 +1,6 @@
 package com.github.tschalk.project_tracker.controller;
 
 import com.github.tschalk.project_tracker.model.User;
-import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
 
 import java.util.List;
 import java.util.Random;

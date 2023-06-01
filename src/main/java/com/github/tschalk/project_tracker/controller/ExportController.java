@@ -74,10 +74,7 @@ public class ExportController {
         return true;
     }
 
-
-
     public List<Project> getProjects() {
         return projectDAO.readAllProjectsByUserID(userLoginController.getCurrentUser().getId());
     }
-
 }

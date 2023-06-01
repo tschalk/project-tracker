@@ -65,7 +65,6 @@ public class ChangePasswordView extends BorderPane {
         contentBox.setPadding(new Insets(10));
         contentBox.getChildren().addAll(titleLabel, gridPane, actionButtonContainer);
 
-
         this.setCenter(contentBox);
     }
 
@@ -185,6 +184,4 @@ public class ChangePasswordView extends BorderPane {
 
         alert.showAndWait();
     }
-
-
 }

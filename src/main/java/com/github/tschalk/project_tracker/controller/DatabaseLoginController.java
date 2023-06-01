@@ -9,11 +9,9 @@ import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
  */
 public class DatabaseLoginController {
     private final DatabaseConnectionManager databaseConnectionManager;
-//    private final DatabaseBackupManager databaseBackupManager;
 
     public DatabaseLoginController(DatabaseConnectionManager databaseConnectionManager/*, DatabaseBackupManager databaseBackupManager*/) {
         this.databaseConnectionManager = databaseConnectionManager;
-//        this.databaseBackupManager = databaseBackupManager;
     }
 
     public String getDatabaseProperty(String propertyName) {
@@ -27,16 +25,11 @@ public class DatabaseLoginController {
         if (isConnected) {
             updateConfig(host, port, username, password, databaseName);
             System.out.println("performing database backup");
-//            databaseBackupManager.performDatabaseBackup();
         }
         return isConnected;
     }
 
     private void updateConfig(String host, int port, String username, String password, String databaseName) {
         databaseConnectionManager.updateConfig(host, port, username, password, databaseName);
-    }
-
-    public DatabaseConnectionManager getDatabaseManager() {
-        return databaseConnectionManager;
     }
 }

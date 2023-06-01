@@ -7,10 +7,6 @@ public class User {
     private String role;
     private boolean isActive;
 
-//    public User(int id, String username, String password) {
-//        this(id, username, password, null);
-//    }
-
     public User(int id, String username, String password, String role, boolean isActive) {
         this.id = id;
         this.name = username;

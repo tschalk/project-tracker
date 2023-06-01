@@ -26,38 +26,6 @@ public class ProjectDAO {
         this.timesheetEntryDAO = timesheetEntryDAO;
     }
 
-//    public Project addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
-//        String query = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
-//
-//        try (PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-//
-//            pstmt.setString(1, description);
-//            pstmt.setInt(2, costCenter.getId());
-//            pstmt.setInt(3, responsible.getId());
-//            pstmt.setInt(4, user.getId());
-//
-//            pstmt.executeUpdate();
-//
-//            ResultSet rs = pstmt.getGeneratedKeys();
-//            if (rs.next()) {
-//                int projectId = rs.getInt(1);
-//
-//                Project project = new Project();
-//                project.setId(projectId);
-//                project.setDescription(description);
-//                project.setCostCenter(costCenter.getName());
-//                project.setResponsible(responsible.getName());
-//
-//                return project;
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Error adding project: " + e.getMessage());
-//        }
-//
-//        return null;
-//    }
-
-
     public void addProject(String description, CostCenter costCenter, Responsible responsible, User user) {
         String query = "INSERT INTO Project (description, cost_center_id, responsible_id, user_id) VALUES (?, ?, ?, ?)";
 
@@ -182,7 +150,6 @@ public class ProjectDAO {
         }
     }
 
-
     public void deleteProject(int projectId) {
         // zuerst alle TimesheetEntries für dieses Projekt löschen
         timesheetEntryDAO.deleteTimesheetEntriesForProject(projectId);
@@ -196,10 +163,6 @@ public class ProjectDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public DatabaseConnectionManager getDatabaseConnectionManager() {
-        return databaseConnectionManager;
     }
 
     public CostCenterDAO getCostCenterDAO() {

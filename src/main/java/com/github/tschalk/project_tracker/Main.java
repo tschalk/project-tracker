@@ -19,11 +19,7 @@ import javafx.stage.StageStyle;
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 
 public class Main extends Application {
-
-
-
     public static final String STYLESHEET_PATH = "/css/styles.css";
-
 
     public static void main(String[] args) {
         launch(args);
@@ -31,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        // Hier wird die Stage initialisiert.
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setOnCloseRequest(event -> Platform.exit());
 
@@ -63,5 +59,4 @@ public class Main extends Application {
             sceneManager.showCustomScene(DATABASE_LOGIN_SCENE, stage);
         }
     }
-
 }

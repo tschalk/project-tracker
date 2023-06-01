@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResponsibleDAO {
-
     private final Connection connection;
 
     public ResponsibleDAO(DatabaseConnectionManager databaseConnectionManager) {

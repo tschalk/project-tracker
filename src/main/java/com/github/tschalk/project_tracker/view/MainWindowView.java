@@ -30,7 +30,6 @@ import java.util.Optional;
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 
 public class MainWindowView extends BorderPane {
-
     private final MainWindowController mainWindowController;
     private final TableView<Project> projectTableView; // Sollte es eine lokale Variable sein?
     private final SimpleLongProperty secondsElapsed;
@@ -212,20 +211,6 @@ public class MainWindowView extends BorderPane {
         return userSettingsButton;
     }
 
-    private Button importButton() {
-        Button importButton = new Button();
-        importButton.setOnAction(e -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-
-            File selectedFile = fileChooser.showOpenDialog(stage);
-            if (selectedFile != null) {
-                // mainWindowController.importCsv(selectedFile.toPath().toString());
-            }
-        });
-        return importButton;
-    }
-
     private void handleAdminAction(HBox buttonContainer) {
         if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
 
@@ -305,5 +290,4 @@ public class MainWindowView extends BorderPane {
     public MainWindowController getMainWindowController() {
         return mainWindowController;
     }
-
 }

@@ -15,7 +15,6 @@ public class DatabaseConfig {
     private final Properties configProps;
     private final Path configPath;
 
-
     public DatabaseConfig() {
         configProps = new Properties();
         configPath = Paths.get("src/main/resources/config/database.properties");
