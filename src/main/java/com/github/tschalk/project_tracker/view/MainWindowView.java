@@ -35,12 +35,11 @@ public class MainWindowView extends BorderPane {
     private final SimpleLongProperty secondsElapsed;
     private final Stage stage;
     private final SVGManager svgManager = SVGManager.getInstance();
-    private User currentUser;
     private Project selectedProject;
     private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
-    private DatabaseBackupManager databaseBackupManager;
+    private final DatabaseBackupManager databaseBackupManager;
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage, DatabaseBackupManager databaseBackupManager) {
         this.mainWindowController = mainWindowController;
@@ -249,11 +248,11 @@ public class MainWindowView extends BorderPane {
                 }
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 if (selectedFile != null) {
-
                     databaseBackupManager.restoreDatabase(selectedFile.toPath());
+                    updateProjectTableView();
                 }
             });
-            buttonContainer.getChildren().addAll(userManagementButton, restoreDatabaseButton);
+            buttonContainer.getChildren().addAll( restoreDatabaseButton, userManagementButton);
         }
     }
 
