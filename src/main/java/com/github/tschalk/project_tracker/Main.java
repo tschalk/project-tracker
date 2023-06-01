@@ -46,11 +46,12 @@ public class Main extends Application {
 
         // Hier wird die Verbindung zur Datenbank hergestellt.
         DatabaseConfig config = new DatabaseConfig();
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config, new DatabaseBackupManager(config));
+        DatabaseBackupManager databaseBackupManager = new DatabaseBackupManager(config);
+        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config, databaseBackupManager);
         databaseConnectionManager.connect();
         Sanitizer sanitizer = Sanitizer.getDefault();
         UserDAO userDAO = new UserDAO(databaseConnectionManager, sanitizer);
-        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager/*, new DatabaseBackupManager(config)*/);
+        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
         UserLoginController userLoginController = new UserLoginController(userDAO);

@@ -5,6 +5,7 @@ import com.github.tschalk.project_tracker.dao.CostCenterDAO;
 import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
+import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.utils.CustomTitleBar;
 import com.github.tschalk.project_tracker.utils.SceneManager;
@@ -122,7 +123,7 @@ public class UserLoginView extends BorderPane {
                 databaseConnectionManager, costCenterDAO, responsibleDAO, timesheetDAO);
 
         MainWindowController mainWindowController = new MainWindowController(projectDAO, userLoginController);
-        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage);
+        MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage, new DatabaseBackupManager(databaseConnectionManager.getDatabaseConfig()));
 
         AddProjectController addProjectController = new AddProjectController(
                 projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO

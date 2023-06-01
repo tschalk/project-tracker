@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DatabaseBackupManager {
 
-    public static final String MY_SQL_BACKUPS = "C:/MySQL-Backups";
+    public static final String MY_SQL_BACKUPS_PATH = "C:/MySQL-Backups";
 
     private final DatabaseConfig config;
     private final Path backupFilePath;
@@ -81,7 +81,7 @@ public class DatabaseBackupManager {
         LocalDate thresholdDate = currentDate.minusWeeks(weeks);
 
         // Verzeichnispfad, in dem sich die Backups befinden
-        Path backupsDirectory = Paths.get(MY_SQL_BACKUPS);
+        Path backupsDirectory = Paths.get(MY_SQL_BACKUPS_PATH);
 
         // Hier werden alle Backups gelöscht, die älter als die angegebene Anzahl von Wochen sind und das Format "...-ProjectTracker-MySQLdump.sql" haben.
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(backupsDirectory, "*-ProjectTracker-MySQLdump.sql")) {
@@ -102,14 +102,15 @@ public class DatabaseBackupManager {
         }
     }
 
-    private void restoreDatabase(LocalDate date) {
-        Path backupFileForGivenDate = generateBackupFilePathForDate(date);
+    //public void restoreDatabase(LocalDate date) { // Hier sollte der path ur date sein und ein localDate übergeben werden
+        public void restoreDatabase(Path backupFileForGivenDate) {
+//        Path backupFileForGivenDate = generateBackupFilePathForDate(date);
         if (Files.exists(backupFileForGivenDate)) {
             String executeCmd = getRestoreCommand(backupFileForGivenDate);
 
             executeBackupCommand(executeCmd, "Backup restored successfully!", "Could not restore the backup.");
         } else {
-            System.out.println("No backup found for the given date: " + date);
+            System.out.println("No backup found");
         }
     }
 
@@ -129,11 +130,11 @@ public class DatabaseBackupManager {
         String backupFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(date) + "-ProjectTracker-MySQLdump.sql";
         // Erstelle das Verzeichnis, falls es nicht existiert
         try {
-            Files.createDirectories(Paths.get(MY_SQL_BACKUPS));
+            Files.createDirectories(Paths.get(MY_SQL_BACKUPS_PATH));
         } catch (IOException e) {
             System.err.println("Fehler beim Erstellen des Backup-Verzeichnisses: " + e.getMessage());
         }
-        return Paths.get(MY_SQL_BACKUPS, backupFileName);
+        return Paths.get(MY_SQL_BACKUPS_PATH, backupFileName);
     }
 
 }

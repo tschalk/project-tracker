@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
+import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.User;
 import com.github.tschalk.project_tracker.utils.CustomTitleBar;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.util.Optional;
 
 import static com.github.tschalk.project_tracker.utils.SceneManager.*;
 
@@ -39,12 +41,14 @@ public class MainWindowView extends BorderPane {
     private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
+    private DatabaseBackupManager databaseBackupManager;
 
-    public MainWindowView(MainWindowController mainWindowController, Stage stage) {
+    public MainWindowView(MainWindowController mainWindowController, Stage stage, DatabaseBackupManager databaseBackupManager) {
         this.mainWindowController = mainWindowController;
         this.projectTableView = new TableView<>();
         this.secondsElapsed = new SimpleLongProperty(0);
         this.stage = stage;
+        this.databaseBackupManager = databaseBackupManager;
         initializeUI();
     }
 
@@ -66,7 +70,6 @@ public class MainWindowView extends BorderPane {
         Button exportButton = getExportButton();
         Button startStopButton = getStartStopButton();
         Button userSettingsButton = getUserSettingsButton();
-        //Button importButton = importButton();
 
         HBox buttonContainer = new HBox(10);
         buttonContainer.getChildren().addAll(startStopButton, addButton, editButton, exportButton, userSettingsButton);
@@ -225,6 +228,7 @@ public class MainWindowView extends BorderPane {
 
     private void handleAdminAction(HBox buttonContainer) {
         if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
+
             Button userManagementButton = new Button();
             userManagementButton.setTooltip(new Tooltip("Manage users"));
             userManagementButton.getStyleClass().add("svg-button");
@@ -233,7 +237,34 @@ public class MainWindowView extends BorderPane {
                 getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE);
             });
 
-            buttonContainer.getChildren().add(userManagementButton);
+            // Hier wird ein button erstellt damit die Datenbank wiederhergestellt werden kann.
+            Button restoreDatabaseButton = new Button();
+            restoreDatabaseButton.setTooltip(new Tooltip("Restore database"));
+            restoreDatabaseButton.getStyleClass().add("svg-button");
+            restoreDatabaseButton.setGraphic(svgManager.getSVGPath("databaseRestoreIcon")); // später databaseIcon
+            restoreDatabaseButton.setOnAction(e -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Resource File");
+                File initialDirectory = new File(DatabaseBackupManager.MY_SQL_BACKUPS_PATH);
+                fileChooser.setInitialDirectory(initialDirectory);
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
+
+                // Hier wird ein Alert erstellt, der den Benutzer fragt, ob er die Datenbank wiederherstellen möchte.
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText("Restore database");
+                alert.setContentText("Are you sure you want to restore the database?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() != ButtonType.OK) {
+                    return;
+                }
+
+                File selectedFile = fileChooser.showOpenDialog(stage);
+                if (selectedFile != null) {
+                    databaseBackupManager.restoreDatabase(selectedFile.toPath());
+                }
+            });
+            buttonContainer.getChildren().addAll(userManagementButton, restoreDatabaseButton);
         }
     }
 
