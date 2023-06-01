@@ -1,6 +1,7 @@
-package com.github.tschalk.project_tracker.database;//package com.github.tschalk.project_tracker.database;
+package com.github.tschalk.project_tracker.database;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 
 public class DatabaseBackupManager {
 
+    public static final String MY_SQL_BACKUPS = "C:/MySQL-Backups";
+
     private final DatabaseConfig config;
     private final Path backupFilePath;
 
@@ -33,7 +36,7 @@ public class DatabaseBackupManager {
         // Und Konflikte zu vermeiden, wenn mehrere Instanzen der Anwendung gleichzeitig laufen.
         if (!Files.exists(backupFilePath)) {
             backupDatabase();
-            deleteOlderBackups(2);
+            deleteOlderBackups(2); // Kann nur gelöscht werde, falls vorher ein neues Backup erstellt wurde.
         }
     }
 
@@ -77,17 +80,25 @@ public class DatabaseBackupManager {
         // Backups löschen, die älter als die angegebene Anzahl von Wochen sind
         LocalDate thresholdDate = currentDate.minusWeeks(weeks);
 
-        try {
-            if (Files.exists(backupFilePath)) {
-                // Überprüfen, ob das Backup älter ist als die angegebene Anzahl von Wochen
-                LocalDateTime lastModified = Files.getLastModifiedTime(backupFilePath).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        // Verzeichnispfad, in dem sich die Backups befinden
+        Path backupsDirectory = Paths.get(MY_SQL_BACKUPS);
+
+        // Hier werden alle Backups gelöscht, die älter als die angegebene Anzahl von Wochen sind und das Format "...-ProjectTracker-MySQLdump.sql" haben.
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(backupsDirectory, "*-ProjectTracker-MySQLdump.sql")) {
+            for (Path backupFile : directoryStream) {
+                LocalDateTime lastModified = Files
+                        .getLastModifiedTime(backupFile)
+                        .toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime();
+
                 if (lastModified.toLocalDate().isBefore(thresholdDate)) {
-                    Files.delete(backupFilePath);
-                    System.out.println("Backup deleted: " + backupFilePath);
+                    Files.delete(backupFile);
+                    System.out.println("Backup deleted: " + backupFile);
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error while deleting backup: " + e.getMessage());
+            System.err.println("Error while deleting backups: " + e.getMessage());
         }
     }
 
@@ -118,10 +129,11 @@ public class DatabaseBackupManager {
         String backupFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(date) + "-ProjectTracker-MySQLdump.sql";
         // Erstelle das Verzeichnis, falls es nicht existiert
         try {
-            Files.createDirectories(Paths.get(System.getProperty("user.home"), "MySQL-Backups"));
+            Files.createDirectories(Paths.get(MY_SQL_BACKUPS));
         } catch (IOException e) {
-            System.err.println("Error while creating backup directory: " + e.getMessage());
+            System.err.println("Fehler beim Erstellen des Backup-Verzeichnisses: " + e.getMessage());
         }
-        return Paths.get(System.getProperty("user.home"), "MySQL-Backups", backupFileName);
+        return Paths.get(MY_SQL_BACKUPS, backupFileName);
     }
+
 }
