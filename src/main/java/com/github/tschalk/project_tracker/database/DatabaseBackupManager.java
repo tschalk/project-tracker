@@ -116,7 +116,12 @@ public class DatabaseBackupManager {
 
     private Path generateBackupFilePathForDate(LocalDate date) {
         String backupFileName = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(date) + "-ProjectTracker-MySQLdump.sql";
-        return Paths.get(System.getProperty("user.home"), "Desktop", backupFileName);
+        // Erstelle das Verzeichnis, falls es nicht existiert
+        try {
+            Files.createDirectories(Paths.get(System.getProperty("user.home"), "MySQL-Backups"));
+        } catch (IOException e) {
+            System.err.println("Error while creating backup directory: " + e.getMessage());
+        }
+        return Paths.get(System.getProperty("user.home"), "MySQL-Backups", backupFileName);
     }
-
 }
