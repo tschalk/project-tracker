@@ -23,14 +23,18 @@ public class DatabaseBackupManager {
     private final DatabaseConfig config;
     private final Path backupFilePath;
 
-    public DatabaseBackupManager(/*DatabaseConfig config*/) {
-        this.config = new DatabaseConfig();
+    public DatabaseBackupManager(DatabaseConfig config) {
+        this.config = config;
         this.backupFilePath = generateBackupFilePathForDate(LocalDate.now());
     }
 
-    public void performDatabaseUpdate() {
-        backupDatabase();
-        deleteOlderBackups(2);
+    public void performDatabaseBackup() {
+        // Hier wird sichergestellt, dass das Backup nur einmal pro Tag ausgeführt wird, um unnötige Backups zu vermeiden.
+        // Und Konflikte zu vermeiden, wenn mehrere Instanzen der Anwendung gleichzeitig laufen.
+        if (!Files.exists(backupFilePath)) {
+            backupDatabase();
+            deleteOlderBackups(2);
+        }
     }
 
     private void backupDatabase() {

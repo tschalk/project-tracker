@@ -17,18 +17,21 @@ public class DatabaseConnectionManager {
     private String databaseName;
     private final DatabaseConfig config;
     private Connection connection;
+    private final DatabaseBackupManager databaseBackupManager;
 
-    public DatabaseConnectionManager(DatabaseConfig config) {
+    public DatabaseConnectionManager(DatabaseConfig config, DatabaseBackupManager databaseBackupManager) {
         this.config = config;
         this.host = config.getProperty("database.host");
         this.port = config.getProperty("database.port");
         this.username = config.getProperty("database.user");
         this.password = config.getProperty("database.password");
         this.databaseName = config.getProperty("database.databaseName");
+        this.databaseBackupManager = databaseBackupManager;
     }
 
     public boolean isConnected() {
         try {
+            databaseBackupManager.performDatabaseBackup();
             return connection != null && !connection.isClosed();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,6 +73,8 @@ public class DatabaseConnectionManager {
             connection = DriverManager.getConnection(url, username, password);
             DatabaseInitializer.initialize(host, port, username, password);
             connection.setCatalog(databaseName);
+
+            databaseBackupManager.performDatabaseBackup();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

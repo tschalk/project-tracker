@@ -8,6 +8,7 @@ import com.github.tschalk.project_tracker.dao.CostCenterDAO;
 import com.github.tschalk.project_tracker.dao.ProjectDAO;
 import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.UserDAO;
+import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 import com.github.tschalk.project_tracker.model.Responsible;
@@ -45,11 +46,11 @@ public class Main extends Application {
 
         // Hier wird die Verbindung zur Datenbank hergestellt.
         DatabaseConfig config = new DatabaseConfig();
-        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config);
+        DatabaseConnectionManager databaseConnectionManager = new DatabaseConnectionManager(config, new DatabaseBackupManager(config));
         databaseConnectionManager.connect();
         Sanitizer sanitizer = Sanitizer.getDefault();
         UserDAO userDAO = new UserDAO(databaseConnectionManager, sanitizer);
-        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager);
+        DatabaseLoginController databaseLoginController = new DatabaseLoginController(databaseConnectionManager/*, new DatabaseBackupManager(config)*/);
         DatabaseLoginView databaseLoginView = new DatabaseLoginView(databaseLoginController, stage);
 
         UserLoginController userLoginController = new UserLoginController(userDAO);
