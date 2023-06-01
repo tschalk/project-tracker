@@ -254,13 +254,17 @@ public class MainWindowView extends BorderPane {
                 alert.setTitle("Confirmation Dialog");
                 alert.setHeaderText("Restore database");
                 alert.setContentText("Are you sure you want to restore the database?");
+
+                // Hier wird noch ein Backup erstellt, bevor die Datenbank wiederhergestellt wird.
+                databaseBackupManager.performDatabaseBackup();
+
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() != ButtonType.OK) {
                     return;
                 }
-
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 if (selectedFile != null) {
+
                     databaseBackupManager.restoreDatabase(selectedFile.toPath());
                 }
             });
