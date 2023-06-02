@@ -1,4 +1,4 @@
-package com.github.tschalk.project_tracker.utils;
+package com.github.tschalk.project_tracker.util;
 
 @FunctionalInterface
 public interface Sanitizer {

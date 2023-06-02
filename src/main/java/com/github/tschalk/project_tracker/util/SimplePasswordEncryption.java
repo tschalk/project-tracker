@@ -1,4 +1,4 @@
-package com.github.tschalk.project_tracker.utils;
+package com.github.tschalk.project_tracker.util;
 
 /**
  * Diese Klasse inst ein Placeholder für eine Verschlüsselungsmethode mit Hash-Algorithmus (wie bcrypt oder Argon2).

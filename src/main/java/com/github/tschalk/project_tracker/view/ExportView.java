@@ -2,7 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.ExportController;
 import com.github.tschalk.project_tracker.model.Project;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
+import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;

@@ -1,7 +1,7 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.DatabaseLoginController;
-import com.github.tschalk.project_tracker.utils.SceneManager;
+import com.github.tschalk.project_tracker.util.SceneManager;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.USER_LOGIN_SCENE;
+import static com.github.tschalk.project_tracker.util.SceneManager.USER_LOGIN_SCENE;
 
 public class DatabaseLoginView extends VBox {
 

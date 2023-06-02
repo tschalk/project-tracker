@@ -5,7 +5,7 @@ import com.github.tschalk.project_tracker.model.CostCenter;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.Responsible;
 import com.github.tschalk.project_tracker.model.TimesheetEntry;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
+import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -201,11 +201,6 @@ public class EditProjectView extends BorderPane {
         });
 
     }
-
-
-
-
-
 
     private void setTimesheetTableView() {
         timesheetEntryTableView = new TableView<>();

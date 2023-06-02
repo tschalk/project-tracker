@@ -1,9 +1,9 @@
 package com.github.tschalk.project_tracker.dao;
 
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.utils.SimplePasswordEncryption;
+import com.github.tschalk.project_tracker.util.SimplePasswordEncryption;
 import com.github.tschalk.project_tracker.model.User;
-import com.github.tschalk.project_tracker.utils.Sanitizer;
+import com.github.tschalk.project_tracker.util.Sanitizer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

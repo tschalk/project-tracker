@@ -1,4 +1,4 @@
-package com.github.tschalk.project_tracker.utils;
+package com.github.tschalk.project_tracker.util;
 
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.view.EditProjectView;

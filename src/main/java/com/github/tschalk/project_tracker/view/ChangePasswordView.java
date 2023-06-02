@@ -1,15 +1,15 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.ChangePasswordController;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
-import com.github.tschalk.project_tracker.utils.SceneManager;
+import com.github.tschalk.project_tracker.util.CustomTitleBar;
+import com.github.tschalk.project_tracker.util.SceneManager;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.MAIN_WINDOW_SCENE;
+import static com.github.tschalk.project_tracker.util.SceneManager.MAIN_WINDOW_SCENE;
 
 public class ChangePasswordView extends BorderPane {
     private final PasswordField newPasswordField;

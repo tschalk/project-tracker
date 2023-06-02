@@ -6,8 +6,8 @@ import com.github.tschalk.project_tracker.dao.UserDAO;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.utils.Sanitizer;
-import com.github.tschalk.project_tracker.utils.SceneManager;
+import com.github.tschalk.project_tracker.util.Sanitizer;
+import com.github.tschalk.project_tracker.util.SceneManager;
 import com.github.tschalk.project_tracker.view.DatabaseLoginView;
 import com.github.tschalk.project_tracker.view.UserLoginView;
 import javafx.application.Application;
@@ -16,7 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.*;
+import static com.github.tschalk.project_tracker.util.SceneManager.*;
 
 public class Main extends Application {
     public static final String STYLESHEET_PATH = "/css/styles.css";
