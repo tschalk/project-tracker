@@ -4,9 +4,8 @@ import com.github.tschalk.project_tracker.controller.MainWindowController;
 import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.model.Project;
-import com.github.tschalk.project_tracker.model.User;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
-import com.github.tschalk.project_tracker.utils.SVGManager;
+import com.github.tschalk.project_tracker.util.CustomTitleBar;
+import com.github.tschalk.project_tracker.util.SVGManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -27,19 +26,20 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.Optional;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.*;
+import static com.github.tschalk.project_tracker.util.AlertUtils.showAlert;
+import static com.github.tschalk.project_tracker.util.SceneManager.*;
 
 public class MainWindowView extends BorderPane {
     private final MainWindowController mainWindowController;
-    private final TableView<Project> projectTableView; // Sollte es eine lokale Variable sein?
+    private final TableView<Project> projectTableView;
     private final SimpleLongProperty secondsElapsed;
     private final Stage stage;
     private final SVGManager svgManager = SVGManager.getInstance();
+    private final DatabaseBackupManager databaseBackupManager;
     private Project selectedProject;
     private Project activeProject;
     private Label titleLabel;
     private Timeline updateTimeLabelTimeline;
-    private final DatabaseBackupManager databaseBackupManager;
 
     public MainWindowView(MainWindowController mainWindowController, Stage stage, DatabaseBackupManager databaseBackupManager) {
         this.mainWindowController = mainWindowController;
@@ -51,14 +51,11 @@ public class MainWindowView extends BorderPane {
     }
 
     private void initializeUI() {
-        // This
         this.setPadding(new Insets(0, 0, 15, 0));
 
-        // Top
         CustomTitleBar titleBar = new CustomTitleBar(this.stage, "Project Tracker");
         this.setTop(titleBar);
 
-        // Center
         this.titleLabel = new Label(mainWindowController.getWelcomeMessage());
 
         initializeTableView();
@@ -92,17 +89,11 @@ public class MainWindowView extends BorderPane {
         TableColumn<Project, String> responsibleColumn = new TableColumn<>("Responsible");
         responsibleColumn.setCellValueFactory(new PropertyValueFactory<>("responsible"));
 
-        // Hier wird die Dauer berechnet
         TableColumn<Project, Number> durationColumn = new TableColumn<>("Duration [h]");
-        durationColumn.setCellValueFactory(p -> { // callback p -> { ... }
+        durationColumn.setCellValueFactory(p -> {
             int durationInSeconds = mainWindowController.getProjectDuration(p.getValue());
 
-            // Hier die Zeit in Stunden umrechnen und runden
-            DoubleBinding durationInHours = Bindings.createDoubleBinding(
-                    // * 100 um zwei Kommastellen zu verschieben, dann runden und danach / 100.0 um wieder zu teilen
-                    () -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0,
-                    new SimpleIntegerProperty(durationInSeconds)
-            );
+            DoubleBinding durationInHours = Bindings.createDoubleBinding(() -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0, new SimpleIntegerProperty(durationInSeconds));
 
             return durationInHours;
         });
@@ -115,131 +106,96 @@ public class MainWindowView extends BorderPane {
         });
     }
 
+    private Button createButton(String svgIcon, String tooltip, Runnable action) {
+        Button button = new Button();
+        button.setTooltip(new Tooltip(tooltip));
+        button.getStyleClass().add("svg-button");
+        button.setGraphic(svgManager.getSVGPath(svgIcon));
+        button.setOnAction(e -> action.run());
+
+        return button;
+    }
+
     private Button getAddButton() {
-        Button addButton = new Button();
-        addButton.setTooltip(new Tooltip("Add new project"));
-        addButton.getStyleClass().add("svg-button");
-        addButton.setGraphic(svgManager.getSVGPath("addIcon"));
-        addButton.setOnAction(e -> {
-            getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE);
-        });
-        return addButton;
+        return createButton("addIcon", "Add new project", () -> getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE));
     }
 
     private Button getEditButton() {
-        Button editButton = new Button();
-        editButton.setTooltip(new Tooltip("Edit selected project"));
-        editButton.getStyleClass().add("svg-button");
-        editButton.setGraphic(svgManager.getSVGPath("editIcon"));
-        editButton.setOnAction(e -> {
+        return createButton("editIcon", "Edit selected project", () -> {
             if (selectedProject != null) {
                 System.out.println("Edit project: " + selectedProject.getDescription());
                 getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setHeaderText("No project selected!");
-                alert.setContentText("Please select a project to edit!");
-
-                alert.showAndWait();
+                showAlert(Alert.AlertType.INFORMATION, "Information", "No project selected!", "Please select a project to edit!");
             }
         });
-        return editButton;
     }
 
     private Button getStartStopButton() {
-        Button startStopButton = new Button();
-        startStopButton.setTooltip(new Tooltip("Start/Stop stopwatch to track time for selected project"));
-        startStopButton.getStyleClass().add("svg-button");
-        startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
-        startStopButton.setOnAction(e -> {
+        final Button[] startStopButton = new Button[1];
 
+        startStopButton[0] = createButton("startIcon", "Start/Stop stopwatch to track time for selected project", () -> {
             if (selectedProject == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("No project selected!");
-                alert.setContentText("Please select a project to start the stopwatch!");
-
-                alert.showAndWait();
+                showErrorAlert("No project selected!", "Please select a project to start the stopwatch!");
                 return;
             }
 
             if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
-                activeProject = selectedProject;
-                mainWindowController.startStopwatch(selectedProject);
-                startStopButton.setGraphic(svgManager.getSVGPath("stopIcon"));
-                startStopButton.setStyle("-fx-background-color: rgba(199,78,79,0.9)");
-
-                startUpdateTitleLabelTimeline();
+                startStopwatch(startStopButton[0]);
             } else {
-                mainWindowController.stopStopwatch();
-                startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
-                startStopButton.setStyle("");
-                selectedProject = null;
-                activeProject = null;
-
-                // Stop updating the titleLabel
-                stopUpdateTitleLabelTimeline();
-                titleLabel.setText(mainWindowController.getWelcomeMessage());
-
-                updateProjectTableView();
+                stopStopwatch(startStopButton[0]);
             }
         });
-        return startStopButton;
+
+        return startStopButton[0];
+    }
+
+    private void startStopwatch(Button startStopButton) {
+        activeProject = selectedProject;
+        mainWindowController.startStopwatch(selectedProject);
+        startStopButton.setGraphic(svgManager.getSVGPath("stopIcon"));
+        startStopButton.setStyle("-fx-background-color: rgba(199,78,79,0.9)");
+        startUpdateTitleLabelTimeline();
+    }
+
+    private void stopStopwatch(Button startStopButton) {
+        mainWindowController.stopStopwatch();
+        startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
+        startStopButton.setStyle("");
+        selectedProject = null;
+        activeProject = null;
+        stopUpdateTitleLabelTimeline();
+        titleLabel.setText(mainWindowController.getWelcomeMessage());
+        updateProjectTableView();
+    }
+
+    private void showErrorAlert(String header, String content) {
+        showAlert(Alert.AlertType.ERROR, "Error", header, content);
     }
 
     private Button getExportButton() {
-        Button exportButton = new Button();
-        exportButton.setTooltip(new Tooltip("Export all projects to CSV with semicolon as delimiter"));
-        exportButton.getStyleClass().add("svg-button");
-        exportButton.setGraphic(svgManager.getSVGPath("exportIcon"));
-        exportButton.setOnAction(e -> {
-            getInstance().showNewWindowWithCustomScene(EXPORT_SCENE);
-        });
-        return exportButton;
+        return createButton("exportIcon", "Export all projects to CSV with semicolon as delimiter", () -> getInstance().showNewWindowWithCustomScene(EXPORT_SCENE));
     }
 
     private Button getUserSettingsButton() {
-        Button userSettingsButton = new Button();
-        userSettingsButton.setTooltip(new Tooltip("Change password"));
-        userSettingsButton.getStyleClass().add("svg-button");
-        userSettingsButton.setGraphic(svgManager.getSVGPath("settingsIcon"));
-        userSettingsButton.setOnAction(e -> {
-            getInstance().showNewWindowWithCustomScene(CHANGE_PASSWORD_LOGGED_USER_SCENE);
-        });
-        return userSettingsButton;
+        return createButton("settingsIcon", "Change password", () -> getInstance().showNewWindowWithCustomScene(CHANGE_PASSWORD_LOGGED_USER_SCENE));
     }
 
     private void handleAdminAction(HBox buttonContainer) {
         if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
+            Button userManagementButton = createButton("userManagementIcon", "Manage users", () -> getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE));
 
-            Button userManagementButton = new Button();
-            userManagementButton.setTooltip(new Tooltip("Manage users"));
-            userManagementButton.getStyleClass().add("svg-button");
-            userManagementButton.setGraphic(svgManager.getSVGPath("userManagementIcon"));
-            userManagementButton.setOnAction(e -> {
-                getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE);
-            });
-
-            // Hier wird ein button erstellt damit die Datenbank wiederhergestellt werden kann.
-            Button restoreDatabaseButton = new Button();
-            restoreDatabaseButton.setTooltip(new Tooltip("Restore database"));
-            restoreDatabaseButton.getStyleClass().add("svg-button");
-            restoreDatabaseButton.setGraphic(svgManager.getSVGPath("databaseRestoreIcon")); // später databaseIcon
-            restoreDatabaseButton.setOnAction(e -> {
+            Button restoreDatabaseButton = createButton("databaseRestoreIcon", "Restore database", () -> {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Open Resource File");
-                File initialDirectory = new File(DatabaseBackupManager.MY_SQL_BACKUPS_PATH);
-                fileChooser.setInitialDirectory(initialDirectory);
+                fileChooser.setInitialDirectory(new File(DatabaseBackupManager.MY_SQL_BACKUPS_PATH));
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
 
-                // Hier wird ein Alert erstellt, der den Benutzer fragt, ob er die Datenbank wiederherstellen möchte.
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Dialog");
                 alert.setHeaderText("Restore database");
                 alert.setContentText("Are you sure you want to restore the database?");
 
-                // Hier wird noch ein Backup erstellt, bevor die Datenbank wiederhergestellt wird.
                 databaseBackupManager.performDatabaseBackup();
 
                 Optional<ButtonType> result = alert.showAndWait();
@@ -252,7 +208,8 @@ public class MainWindowView extends BorderPane {
                     updateProjectTableView();
                 }
             });
-            buttonContainer.getChildren().addAll( restoreDatabaseButton, userManagementButton);
+
+            buttonContainer.getChildren().addAll(userManagementButton, restoreDatabaseButton);
         }
     }
 
@@ -271,7 +228,6 @@ public class MainWindowView extends BorderPane {
     }
 
     private void stopUpdateTitleLabelTimeline() {
-        // Hier wird die Zeit gestoppt
         if (updateTimeLabelTimeline != null) {
             updateTimeLabelTimeline.stop();
             updateTimeLabelTimeline = null;
