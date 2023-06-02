@@ -93,17 +93,21 @@ public class MainWindowView extends BorderPane {
         durationColumn.setCellValueFactory(p -> {
             int durationInSeconds = mainWindowController.getProjectDuration(p.getValue());
 
-            DoubleBinding durationInHours = Bindings.createDoubleBinding(() -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0, new SimpleIntegerProperty(durationInSeconds));
+            DoubleBinding durationInHours = Bindings.createDoubleBinding(
+                    () -> Math.round((double) durationInSeconds / 3600 * 100) / 100.0,
+                    new SimpleIntegerProperty(durationInSeconds)
+            );
 
             return durationInHours;
         });
 
         projectTableView.getColumns().addAll(descriptionColumn, costCenterColumn, responsibleColumn, durationColumn);
-        projectTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedProject = newSelection;
-            }
-        });
+        projectTableView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> {
+                    if (newSelection != null) {
+                        selectedProject = newSelection;
+                    }
+                });
     }
 
     private Button createButton(String svgIcon, String tooltip, Runnable action) {
@@ -117,7 +121,8 @@ public class MainWindowView extends BorderPane {
     }
 
     private Button getAddButton() {
-        return createButton("addIcon", "Add new project", () -> getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE));
+        return createButton("addIcon", "Add new project",
+                () -> getInstance().showNewWindowWithCustomScene(ADD_PROJECT_SCENE));
     }
 
     private Button getEditButton() {
@@ -126,7 +131,8 @@ public class MainWindowView extends BorderPane {
                 System.out.println("Edit project: " + selectedProject.getDescription());
                 getInstance().showNewWindowWithCustomScene(EDIT_PROJECT_SCENE, selectedProject);
             } else {
-                showAlert(Alert.AlertType.INFORMATION, "Information", "No project selected!", "Please select a project to edit!");
+                showAlert(Alert.AlertType.INFORMATION, "Information", "No project selected!",
+                        "Please select a project to edit!");
             }
         });
     }
@@ -134,18 +140,20 @@ public class MainWindowView extends BorderPane {
     private Button getStartStopButton() {
         final Button[] startStopButton = new Button[1];
 
-        startStopButton[0] = createButton("startIcon", "Start/Stop stopwatch to track time for selected project", () -> {
-            if (selectedProject == null) {
-                showErrorAlert("No project selected!", "Please select a project to start the stopwatch!");
-                return;
-            }
+        startStopButton[0] = createButton("startIcon", "Start/Stop stopwatch to track time for selected project",
+                () -> {
+                    if (selectedProject == null) {
+                        showAlert(Alert.AlertType.ERROR, "Error", "No project selected!",
+                                "Please select a project to start the stopwatch!");
+                        return;
+                    }
 
-            if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
-                startStopwatch(startStopButton[0]);
-            } else {
-                stopStopwatch(startStopButton[0]);
-            }
-        });
+                    if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
+                        startStopwatch(startStopButton[0]);
+                    } else {
+                        stopStopwatch(startStopButton[0]);
+                    }
+                });
 
         return startStopButton[0];
     }
@@ -153,61 +161,66 @@ public class MainWindowView extends BorderPane {
     private void startStopwatch(Button startStopButton) {
         activeProject = selectedProject;
         mainWindowController.startStopwatch(selectedProject);
+
         startStopButton.setGraphic(svgManager.getSVGPath("stopIcon"));
         startStopButton.setStyle("-fx-background-color: rgba(199,78,79,0.9)");
+
         startUpdateTitleLabelTimeline();
     }
 
     private void stopStopwatch(Button startStopButton) {
         mainWindowController.stopStopwatch();
+
         startStopButton.setGraphic(svgManager.getSVGPath("startIcon"));
         startStopButton.setStyle("");
+
         selectedProject = null;
         activeProject = null;
         stopUpdateTitleLabelTimeline();
         titleLabel.setText(mainWindowController.getWelcomeMessage());
+
         updateProjectTableView();
     }
 
-    private void showErrorAlert(String header, String content) {
-        showAlert(Alert.AlertType.ERROR, "Error", header, content);
-    }
-
     private Button getExportButton() {
-        return createButton("exportIcon", "Export all projects to CSV with semicolon as delimiter", () -> getInstance().showNewWindowWithCustomScene(EXPORT_SCENE));
+        return createButton("exportIcon", "Export all projects to CSV with semicolon as delimiter",
+                () -> getInstance().showNewWindowWithCustomScene(EXPORT_SCENE));
     }
 
     private Button getUserSettingsButton() {
-        return createButton("settingsIcon", "Change password", () -> getInstance().showNewWindowWithCustomScene(CHANGE_PASSWORD_LOGGED_USER_SCENE));
+        return createButton("settingsIcon", "Change password",
+                () -> getInstance().showNewWindowWithCustomScene(CHANGE_PASSWORD_LOGGED_USER_SCENE));
     }
 
     private void handleAdminAction(HBox buttonContainer) {
         if (getMainWindowController().getCurrentUser().getRole().equals("admin")) {
-            Button userManagementButton = createButton("userManagementIcon", "Manage users", () -> getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE));
+            Button userManagementButton = createButton("userManagementIcon", "Manage users",
+                    () -> getInstance().showNewWindowWithCustomScene(USER_MANAGEMENT_SCENE));
 
-            Button restoreDatabaseButton = createButton("databaseRestoreIcon", "Restore database", () -> {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Open Resource File");
-                fileChooser.setInitialDirectory(new File(DatabaseBackupManager.MY_SQL_BACKUPS_PATH));
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
+            Button restoreDatabaseButton = createButton("databaseRestoreIcon", "Restore database",
+                    () -> {
+                        FileChooser fileChooser = new FileChooser();
+                        fileChooser.setTitle("Open Resource File");
+                        fileChooser.setInitialDirectory(new File(DatabaseBackupManager.MY_SQL_BACKUPS_PATH));
+                        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation Dialog");
-                alert.setHeaderText("Restore database");
-                alert.setContentText("Are you sure you want to restore the database?");
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirmation Dialog");
+                        alert.setHeaderText("Restore database");
+                        alert.setContentText("Are you sure you want to restore the database?");
 
-                databaseBackupManager.performDatabaseBackup();
+                        databaseBackupManager.performDatabaseBackup();
 
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() != ButtonType.OK) {
-                    return;
-                }
-                File selectedFile = fileChooser.showOpenDialog(stage);
-                if (selectedFile != null) {
-                    databaseBackupManager.restoreDatabase(selectedFile.toPath());
-                    updateProjectTableView();
-                }
-            });
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() != ButtonType.OK) {
+                            return;
+                        }
+                        File selectedFile = fileChooser.showOpenDialog(stage);
+                        if (selectedFile != null) {
+                            databaseBackupManager.restoreDatabase(selectedFile.toPath());
+                            updateProjectTableView();
+                        }
+                    });
 
             buttonContainer.getChildren().addAll(userManagementButton, restoreDatabaseButton);
         }
@@ -219,11 +232,18 @@ public class MainWindowView extends BorderPane {
     }
 
     private void setupTimeline() {
-        updateTimeLabelTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            secondsElapsed.set(secondsElapsed.get() + 1);
-            String formattedTime = String.format("%02d:%02d:%02d", secondsElapsed.get() / 3600, (secondsElapsed.get() % 3600) / 60, secondsElapsed.get() % 60);
-            titleLabel.setText("Selected Project: " + activeProject.getDescription() + " | Time: " + formattedTime);
-        }));
+        updateTimeLabelTimeline = new Timeline(new KeyFrame(Duration.seconds(1),
+                event -> {
+                    secondsElapsed.set(secondsElapsed.get() + 1);
+
+                    String formattedTime = String.format(
+                            "%02d:%02d:%02d",
+                            secondsElapsed.get() / 3600,
+                            (secondsElapsed.get() % 3600) / 60,
+                            secondsElapsed.get() % 60
+                    );
+                    titleLabel.setText("Selected Project: " + activeProject.getDescription() + " | Time: " + formattedTime);
+                }));
         updateTimeLabelTimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
