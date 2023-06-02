@@ -7,8 +7,9 @@ import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.utils.CustomTitleBar;
-import com.github.tschalk.project_tracker.utils.SceneManager;
+import com.github.tschalk.project_tracker.util.AlertUtils;
+import com.github.tschalk.project_tracker.util.CustomTitleBar;
+import com.github.tschalk.project_tracker.util.SceneManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,7 +20,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.tschalk.project_tracker.utils.SceneManager.*;
+import static com.github.tschalk.project_tracker.util.AlertUtils.*;
+import static com.github.tschalk.project_tracker.util.SceneManager.*;
 
 public class UserLoginView extends BorderPane {
     private final TextField usernameField;
@@ -94,7 +96,7 @@ public class UserLoginView extends BorderPane {
         password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Username or password cannot be empty.");
+            showAlert(Alert.AlertType.ERROR, "Error", null, "Username or password cannot be empty.");
             return;
         }
 
@@ -104,7 +106,7 @@ public class UserLoginView extends BorderPane {
             stage.close();
             switchToMainWindowView(username, password);
         } else {
-            showAlert("Login failed!");
+            showAlert(Alert.AlertType.ERROR, "Error", null, "Login failed!");
         }
     }
 
@@ -177,15 +179,6 @@ public class UserLoginView extends BorderPane {
                 sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
             }
         }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        alert.showAndWait();
     }
 
     public static boolean isNumeric(String strNum) {

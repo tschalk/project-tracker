@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.UserManagementController;
 import com.github.tschalk.project_tracker.model.User;
+import com.github.tschalk.project_tracker.util.AlertUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -31,7 +32,6 @@ public class UserManagementView extends VBox {
     }
 
     private void initializeUI() {
-
         Label titleLabel = new Label("User Management");
 
         GridPane gridPane = getGridPane();
@@ -91,7 +91,7 @@ public class UserManagementView extends VBox {
         String role = roleComboBox.getValue();
 
         if (username.isEmpty() || role == null) {
-            showAlert("Username or Role cannot be empty.");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username or Role cannot be empty.");
             return;
         }
 
@@ -123,7 +123,7 @@ public class UserManagementView extends VBox {
 
             alert.showAndWait();
         } else {
-            showAlert("Adding user failed! User already exists or you used special characters.");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Adding user failed! User already exists or you used special characters.");
         }
     }
 
@@ -132,17 +132,16 @@ public class UserManagementView extends VBox {
         String role = roleComboBox.getValue();
 
         if (username.isEmpty() || role == null) {
-            showAlert("Username or Role cannot be empty.");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username or Role cannot be empty.");
             return;
         }
 
-        // Hier wird der aktuelle User geholt um zu prüfen, ob sich etwas geändert hat
         User currentUser = userManagementController.getUser(username);
         String currentRole = currentUser.getRole();
         boolean currentIsActive = currentUser.isActive();
 
         if (currentUser.getName().equals("admin")) {
-            showAlert("This admin cannot be updated!");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "This admin cannot be updated!");
             return;
         }
 
@@ -152,27 +151,26 @@ public class UserManagementView extends VBox {
             roleComboBox.setValue(null);
             User updatedUser = userManagementController.getUser(username);
 
-            // Check, ob die Rolle geändert wurde
             if (!currentRole.equals(updatedUser.getRole())) {
-                showAlert("User role updated to: " + updatedUser.getRole());
+                AlertUtils.showAlert(Alert.AlertType.INFORMATION, "Information", null, "User role updated to: " + updatedUser.getRole());
             }
-            // Check, ob der Status geändert wurde
+
             if (currentIsActive != updatedUser.isActive()) {
-                showAlert("User active status updated to: " + (updatedUser.isActive() ? "Active" : "Inactive"));
+                AlertUtils.showAlert(Alert.AlertType.INFORMATION, "Information", null, "User active status updated to: " + (updatedUser.isActive() ? "Active" : "Inactive"));
             }
+
             updateUserList();
         } else {
-            showAlert("Updating user failed! User already exists.");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Updating user failed! User already exists.");
         }
     }
-
 
     private void deleteUser() {
         String username = usernameField.getText();
 
         if (username.isEmpty()) {
             updateUserList();
-            showAlert("Username cannot be empty.");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username cannot be empty.");
             return;
         }
 
@@ -180,24 +178,16 @@ public class UserManagementView extends VBox {
         if (deleteUserSuccessful) {
             updateUserList();
             System.out.println("User deleted successfully!");
-            showAlert("User deleted successfully!");
+            AlertUtils.showAlert(Alert.AlertType.INFORMATION, "Information", null, "User deleted successfully!");
             usernameField.clear();
             roleComboBox.setValue(null);
         } else {
-            showAlert("Deleting user failed!");
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Deleting user failed!");
         }
     }
 
     private void updateUserList() {
         ObservableList<User> observableList = FXCollections.observableArrayList(userManagementController.getAllUsers());
         userList.setItems(observableList);
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
