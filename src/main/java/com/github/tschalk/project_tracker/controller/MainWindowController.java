@@ -10,6 +10,10 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
 
+/**
+ * Diese Klasse ist der Controller für das Hauptfenster der Anwendung.
+ */
+
 public class MainWindowController {
     private final ProjectDAO projectDAO;
     private final UserLoginController userLoginController;
@@ -25,7 +29,6 @@ public class MainWindowController {
     }
 
     public void startStopwatch(Project selectedProject) {
-        System.out.println("Start Stopwatch");
         this.selectedProject = selectedProject;
         this.stopwatchState = StopwatchState.RUNNING;
     }
@@ -51,7 +54,7 @@ public class MainWindowController {
     }
 
     public ObservableList<Project> getProjectList() {
-        User currentUser = userLoginController.getCurrentUser();
+        User currentUser = getCurrentUser();
 
         return currentUser != null ?
                 FXCollections.observableArrayList(projectDAO.readAllProjectsByUserID(currentUser.getId())) :
@@ -69,5 +72,14 @@ public class MainWindowController {
     public String getWelcomeMessage() {
         User currentUser = getCurrentUser();
         return currentUser != null ? "Welcome " + currentUser.getName() : "Welcome";
+    }
+
+    /**
+     * Diese innere Klasse dient dazu, den Zustand des Stoppuhr-Buttons zu speichern.
+     */
+
+    public enum StopwatchState {
+        RUNNING,
+        STOPPED
     }
 }

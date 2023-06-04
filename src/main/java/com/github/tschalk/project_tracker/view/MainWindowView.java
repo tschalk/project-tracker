@@ -1,7 +1,6 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.MainWindowController;
-import com.github.tschalk.project_tracker.controller.StopwatchState;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.util.CustomTitleBar;
@@ -148,7 +147,7 @@ public class MainWindowView extends BorderPane {
                         return;
                     }
 
-                    if (mainWindowController.getStopwatchState() == StopwatchState.STOPPED) {
+                    if (mainWindowController.getStopwatchState() == MainWindowController.StopwatchState.STOPPED) {
                         startStopwatch(startStopButton[0]);
                     } else {
                         stopStopwatch(startStopButton[0]);

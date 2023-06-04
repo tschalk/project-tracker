@@ -31,12 +31,10 @@ public class AddProjectController {
      * Cost Center:
      */
 
-    public CostCenter addCostCenter(String name) {
+    public void addCostCenter(String name) {
         CostCenter newCostCenter = new CostCenter();
         newCostCenter.setName(name);
         costCenterDAO.add(newCostCenter);
-
-        return newCostCenter;
     }
 
     public ObservableList<CostCenter> getCostCenters() {
@@ -50,16 +48,13 @@ public class AddProjectController {
 
     /**
      * Responsible:
-     *
-     * @return
      */
 
-    public Responsible addResponsible(String name) {
+    public void addResponsible(String name) {
         Responsible newResponsible = new Responsible();
         newResponsible.setName(name);
         responsibleDAO.add(newResponsible);
 
-        return newResponsible;
     }
 
     public ObservableList<Responsible> getResponsible() {

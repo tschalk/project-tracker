@@ -16,12 +16,7 @@ public class UserLoginController {
         userDAO.setConnection(userDAO.getDatabaseManager().getConnection());
         currentUser = userDAO.getUser(username);
 
-        if (currentUser != null && currentUser.isActive() && currentUser.getPassword().equals(password)) {
-            return true;
-        } else {
-            System.err.println("Login failed!");
-            return false;
-        }
+        return currentUser != null && currentUser.isActive() && currentUser.getPassword().equals(password);
     }
 
     public UserDAO getUserDAO() {
@@ -29,13 +24,12 @@ public class UserLoginController {
     }
 
     public User getCurrentUser() {
-        currentUser = userDAO.getUser(currentUser.getName());
-        System.out.println("Current User: " + currentUser);
-        return currentUser;
+        return currentUser != null ?
+                userDAO.getUser(currentUser.getName()) :
+                null;
     }
 
     public DatabaseConnectionManager getDatabaseConnectionManager() {
         return userDAO.getDatabaseManager();
     }
-
 }

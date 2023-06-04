@@ -16,11 +16,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Controller für den Export von Projekten in eine CSV-Datei.
+ */
+
 public class ExportController {
-    ProjectDAO projectDAO;
-    UserLoginController userLoginController;
-    TimesheetEntryDAO timesheetEntryDAO;
-    String userName;
+    private final ProjectDAO projectDAO;
+    private final UserLoginController userLoginController;
+    private final TimesheetEntryDAO timesheetEntryDAO;
+    private final String userName;
 
     public ExportController(ProjectDAO projectDAO, TimesheetEntryDAO timesheetEntryDAO, UserLoginController userLoginController) {
         this.projectDAO = projectDAO;
@@ -28,6 +32,15 @@ public class ExportController {
         this.timesheetEntryDAO = timesheetEntryDAO;
         this.userName = userLoginController.getCurrentUser().getName();
     }
+
+    /**
+     * Eerzeugt eine CSV-Datei mit den übergebenen Daten. Die Datei wird im übergebenen Verzeichnis gespeichert.
+     * @param projects Liste der Projekte, die exportiert werden sollen
+     * @param startDate Startdatum des Zeitraums, der exportiert werden soll
+     * @param endDate Enddatum des Zeitraums, der exportiert werden soll
+     * @param directory Verzeichnis, in dem die Datei gespeichert werden soll
+     * @return true, wenn die Datei erfolgreich erstellt wurde, false sonst
+     */
 
     public boolean generateCSV(List<Project> projects, LocalDate startDate, LocalDate endDate, Path directory) {
         if (projects.isEmpty() || startDate == null || endDate == null) {
@@ -73,6 +86,11 @@ public class ExportController {
         }
         return true;
     }
+
+    /**
+     * Liefert eine Liste aller Projekte des aktuell angemeldeten Benutzers.
+     * @return Liste aller Projekte des aktuell angemeldeten Benutzers
+     */
 
     public List<Project> getProjects() {
         return projectDAO.readAllProjectsByUserID(userLoginController.getCurrentUser().getId());

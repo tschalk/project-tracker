@@ -4,6 +4,11 @@ import javafx.scene.shape.SVGPath;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Diese Klasse stellt eine Verbindung zwischen SVG-Icons und den dazugehörigen Strings her.
+ * Die Icons werden als SVGPath-Objekte gespeichert und können über die Methode getIcon(String iconName) abgerufen werden.
+ */
+
 public class SVGManager {
 
     private static final String ADD_ICON = "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";

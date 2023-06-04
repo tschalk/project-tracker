@@ -1,6 +1,5 @@
 package com.github.tschalk.project_tracker.controller;
 
-import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConfig;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 
