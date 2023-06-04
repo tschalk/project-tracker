@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import static com.github.tschalk.project_tracker.util.AlertUtils.showAlert;
 import static com.github.tschalk.project_tracker.util.SceneManager.USER_LOGIN_SCENE;
 
 public class DatabaseLoginView extends VBox {
@@ -130,14 +131,6 @@ public class DatabaseLoginView extends VBox {
     private void switchToLoginView() {
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.showCustomScene(USER_LOGIN_SCENE, stage);
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String header, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
 

@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.ExportController;
 import com.github.tschalk.project_tracker.model.Project;
+import com.github.tschalk.project_tracker.util.AlertUtils;
 import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -11,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -43,7 +45,7 @@ public class ExportView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar(/*SceneManager.getInstance().getStage(SceneManager.ADD_PROJECT_SCENE),*/"Edit Project");
+        CustomTitleBar customTitleBar = new CustomTitleBar("Edit Project");
         customTitleBar.showCloseButton(false);
         this.setTop(customTitleBar);
 
@@ -56,6 +58,22 @@ public class ExportView extends BorderPane {
         Button directoryButton = getDirectoryButton();
         Button exportButton = getExportButton(fromDatePicker, toDatePicker);
 
+        GridPane gridPane = getGridPane(fromDatePicker, toDatePicker);
+
+        HBox actionButtonContainer = new HBox(10);
+        actionButtonContainer.getChildren().addAll(directoryButton, exportButton);
+        actionButtonContainer.getStyleClass().add("button-container");
+
+        VBox centerContainer = new VBox(10);
+        centerContainer.setPadding(new Insets(10));
+        centerContainer.getChildren().addAll(titleLabel, gridPane, actionButtonContainer);
+
+        this.setCenter(centerContainer);
+
+    }
+
+    @NotNull
+    private static GridPane getGridPane(DatePicker fromDatePicker, DatePicker toDatePicker) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -68,16 +86,7 @@ public class ExportView extends BorderPane {
         gridPane.add(toLabel, 0, 1);
         gridPane.add(toDatePicker, 1, 1);
 
-        HBox actionButtonContainer = new HBox(10);
-        actionButtonContainer.getChildren().addAll(directoryButton, exportButton);
-        actionButtonContainer.getStyleClass().add("button-container");
-
-        VBox centerContainer = new VBox(10);
-        centerContainer.setPadding(new Insets(10));
-        centerContainer.getChildren().addAll(titleLabel, gridPane, actionButtonContainer);
-
-        this.setCenter(centerContainer);
-
+        return gridPane;
     }
 
     private DirectoryChooser initializeDirectoryChooser() {
@@ -127,7 +136,6 @@ public class ExportView extends BorderPane {
             directory = directoryChooser.getInitialDirectory();
         }
     });
-
         return directoryButton;
     }
 
@@ -135,27 +143,30 @@ public class ExportView extends BorderPane {
         Button exportButton = new Button(EXPORT_TEXT);
         exportButton.setOnAction(e -> {
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Exporting data");
-            alert.setContentText("Are you sure you want to export the data?");
+            Optional<ButtonType> result = AlertUtils.showAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Confirmation Dialog", "Exporting data",
+                    "Are you sure you want to export the data?"
+            );
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() != ButtonType.OK){
+            if (result.isPresent() && result.get() == ButtonType.NO) {
                 return;
             }
 
             List<Project> projects = exportController.getProjects();
             Path directoryPath = Paths.get(directory.getPath());
+            boolean hasExported = exportController.generateCSV(
+                    projects,
+                    fromDatePicker.getValue(),
+                    toDatePicker.getValue(),
+                    directoryPath
+            );
 
-            boolean hasExported = exportController.generateCSV(projects, fromDatePicker.getValue(), toDatePicker.getValue(), directoryPath);
             if(!hasExported) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Error Dialog");
-                errorAlert.setHeaderText("Error while exporting data");
-                errorAlert.setContentText("Please proof the data and try again.");
-
-                errorAlert.showAndWait();
+                AlertUtils.showAlert(Alert.AlertType.ERROR,
+                        "Error Dialog", "Error while exporting data",
+                        "Please proof the data and try again."
+                );
                 return;
             }
             Stage stage = (Stage) this.getScene().getWindow();

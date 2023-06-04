@@ -1,6 +1,7 @@
 package com.github.tschalk.project_tracker.view;
 
 import com.github.tschalk.project_tracker.controller.ChangePasswordController;
+import com.github.tschalk.project_tracker.util.AlertUtils;
 import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import com.github.tschalk.project_tracker.util.SceneManager;
 import javafx.geometry.Insets;
@@ -35,11 +36,9 @@ public class ChangePasswordView extends BorderPane {
         this.stage = stage;
         this.newPasswordField = new PasswordField();
         this.confirmNewPasswordField = new PasswordField();
-
         this.isUserLoggedIn = isUserLoggedIn;
         initializeUI();
     }
-
 
     private void initializeUI() {
         // This
@@ -105,23 +104,22 @@ public class ChangePasswordView extends BorderPane {
         String confirmNewPassword = confirmNewPasswordField.getText();
 
         if (newPassword == null || confirmNewPassword == null) {
-            showAlert("New password and confirmation must not be null.", Alert.AlertType.ERROR);
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error changing password", "New password and confirmation must not be null.");
             return;
         }
 
         if (newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
-            showAlert("New password and confirmation must not be empty.", Alert.AlertType.ERROR);
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error changing password", "New password and confirmation must not be empty.");
             return;
         }
 
         if (newPassword.length() < 8 || !isPasswordValid(newPassword)) {
-            showAlert("Password must be at least 8 characters long and contain at least one uppercase letter," +
-                    " one lowercase letter, one number, and one special character.", Alert.AlertType.ERROR);
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error changing password", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
             return;
         }
 
         if (!newPassword.equals(confirmNewPassword)) {
-            showAlert("Passwords do not match.", Alert.AlertType.ERROR);
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error changing password", "Passwords do not match.");
             return;
         }
 
@@ -146,7 +144,7 @@ public class ChangePasswordView extends BorderPane {
 
     private void showPasswordChangeResult(boolean success) {
         if (success) {
-            showAlert("Password changed successfully!", Alert.AlertType.INFORMATION);
+            AlertUtils.showAlert(Alert.AlertType.INFORMATION, "Success", "Password changed successfully!", "Password changed successfully!");
             if (isUserLoggedIn) {
                 Stage stage = (Stage) this.getScene().getWindow();
                 stage.close();
@@ -154,34 +152,7 @@ public class ChangePasswordView extends BorderPane {
                 SceneManager.getInstance().showCustomScene(MAIN_WINDOW_SCENE, stage);
             }
         } else {
-            showAlert("Password change failed!", Alert.AlertType.ERROR);
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error changing password", "Password change failed!");
         }
-    }
-
-    private void showAlert(String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Success");
-
-        if (alertType == Alert.AlertType.ERROR) {
-            alert.setHeaderText("Error changing password");
-        } else {
-            alert.setHeaderText("Password changed successfully!");
-        }
-
-        TextArea textArea = new TextArea(message);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(textArea, 0, 0);
-        alert.getDialogPane().setContent(expContent);
-
-        alert.showAndWait();
     }
 }

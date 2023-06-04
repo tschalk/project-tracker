@@ -5,6 +5,7 @@ import com.github.tschalk.project_tracker.model.CostCenter;
 import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.model.Responsible;
 import com.github.tschalk.project_tracker.model.TimesheetEntry;
+import com.github.tschalk.project_tracker.util.AlertUtils;
 import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,13 +81,14 @@ public class EditProjectView extends BorderPane {
             if (timesheetEntryTableView.getSelectionModel().getSelectedItem() == null) {
                 return;
             }
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remove Time");
-            alert.setHeaderText("Are you sure you want to remove this time?");
-            alert.setContentText("This action cannot be undone.");
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
 
-            Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = AlertUtils.showAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Remove Time",
+                    "Are you sure you want to remove this time?",
+                    "This action cannot be undone."
+            );
+
             if (result.isPresent() && result.get() == ButtonType.NO) {
                 return;
             }
@@ -105,13 +107,13 @@ public class EditProjectView extends BorderPane {
         Button removeProjectButton = new Button("Remove Project");
         removeProjectButton.setOnAction(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Remove Project " + this.selectedProject.getDescription());
-            alert.setHeaderText("Are you sure you want to remove the  Project " + this.selectedProject.getDescription() + "?");
-            alert.setContentText("This action cannot be undone.");
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> result = AlertUtils.showAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Remove Project " + this.selectedProject.getDescription(),
+                    "Are you sure you want to remove the  Project " + this.selectedProject.getDescription() + "?",
+                    "This action cannot be undone."
+            );
 
-            Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.NO) {
                 return;
             }
