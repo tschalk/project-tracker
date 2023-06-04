@@ -7,7 +7,6 @@ import com.github.tschalk.project_tracker.dao.ResponsibleDAO;
 import com.github.tschalk.project_tracker.dao.TimesheetEntryDAO;
 import com.github.tschalk.project_tracker.database.DatabaseBackupManager;
 import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
-import com.github.tschalk.project_tracker.util.AlertUtils;
 import com.github.tschalk.project_tracker.util.CustomTitleBar;
 import com.github.tschalk.project_tracker.util.SceneManager;
 import javafx.geometry.Insets;
@@ -20,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
-import static com.github.tschalk.project_tracker.util.AlertUtils.*;
+import static com.github.tschalk.project_tracker.util.AlertUtils.showAlert;
 import static com.github.tschalk.project_tracker.util.SceneManager.*;
 
 public class UserLoginView extends BorderPane {
@@ -35,6 +34,18 @@ public class UserLoginView extends BorderPane {
         this.usernameField = new TextField();
         this.passwordField = new PasswordField();
         initializeUI();
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(strNum);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     private void initializeUI() {
@@ -92,8 +103,8 @@ public class UserLoginView extends BorderPane {
         String password = passwordField.getText();
 
         // FIXME: DEBUGGING & TESTING:
-        username = "admin";
-        password = "123";
+//        username = "admin";
+//        password = "123";
 
         if (username.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", null, "Username or password cannot be empty.");
@@ -138,6 +149,10 @@ public class UserLoginView extends BorderPane {
         ChangePasswordView changePasswordView = new ChangePasswordView(changePasswordController, stage);
         ChangePasswordView changePasswordLoggedUserView = new ChangePasswordView(changePasswordController, stage, true);
 
+        // Admin only:
+        UserManagementController userManagementController = new UserManagementController(userLoginController);
+        UserManagementView userManagementView = new UserManagementView(userManagementController);
+
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
         sceneManager.addScene(ADD_PROJECT_SCENE,
@@ -153,45 +168,16 @@ public class UserLoginView extends BorderPane {
         sceneManager.addScene(CHANGE_PASSWORD_LOGGED_USER_SCENE,
                 new Scene(changePasswordLoggedUserView, CHANGE_PASSWORD_LOGGED_USER_VIEW_WIDTH, CHANGE_PASSWORD_LOGGED_USER_VIEW_HEIGHT));
 
-        // Case: User
-        if (userLoginController.getCurrentUser().getRole().equals("user")) {
+        // Admin only:
+        sceneManager.addScene(USER_MANAGEMENT_SCENE,
+                new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
 
-            if (password.startsWith(username) &&
-                    isNumeric(password.substring(username.length()))) {
-                sceneManager.showCustomScene(CHANGE_PASSWORD_SCENE, stage);
-            } else {
-                sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
-            }
+        // Hier wird die erste Szene gesetzt.
+        if (password.startsWith(username) &&
+                isNumeric(password.substring(username.length()))) {
+            sceneManager.showCustomScene(CHANGE_PASSWORD_SCENE, stage);
+        } else {
+            sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
         }
-
-        // Case: Admin
-        if (userLoginController.getCurrentUser().getRole().equals("admin")) {
-
-            UserManagementController userManagementController = new UserManagementController(userLoginController);
-            UserManagementView userManagementView = new UserManagementView(userManagementController);
-
-            sceneManager.addScene(USER_MANAGEMENT_SCENE,
-                    new Scene(userManagementView, USER_MANAGEMENT_VIEW_WIDTH, USER_MANAGEMENT_VIEW_HEIGHT));
-
-            if (userLoginController.getCurrentUser().getPassword().equals("admin")) {
-                sceneManager.showCustomScene(CHANGE_PASSWORD_SCENE, stage);
-            } else {
-                sceneManager.showCustomScene(MAIN_WINDOW_SCENE, stage);
-            }
-        }
-    }
-
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            Integer.parseInt(strNum);
-            System.out.println("isNumeric: " + strNum);
-        } catch (NumberFormatException e) {
-            System.err.println("isNumeric: " + strNum + " is not a number");
-            return false;
-        }
-        return true;
     }
 }
