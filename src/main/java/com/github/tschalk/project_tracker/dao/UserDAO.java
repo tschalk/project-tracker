@@ -128,32 +128,32 @@ public class UserDAO {
         }
     }
 
-    public int getUserId(String username) {
-        String query = "SELECT id FROM User WHERE username = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-
-            pstmt.setString(1, username);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt("id");
-            } else {
-                return -1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
+//    public int getUserId(String username) {
+//        String query = "SELECT id FROM User WHERE username = ?";
+//
+//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+//
+//            pstmt.setString(1, username);
+//
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            if (rs.next()) {
+//                return rs.getInt("id");
+//            } else {
+//                return -1;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return -1;
+//        }
+//    }
 
     public boolean updatePassword(int userId, String newPassword) {
         String query = "UPDATE User SET password = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-
-            pstmt.setString(1, newPassword);
+            String encryptedPassword = SimplePasswordEncryption.encrypt(newPassword);
+            pstmt.setString(1, encryptedPassword);
             pstmt.setInt(2, userId);
 
             int rowsAffected = pstmt.executeUpdate();
