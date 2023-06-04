@@ -20,6 +20,8 @@ public class UserManagementView extends VBox {
     private final UserManagementController userManagementController;
     private final ListView<User> userList;
     private final CheckBox activeUserChekBox;
+    private Button resetPasswordButton;
+
 
     public UserManagementView(UserManagementController userManagementController) {
         this.userManagementController = userManagementController;
@@ -45,8 +47,11 @@ public class UserManagementView extends VBox {
         Button deleteButton = new Button("Delete User");
         deleteButton.setOnAction(e -> deleteUser());
 
+        this.resetPasswordButton = new Button("Reset Password");
+        resetPasswordButton.setOnAction(e -> resetPassword());
+
         HBox buttonContainer = new HBox(10);
-        buttonContainer.getChildren().addAll(addButton, updateButton, deleteButton);
+        buttonContainer.getChildren().addAll(addButton, updateButton, resetPasswordButton, deleteButton);
         buttonContainer.getStyleClass().add("button-container");
 
         userList.setPrefHeight(150);
@@ -177,7 +182,6 @@ public class UserManagementView extends VBox {
         boolean deleteUserSuccessful = userManagementController.deleteUser(username);
         if (deleteUserSuccessful) {
             updateUserList();
-            System.out.println("User deleted successfully!");
             AlertUtils.showAlert(Alert.AlertType.INFORMATION, "Information", null, "User deleted successfully!");
             usernameField.clear();
             roleComboBox.setValue(null);
@@ -190,4 +194,39 @@ public class UserManagementView extends VBox {
         ObservableList<User> observableList = FXCollections.observableArrayList(userManagementController.getAllUsers());
         userList.setItems(observableList);
     }
+
+    private void resetPassword() {
+        String username = usernameField.getText();
+        if (username.isEmpty()) {
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username cannot be empty.");
+            return;
+        }
+
+        boolean resetPasswordSuccessful = userManagementController.resetPassword(username);
+        if (resetPasswordSuccessful) {
+            User user = userManagementController.getUser(username);
+            String password = user.getPassword();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+
+            Button button = new Button("Copy Password to Clipboard");
+            button.setOnAction(e -> {
+                final Clipboard clipboard = Clipboard.getSystemClipboard();
+                final ClipboardContent content = new ClipboardContent();
+                content.putString(password);
+                clipboard.setContent(content);
+            });
+
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(new Label("Password reset successfully. New password: " + password), button);
+            alert.getDialogPane().setContent(vbox);
+
+            alert.showAndWait();
+        } else {
+            AlertUtils.showAlert(Alert.AlertType.ERROR, "Error", null, "Failed to reset password.");
+        }
+    }
+
 }
