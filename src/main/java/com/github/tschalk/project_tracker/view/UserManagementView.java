@@ -20,8 +20,6 @@ public class UserManagementView extends VBox {
     private final UserManagementController userManagementController;
     private final ListView<User> userList;
     private final CheckBox activeUserChekBox;
-    private Button resetPasswordButton;
-
 
     public UserManagementView(UserManagementController userManagementController) {
         this.userManagementController = userManagementController;
@@ -47,7 +45,7 @@ public class UserManagementView extends VBox {
         Button deleteButton = new Button("Delete User");
         deleteButton.setOnAction(e -> deleteUser());
 
-        this.resetPasswordButton = new Button("Reset Password");
+        Button resetPasswordButton = new Button("Reset Password");
         resetPasswordButton.setOnAction(e -> resetPassword());
 
         HBox buttonContainer = new HBox(10);

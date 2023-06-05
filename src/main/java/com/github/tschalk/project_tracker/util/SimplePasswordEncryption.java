@@ -9,6 +9,7 @@ public class SimplePasswordEncryption {
 
     public static String encrypt(String password) {
         String encryptedPassword = "";
+
         for (int i = 0; i < password.length(); i++) {
             char encryptedChar = (char) (password.charAt(i) + 1);
             encryptedPassword += encryptedChar;
@@ -18,6 +19,7 @@ public class SimplePasswordEncryption {
 
     public static String decrypt(String encryptedPassword) {
         String decryptedPassword = "";
+
         for (int i = 0; i < encryptedPassword.length(); i++) {
             char decryptedChar = (char) (encryptedPassword.charAt(i) - 1);
             decryptedPassword += decryptedChar;

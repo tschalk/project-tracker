@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class EditProjectView extends BorderPane {
-
     private final EditProjectController editProjectController;
     private Project selectedProject;
     private TableView<TimesheetEntry> timesheetEntryTableView;

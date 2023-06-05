@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TimesheetEntryDAO {
-    Connection connection;
+    private final Connection connection;
 
     public TimesheetEntryDAO(DatabaseConnectionManager databaseConnectionManager) {
         this.connection = databaseConnectionManager.getConnection();

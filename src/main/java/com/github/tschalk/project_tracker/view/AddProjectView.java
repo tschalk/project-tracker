@@ -19,9 +19,7 @@ import java.util.Optional;
 import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
 
 public class AddProjectView extends BorderPane {
-
     private final AddProjectController addProjectController;
-
     private final TextField descriptionField;
     private final ComboBox<CostCenter> costCenterComboBox;
     private final ComboBox<Responsible> responsibleComboBox;
@@ -146,7 +144,8 @@ public class AddProjectView extends BorderPane {
                 alert.setContentText("An error occurred while adding the responsible. Semi-colons are not allowed. Please try again.");
                 alert.showAndWait();
             });
-        }); return addCostCenterButton;
+        });
+        return addCostCenterButton;
     }
 
     private Button getAddResponsibleButton() {
@@ -275,20 +274,20 @@ public class AddProjectView extends BorderPane {
     private Button getOkButton() {
         Button okButton = new Button("Ok");
         okButton.setOnAction(event -> {
-        String description = descriptionField.getText();
-        if (description != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
-            if (description.contains(";")) {
-                // Display error message if description contains a semicolon
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setHeaderText(null);
-                alert.setContentText("Description cannot contain a semicolon (;).");
-                alert.showAndWait();
-                return;
-            }
+            String description = descriptionField.getText();
+            if (description != null && costCenterComboBox.getValue() != null && responsibleComboBox.getValue() != null) {
+                if (description.contains(";")) {
+                    // Display error message if description contains a semicolon
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Description cannot contain a semicolon (;).");
+                    alert.showAndWait();
+                    return;
+                }
 
                 addProjectController.getProjectDAO().addProject(
-                    description,
+                        description,
                         costCenterComboBox.getValue(),
                         responsibleComboBox.getValue(),
                         addProjectController.getCurrentUser());

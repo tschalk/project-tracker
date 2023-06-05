@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.github.tschalk.project_tracker.Main.STYLESHEET_PATH;
-public class SceneManager {
 
+public class SceneManager {
     public static final String DATABASE_LOGIN_SCENE = "Database Login";
     public static final String USER_LOGIN_SCENE = "User Login";
     public static final String MAIN_WINDOW_SCENE = "Main Window";
@@ -47,7 +47,8 @@ public class SceneManager {
     private final Map<String, Scene> scenes = new HashMap<>();
 
     // Privater Konsruktor damit nur eine Instanz von SceneManager existiert
-    private SceneManager() {}
+    private SceneManager() {
+    }
 
     // Get the single instance of SceneManager
     public static SceneManager getInstance() {
@@ -64,6 +65,7 @@ public class SceneManager {
     public void showCustomScene(String name, @NotNull Stage stage) {
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
+
         stage.setScene(scene);
         stage.setTitle(name);
         stage.setResizable(false);
@@ -75,6 +77,7 @@ public class SceneManager {
     public void showNewWindowWithCustomScene(String sceneName) {
         Scene scene = scenes.get(sceneName);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
+
         Stage newStage = new Stage();
         newStage.setScene(scene);
         newStage.setTitle(sceneName);
@@ -90,7 +93,7 @@ public class SceneManager {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
         // Überprüfen, ob die Szene eine Instanz von EditProjectView ist
-        if(scene.getRoot() instanceof EditProjectView editProjectView) {
+        if (scene.getRoot() instanceof EditProjectView editProjectView) {
             editProjectView.setSelectedProject(selectedProject);
         }
         Stage newStage = new Stage();

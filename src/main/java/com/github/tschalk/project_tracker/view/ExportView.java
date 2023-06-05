@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class ExportView extends BorderPane {
-
     private static final String FROM_PROMPT_TEXT = "From";
     private static final String TO_PROMPT_TEXT = "To";
     private static final String CHOOSE_DIRECTORY_TEXT = "Choose Directory";

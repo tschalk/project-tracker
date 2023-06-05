@@ -37,7 +37,4 @@ public class DatabaseConfig {
             e.printStackTrace();
         }
     }
-
 }
-
-

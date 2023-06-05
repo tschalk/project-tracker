@@ -1,8 +1,8 @@
 package com.github.tschalk.project_tracker.model;
 
 public class Responsible {
-    int id;
-    String name;
+    private int id;
+    private String name;
 
     public int getId() {
         return id;

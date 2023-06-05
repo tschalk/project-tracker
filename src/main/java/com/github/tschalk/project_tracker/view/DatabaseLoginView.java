@@ -13,7 +13,6 @@ import static com.github.tschalk.project_tracker.util.AlertUtils.showAlert;
 import static com.github.tschalk.project_tracker.util.SceneManager.USER_LOGIN_SCENE;
 
 public class DatabaseLoginView extends VBox {
-
     private final DatabaseLoginController databaseLoginController;
     private final Stage stage;
     private final TextField hostField;
