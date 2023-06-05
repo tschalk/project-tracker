@@ -64,7 +64,6 @@ public class EditProjectView extends BorderPane {
         actionButtonContainer2.getChildren().addAll(removeDateTimeButton, removeProjectButton, editButton);
         actionButtonContainer2.getStyleClass().add("button-container");
 
-
         VBox contentBox = new VBox(10);
         contentBox.setPadding(new Insets(10));
         contentBox.getChildren().addAll(titleLabel, timesheetEntryTableView, actionButtonContainer1, actionButtonContainer2);
