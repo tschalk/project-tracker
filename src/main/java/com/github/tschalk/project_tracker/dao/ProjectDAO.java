@@ -39,8 +39,8 @@ public class ProjectDAO {
         }
     }
 
-    public ObservableList<Project> readAllProjectsByUserID(int userID) {
-        ObservableList<Project> projectList = FXCollections.observableArrayList();
+    public List<Project> readAllProjectsByUserID(int userID) {
+    List<Project> projectList = new ArrayList<>();
         String query = "SELECT * FROM project WHERE user_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {

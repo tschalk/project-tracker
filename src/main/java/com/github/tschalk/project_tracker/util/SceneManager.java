@@ -31,7 +31,7 @@ public class SceneManager {
     public static final int MAIN_WINDOW_VIEW_HEIGHT = 480;
     public static final int ADD_PROJECT_VIEW_WIDTH = 350;
     public static final int ADD_PROJECT_VIEW_HEIGHT = 300;
-    public static final int EDIT_PROJECT_VIEW_WIDTH = 300;
+    public static final int EDIT_PROJECT_VIEW_WIDTH = 500;
     public static final int EDIT_PROJECT_VIEW_HEIGHT = 300;
     public static final int EXPORT_VIEW_WIDTH = 300;
     public static final int EXPORT_VIEW_HEIGHT = 200;

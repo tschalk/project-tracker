@@ -61,6 +61,7 @@ public class MainWindowController {
                 FXCollections.observableArrayList();
     }
 
+
     public User getCurrentUser() {
         return userLoginController.getCurrentUser();
     }
