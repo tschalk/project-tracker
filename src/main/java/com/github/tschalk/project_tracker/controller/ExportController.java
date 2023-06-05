@@ -26,10 +26,10 @@ public class ExportController {
     private final TimesheetEntryDAO timesheetEntryDAO;
     private final String userName;
 
-    public ExportController(ProjectDAO projectDAO, TimesheetEntryDAO timesheetEntryDAO, UserLoginController userLoginController) {
+    public ExportController(ProjectDAO projectDAO,  UserLoginController userLoginController) {
         this.projectDAO = projectDAO;
+        this.timesheetEntryDAO = projectDAO.getTimesheetEntryDAO();
         this.userLoginController = userLoginController;
-        this.timesheetEntryDAO = timesheetEntryDAO;
         this.userName = userLoginController.getCurrentUser().getName();
     }
 

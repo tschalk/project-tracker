@@ -134,15 +134,15 @@ public class UserLoginView extends BorderPane {
         MainWindowView mainWindowView = new MainWindowView(mainWindowController, stage, new DatabaseBackupManager(databaseConnectionManager.getDatabaseConfig()));
 
         AddProjectController addProjectController = new AddProjectController(
-                projectDAO, costCenterDAO, responsibleDAO, userLoginController, mainWindowView); // ProjectDAO
+                projectDAO, userLoginController, mainWindowView); // ProjectDAO
         AddProjectView addProjectView = new AddProjectView(addProjectController);
 
         EditProjectController editProjectController = new EditProjectController(
-                projectDAO, userLoginController, mainWindowView);
+                projectDAO, mainWindowView);
         EditProjectView editProjectView = new EditProjectView(editProjectController);
 
         ExportController exportController = new ExportController(
-                projectDAO, timesheetDAO, userLoginController);
+                projectDAO,  userLoginController);
         ExportView exportView = new ExportView(exportController);
 
         ChangePasswordController changePasswordController = new ChangePasswordController(userLoginController);

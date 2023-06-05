@@ -19,7 +19,6 @@ public class CostCenterDAO {
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, costCenter.getName());
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,7 +41,6 @@ public class CostCenterDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return costCenterList;
     }
 
@@ -110,6 +108,7 @@ public class CostCenterDAO {
         try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
             checkStmt.setInt(1, costCenter.getId());
             ResultSet rs = checkStmt.executeQuery();
+
             return rs.next();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

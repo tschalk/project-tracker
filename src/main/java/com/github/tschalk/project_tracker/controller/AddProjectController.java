@@ -19,10 +19,10 @@ public class AddProjectController {
     private final UserLoginController userLoginController;
     private final MainWindowView mainWindowView;
 
-    public AddProjectController(ProjectDAO projectDAO, CostCenterDAO costCenterDAO, ResponsibleDAO responsibleDAO, UserLoginController userLoginController, MainWindowView mainWindowView) {
+    public AddProjectController(ProjectDAO projectDAO,  UserLoginController userLoginController, MainWindowView mainWindowView) {
         this.projectDAO = projectDAO;
-        this.costCenterDAO = costCenterDAO;
-        this.responsibleDAO = responsibleDAO;
+        this.costCenterDAO = projectDAO.getCostCenterDAO();
+        this.responsibleDAO = projectDAO.getResponsibleDAO();
         this.userLoginController = userLoginController;
         this.mainWindowView = mainWindowView;
     }

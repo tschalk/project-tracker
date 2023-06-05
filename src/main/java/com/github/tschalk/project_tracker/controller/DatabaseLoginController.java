@@ -9,7 +9,7 @@ import com.github.tschalk.project_tracker.database.DatabaseConnectionManager;
 public class DatabaseLoginController {
     private final DatabaseConnectionManager databaseConnectionManager;
 
-    public DatabaseLoginController(DatabaseConnectionManager databaseConnectionManager/*, DatabaseBackupManager databaseBackupManager*/) {
+    public DatabaseLoginController(DatabaseConnectionManager databaseConnectionManager) {
         this.databaseConnectionManager = databaseConnectionManager;
     }
 

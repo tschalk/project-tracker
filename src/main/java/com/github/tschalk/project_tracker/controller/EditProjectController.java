@@ -18,7 +18,7 @@ public class EditProjectController {
     private final MainWindowView mainWindowView;
     private final TimesheetEntryDAO timesheetEntryDAO;
 
-    public EditProjectController(ProjectDAO projectDAO, UserLoginController userLoginController, MainWindowView mainWindowView) {
+    public EditProjectController(ProjectDAO projectDAO, MainWindowView mainWindowView) {
         this.projectDAO = projectDAO;
         this.mainWindowView = mainWindowView;
         this.timesheetEntryDAO = projectDAO.getTimesheetEntryDAO();
