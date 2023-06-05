@@ -93,8 +93,8 @@ public class UserManagementView extends VBox {
         String username = usernameField.getText();
         String role = roleComboBox.getValue();
 
-        if (username.isEmpty() || role == null) {
-            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username or Role cannot be empty.");
+        if (username.isEmpty() || role == null || username.contains(";")) {
+            AlertUtils.showAlert(Alert.AlertType.WARNING, "Warning", null, "Username or Role cannot be empty or contain special characters ';'. ");
             return;
         }
 
