@@ -90,19 +90,8 @@ public class ExportView extends BorderPane {
 
     private DirectoryChooser initializeDirectoryChooser() {
         DirectoryChooser chooser = new DirectoryChooser();
-        Path desktopPath = getDesktopPath();
-        chooser.setInitialDirectory(desktopPath.toFile());
 
         return chooser;
-    }
-
-    private Path getDesktopPath() {
-        String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.contains("win")) {
-            return Paths.get(System.getProperty("user.home"), "Desktop");
-        } else {
-            return Paths.get(System.getProperty("user.home"));
-        }
     }
 
     private DatePicker getFromDatePicker() {
