@@ -96,9 +96,8 @@ public class DatabaseBackupManager {
         }
     }
 
-    //public void restoreDatabase(LocalDate date) { // Hier sollte der path ur date sein und ein localDate übergeben werden
+
     public void restoreDatabase(Path backupFileForGivenDate) {
-//        Path backupFileForGivenDate = generateBackupFilePathForDate(date);
         if (Files.exists(backupFileForGivenDate)) {
             String executeCmd = getRestoreCommand(backupFileForGivenDate);
 
@@ -129,5 +128,4 @@ public class DatabaseBackupManager {
         }
         return Paths.get(MY_SQL_BACKUPS_PATH, backupFileName);
     }
-
 }
