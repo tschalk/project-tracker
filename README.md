@@ -26,8 +26,8 @@ Das Projekt folgt der Model-View-Controller (MVC) Architektur und ist wie folgt 
 Geben Sie die folgenden Befehle ein, um das Projekt zu klonen und zu bauen:
 
 ```bash
-git clone https://github.com/tschalk/project_tracker.git
-cd project_tracker
+git clone https://github.com/tschalk/project-tracker.git
+cd project-tracker
 mvn clean install
 ```
 ## Verwendung
@@ -35,7 +35,7 @@ mvn clean install
 Nachdem Sie das Projekt gebaut haben, können Sie die Anwendung starten, indem Sie den folgenden Befehl eingeben:
 
 ```bash
-java -jar target/project_tracker-1.0.jar
+java -jar target/project-tracker-1.0.jar
 ```
 
 ## Dokumentation
