@@ -39,7 +39,7 @@ public class SceneManager {
     public static final int CHANGE_PASSWORD_VIEW_HEIGHT = 200;
     public static final int CHANGE_PASSWORD_LOGGED_USER_VIEW_WIDTH = 300;
     public static final int CHANGE_PASSWORD_LOGGED_USER_VIEW_HEIGHT = 250;
-    public static final int USER_MANAGEMENT_VIEW_WIDTH = 300;
+    public static final int USER_MANAGEMENT_VIEW_WIDTH = 400;
     public static final int USER_MANAGEMENT_VIEW_HEIGHT = 350;
 
     private static SceneManager sceneManager = null;
