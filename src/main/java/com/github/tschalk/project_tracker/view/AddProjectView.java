@@ -44,9 +44,9 @@ public class AddProjectView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar("Add new project");
-        customTitleBar.showCloseButton(false);
-        this.setTop(customTitleBar);
+//        CustomTitleBar customTitleBar = new CustomTitleBar("Add new project");
+//        customTitleBar.showCloseButton(false);
+//        this.setTop(customTitleBar);
 
         // Center
         Label titleLabel = new Label("Add new project");

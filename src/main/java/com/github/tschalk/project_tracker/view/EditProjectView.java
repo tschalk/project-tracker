@@ -40,12 +40,12 @@ public class EditProjectView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar("Edit Project");
-        customTitleBar.showCloseButton(false);
-        this.setTop(customTitleBar);
+//        CustomTitleBar customTitleBar = new CustomTitleBar("Edit");
+//        customTitleBar.showCloseButton(false);
+//        this.setTop(customTitleBar);
 
         // Center
-        Label titleLabel = new Label("Edit project");
+        Label titleLabel = new Label("Export project");
 
         setTimesheetTableView();
         initializeCostCenterComboBox();
@@ -165,7 +165,7 @@ public class EditProjectView extends BorderPane {
     }
 
     /**
-     * In ieser Methode wird für CostCenter eine Combobox erstellt, in der alle CostCenter angezeigt werden.
+     * In dieser Methode wird für CostCenter eine Combobox erstellt, in der alle CostCenter angezeigt werden.
      */
     private void initializeCostCenterComboBox() {
         costCenterComboBox.setPromptText("Select Cost Center");

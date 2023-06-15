@@ -44,9 +44,9 @@ public class ExportView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar("Edit Project");
-        customTitleBar.showCloseButton(false);
-        this.setTop(customTitleBar);
+//        CustomTitleBar customTitleBar = new CustomTitleBar("Export");
+//        customTitleBar.showCloseButton(false);
+//        this.setTop(customTitleBar);
 
         // Center
         Label titleLabel = new Label("Export project");

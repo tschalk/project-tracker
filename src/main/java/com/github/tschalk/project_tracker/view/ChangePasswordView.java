@@ -45,9 +45,9 @@ public class ChangePasswordView extends BorderPane {
         this.setPadding(new Insets(0, 0, 15, 0));
 
         // Top
-        CustomTitleBar customTitleBar = new CustomTitleBar(stage, "Edit Project");
-        this.setTop(customTitleBar);
-        if (isUserLoggedIn) customTitleBar.showCloseButton(false);
+//        CustomTitleBar customTitleBar = new CustomTitleBar(/*stage,*/ "Password");
+//        this.setTop(customTitleBar);
+//        if (isUserLoggedIn) customTitleBar.showCloseButton(false);
 
         // Center
         Label titleLabel = new Label("Change Password:");
