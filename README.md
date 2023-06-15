@@ -1,5 +1,3 @@
-# _Der nachfolgende Text dient als Beispiel_
-
 ## Project Tracker
 
 Der Project Tracker ist eine Anwendung, die es Benutzern ermöglicht, ihre Projektzeiten zu verfolgen und 
@@ -12,14 +10,14 @@ diese Informationen dann als CSV-Datei zu exportieren.
 - MySQL 8.0.33
 - JavaFX 11.0.2
 
-## Struktur
+Struktur gemäß SRS
 
-Das Projekt folgt der Model-View-Controller (MVC) Architektur und ist wie folgt strukturiert:
+Das Projekt ist der Model-View-Controller (MVC) Architektur angelehnt und ist gemäß der Software Requirements Specification (SRS) wie folgt strukturiert:
 
-- **Model**: Enthält die Klassen, die die Datenstrukturen repräsentieren.
-- **View**: Enthält die Klassen, die für die Darstellung der Benutzeroberfläche verantwortlich sind.
-- **Controller**: Enthält die Klassen, die die Anwendungslogik und die Interaktion zwischen Model und View verwalten.
-- **DAO**: Enthält die Klassen, die für die Kommunikation mit der Datenbank verantwortlich sind.
+    _Model:_ Enthält die Klassen, die die Datenstrukturen repräsentieren.
+    _View:_ Enthält die Klassen, die für die Darstellung der Benutzeroberfläche verantwortlich sind.
+    _Controller:_ Enthält die Klassen, die die Anwendungslogik und die Interaktion zwischen Model und View verwalten.
+    _DAO:_ Enthält die Klassen, die für die Kommunikation mit der Datenbank verantwortlich sind.
 
 ## Installation
 
@@ -43,4 +41,4 @@ java -jar target/project-tracker-1.0.jar
 Weitere Informationen finden Sie in der mitgelieferten Dokumentation:
 
 - `docs/SRS.pdf`: Software Requirements Specification
-- `docs/DesignDocs/ClassDiagram.png`: Klassendiagramm
+- `docs/ClassDiagram.png`: Klassendiagramm
