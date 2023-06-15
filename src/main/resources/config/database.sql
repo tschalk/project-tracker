@@ -39,4 +39,4 @@ CREATE TABLE TimesheetEntry (
 );
 
 INSERT INTO User (username, password, role)
-VALUES ('admin', 'benjo', 'admin');
+VALUES ('admin', 'benjo2345', 'admin');
