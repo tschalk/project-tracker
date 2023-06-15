@@ -102,10 +102,6 @@ public class UserLoginView extends BorderPane {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // FIXME: DEBUGGING & TESTING:
-//        username = "admin";
-//        password = "123";
-
         if (username.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", null, "Username or password cannot be empty.");
             return;
@@ -152,6 +148,7 @@ public class UserLoginView extends BorderPane {
         // Admin only:
         UserManagementController userManagementController = new UserManagementController(userLoginController);
         UserManagementView userManagementView = new UserManagementView(userManagementController);
+        // TODO: Database here <--
 
         // Hier werden weitere Views den Szenen hinzugefügt und die Szenen dem SceneManager hinzugefügt.
         SceneManager sceneManager = SceneManager.getInstance();
