@@ -14,7 +14,6 @@ public class ChangePasswordController {
     }
 
     public boolean updatePassword(String newPassword) {
-        String encryptedPassword = SimplePasswordEncryption.encrypt(newPassword);
-        return this.currentUser != null && userDAO.updatePassword(currentUser.getId(), encryptedPassword);
+        return this.currentUser != null && userDAO.updatePassword(currentUser.getId(), newPassword);
     }
 }
