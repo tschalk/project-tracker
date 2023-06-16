@@ -33,7 +33,7 @@ mvn clean install
 Nachdem Sie das Projekt gebaut haben, können Sie die Anwendung starten, indem Sie den folgenden Befehl eingeben:
 
 ```bash
-java -jar target/project-tracker-1.0.jar
+java -jar target/project-tracker.jar
 ```
 
 ## Dokumentation
