@@ -14,10 +14,13 @@ Struktur gemäß SRS
 
 Das Projekt ist der Model-View-Controller (MVC) Architektur angelehnt und ist gemäß der Software Requirements Specification (SRS) wie folgt strukturiert:
 
-    _Model:_ Enthält die Klassen, die die Datenstrukturen repräsentieren.
-    _View:_ Enthält die Klassen, die für die Darstellung der Benutzeroberfläche verantwortlich sind.
-    _Controller:_ Enthält die Klassen, die die Anwendungslogik und die Interaktion zwischen Model und View verwalten.
-    _DAO:_ Enthält die Klassen, die für die Kommunikation mit der Datenbank verantwortlich sind.
+    model Enthält die Klassen, die die Datenstrukturen repräsentieren.
+    view: Enthält die Klassen, die für die Darstellung der Benutzeroberfläche verantwortlich sind.
+    controller: Enthält die Klassen, die die Anwendungslogik und die Interaktion zwischen Model und View verwalten.
+    dao: Enthält die Klassen, die für die Kommunikation mit der Datenbank verantwortlich sind.
+    util: Enthält Hilfsklassen
+    database: Enthält die Klassen, die für die Datenbank verantwortlich sind.
+    
 
 ## Installation
 
