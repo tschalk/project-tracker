@@ -20,7 +20,8 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class DatabaseBackupManager {
-    public static final String MY_SQL_BACKUPS_PATH = "C:/MySQL-Backups";
+//    public static final String MY_SQL_BACKUPS_PATH = "C:/MySQL-Backups";
+    public static final String MY_SQL_BACKUPS_PATH = Paths.get(System.getProperty("user.home"), "MySQL-Backups").toString();
 
     private final DatabaseConfig config;
     private final Path backupFilePath;
@@ -83,12 +84,14 @@ public class DatabaseBackupManager {
 
         // Hier werden alle Backups gelöscht, die älter als die angegebene Anzahl von Wochen sind und das Format "...-ProjectTracker-MySQLdump.sql" haben.
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(backupsDirectory, "*-ProjectTracker-MySQLdump.sql")) {
-            for (Path backupFile : directoryStream) {
-                LocalDateTime lastModified = Files.getLastModifiedTime(backupFile).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (directoryStream != null) {
+                for (Path backupFile : directoryStream) {
+                    LocalDateTime lastModified = Files.getLastModifiedTime(backupFile).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-                if (lastModified.toLocalDate().isBefore(thresholdDate)) {
-                    Files.delete(backupFile);
-                    System.out.println("Backup deleted: " + backupFile);
+                    if (lastModified.toLocalDate().isBefore(thresholdDate)) {
+                        Files.delete(backupFile);
+                        System.out.println("Backup deleted: " + backupFile);
+                    }
                 }
             }
         } catch (IOException e) {
