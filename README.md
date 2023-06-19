@@ -6,9 +6,10 @@ diese Informationen dann als CSV-Datei zu exportieren.
 ## Technologien
 
 - Java OpenJDK 20
-- Maven 3.8.2
+- Maven 4.0
 - MySQL 8.0.33
-- JavaFX 11.0.2
+- JavaFX 20
+- Jetbrains Annotations 24.0.1
 
 Struktur gemäß SRS
 
