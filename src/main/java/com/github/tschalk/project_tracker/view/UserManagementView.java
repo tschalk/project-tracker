@@ -12,7 +12,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
 
 public class UserManagementView extends VBox {
     private final TextField usernameField;
@@ -67,7 +66,6 @@ public class UserManagementView extends VBox {
         this.getChildren().add(contentBox);
     }
 
-    @NotNull
     private GridPane getGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);

@@ -17,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import static com.github.tschalk.project_tracker.util.AlertUtils.showAlert;
 import static com.github.tschalk.project_tracker.util.SceneManager.*;
@@ -74,14 +73,12 @@ public class UserLoginView extends BorderPane {
         this.setCenter(contentBox);
     }
 
-    @NotNull
     private Button getloginButton() {
         Button loginButton = new Button("Login");
         loginButton.setOnAction(e -> login());
         return loginButton;
     }
 
-    @NotNull
     private GridPane getGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);

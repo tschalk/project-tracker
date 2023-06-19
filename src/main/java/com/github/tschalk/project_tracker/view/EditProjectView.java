@@ -16,7 +16,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -71,7 +70,6 @@ public class EditProjectView extends BorderPane {
         this.setCenter(contentBox);
     }
 
-    @NotNull
     private Button getremoveDateTimeButton() {
         Button removeDateTimeButton = new Button("Remove Time");
         removeDateTimeButton.setOnAction(event -> {
@@ -100,7 +98,6 @@ public class EditProjectView extends BorderPane {
         return removeDateTimeButton;
     }
 
-    @NotNull
     private Button getRemoveProjectButton() {
         Button removeProjectButton = new Button("Remove Project");
         removeProjectButton.setOnAction(event -> {
@@ -128,7 +125,6 @@ public class EditProjectView extends BorderPane {
         return removeProjectButton;
     }
 
-    @NotNull
     private Button getEditButton() {
         Button editButton = new Button("Edit Duration");
         editButton.setOnAction(event -> {
@@ -141,7 +137,6 @@ public class EditProjectView extends BorderPane {
         return editButton;
     }
 
-    @NotNull
     private Button getUpdateDescriptionButton() {
         Button updateDescriptionButton = new Button("Update Description");
         updateDescriptionButton.setOnAction(event -> {

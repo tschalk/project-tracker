@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -71,7 +70,6 @@ public class ExportView extends BorderPane {
 
     }
 
-    @NotNull
     private static GridPane getGridPane(DatePicker fromDatePicker, DatePicker toDatePicker) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);

@@ -4,7 +4,6 @@ import com.github.tschalk.project_tracker.model.Project;
 import com.github.tschalk.project_tracker.view.EditProjectView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +61,7 @@ public class SceneManager {
         scenes.put(name, scene);
     }
 
-    public void showCustomScene(String name, @NotNull Stage stage) {
+    public void showCustomScene(String name, Stage stage) {
         Scene scene = scenes.get(name);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(STYLESHEET_PATH)).toExternalForm());
 
