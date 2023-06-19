@@ -9,7 +9,6 @@ diese Informationen dann als CSV-Datei zu exportieren.
 - Maven 4.0
 - MySQL 8.0.33
 - JavaFX 20
-- Jetbrains Annotations 24.0.1
 
 Struktur gemäß SRS
 
@@ -21,16 +20,14 @@ Das Projekt ist der Model-View-Controller (MVC) Architektur angelehnt und ist ge
     dao: Enthält die Klassen, die für die Kommunikation mit der Datenbank verantwortlich sind.
     util: Enthält Hilfsklassen
     database: Enthält die Klassen, die für die Datenbank verantwortlich sind.
-    
 
 ## Installation
 
-Geben Sie die folgenden Befehle ein, um das Projekt zu klonen und zu bauen:
+Geben Sie die folgenden Befehle ein, um das Projekt zu klonen:
 
 ```bash
 git clone https://github.com/tschalk/project-tracker.git
 cd project-tracker
-mvn clean install
 ```
 ## Verwendung
 
