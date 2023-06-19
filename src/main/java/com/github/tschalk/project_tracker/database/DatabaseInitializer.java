@@ -38,8 +38,9 @@ public class DatabaseInitializer {
 
     private static Path getConfigFilePath(String fileName) throws IOException {
         String dir = System.getProperty("user.dir");
-        return Paths.get(dir, "src", "main", "resources", "config", fileName);
+        return Paths.get(dir, fileName);
     }
+
 
     private static void executeSQLCommand(Connection connection, String command) throws SQLException {
         try (Statement statement = connection.createStatement()) {
