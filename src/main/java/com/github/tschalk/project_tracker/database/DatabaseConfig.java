@@ -17,7 +17,9 @@ public class DatabaseConfig {
 
     public DatabaseConfig() {
         configProps = new Properties();
-        configPath = Paths.get("src/main/resources/config/database.properties");
+        // Get the directory that the .jar is running from.
+        String dir = System.getProperty("user.dir");
+        configPath = Paths.get(dir, "database.properties");
         try {
             configProps.load(Files.newInputStream(configPath));
         } catch (IOException ex) {

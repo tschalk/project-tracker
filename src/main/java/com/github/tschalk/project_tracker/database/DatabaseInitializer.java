@@ -2,6 +2,7 @@ package com.github.tschalk.project_tracker.database;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,11 +15,10 @@ import java.sql.Statement;
  */
 
 public class DatabaseInitializer {
-
     public static void initialize(String host, int port, String username, String password) {
-        String sqlScriptPath = "src/main/resources/config/database.sql";
         try {
-            String sqlCommands = Files.readString(Paths.get(sqlScriptPath));
+            Path sqlScriptPath = getConfigFilePath("database.sql");
+            String sqlCommands = new String(Files.readAllBytes(sqlScriptPath));
             String url = "jdbc:mysql://" + host + ":" + port + "/";
 
             try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -30,10 +30,15 @@ public class DatabaseInitializer {
                 }
             }
         } catch (IOException e) {
-            handleIOException(sqlScriptPath);
+            handleIOException("database.sql");
         } catch (SQLException e) {
             handleSQLException(e.getMessage());
         }
+    }
+
+    private static Path getConfigFilePath(String fileName) throws IOException {
+        String dir = System.getProperty("user.dir");
+        return Paths.get(dir, "src", "main", "resources", "config", fileName);
     }
 
     private static void executeSQLCommand(Connection connection, String command) throws SQLException {
@@ -42,8 +47,8 @@ public class DatabaseInitializer {
         }
     }
 
-    private static void handleIOException(String filePath) {
-        System.out.println("Error while reading the SQL script: " + filePath);
+    private static void handleIOException(String fileName) {
+        System.out.println("Error while reading the SQL script: " + fileName);
     }
 
     private static void handleSQLException(String errorMessage) {
