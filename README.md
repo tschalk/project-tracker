@@ -23,12 +23,17 @@ Das Projekt ist der Model-View-Controller (MVC) Architektur angelehnt und ist ge
 
 ## Installation
 
-Geben Sie die folgenden Befehle ein, um das Projekt zu klonen:
+1. Geben Sie die folgenden Befehle ein, um das Projekt zu klonen:
+    ```bash
+    git clone https://github.com/tschalk/project-tracker.git
+    cd project-tracker
+    ```
+2. Compilieren Sie das Projekt.
 
-```bash
-git clone https://github.com/tschalk/project-tracker.git
-cd project-tracker
-```
+3. Fügen Sie die beiden benötigten Dateien in das Arbeitsverzeichnis hinzu:
+   - database.properties
+   - database.sql
+    
 ## Verwendung
 
 Nachdem Sie das Projekt gebaut haben, können Sie die Anwendung starten, indem Sie den folgenden Befehl eingeben:
